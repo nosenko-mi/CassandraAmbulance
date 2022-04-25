@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/17.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.coursework.cassandraambulance.controllers.AddCallController">
+   <children>
+      <TableView fx:id="dataTable" layoutX="640.0" layoutY="124.0" prefHeight="446.0" prefWidth="626.0" AnchorPane.bottomAnchor="150.0" AnchorPane.leftAnchor="640.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="124.0" />
+      <Button fx:id="getDataButton" layoutX="1193.0" layoutY="600.0" mnemonicParsing="false" onAction="#GetUnits" prefHeight="25.0" prefWidth="73.0" text="Get Units" AnchorPane.bottomAnchor="95.0" AnchorPane.leftAnchor="1193.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="600.0" />
+      <Label layoutX="226.0" layoutY="24.0" text="Add call">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <Separator layoutX="200.0" orientation="VERTICAL" prefHeight="720.0" prefWidth="4.0" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0" />
+      <Label layoutX="226.0" layoutY="128.0" text="Locality" />
+      <Label layoutX="226.0" layoutY="164.0" text="Thoroughfare" />
+      <TextField fx:id="thoroughfareTextField" layoutX="339.0" layoutY="160.0" prefHeight="25.0" prefWidth="174.0" />
+      <TextField fx:id="localityTextField" layoutX="339.0" layoutY="124.0" prefHeight="25.0" prefWidth="174.0" />
+      <VBox layoutX="13.0" layoutY="146.0" prefHeight="428.0" prefWidth="174.0" AnchorPane.bottomAnchor="146.0" AnchorPane.topAnchor="146.0">
+         <children>
+            <Label fx:id="getByDateLabel" prefHeight="40.0" onMouseClicked="#SwitchToCallByDate" text="Get call by date" textFill="#00000099">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label fx:id="getCallByAddress" onMouseClicked="#SwitchToCallByAddress" prefHeight="40.0" text="Get call by address" textFill="#00000099">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label fx:id="getCallByUnit" prefHeight="40.0" text="Get call by unit" textFill="#00000099">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label fx:id="getReportByCall" prefHeight="40.0" text="Get report by call" textFill="#00000099">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label fx:id="getReportByHosp" prefHeight="40.0" text="Get report by hospitalization" textFill="#00000099">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label fx:id="getUnitById" prefHeight="40.0" text="Get unit by ID" textFill="#00000099">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label fx:id="getUnitByEmp" prefHeight="40.0" prefWidth="150.0" text="Get unit by employee" textFill="#00000099">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label fx:id="getPersons" prefHeight="40.0" prefWidth="150.0" text="Get persons" textFill="#00000099">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label fx:id="addCall" layoutX="10.0" layoutY="290.0" prefHeight="40.0" prefWidth="150.0" text="Add call">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
+            <Label fx:id="addReport" layoutX="10.0" layoutY="330.0" onMouseClicked="#SwitchToAddReport" prefHeight="40.0" prefWidth="150.0" text="Add report" textFill="#00000099">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+         </children>
+      </VBox>
+      <Label layoutX="226.0" layoutY="199.0" text="Premise" />
+      <Label layoutX="226.0" layoutY="235.0" text="Sub premise" />
+      <TextField fx:id="subPremiseTextField" layoutX="339.0" layoutY="231.0" prefHeight="25.0" prefWidth="174.0" />
+      <TextField fx:id="premiseTextField" layoutX="339.0" layoutY="195.0" prefHeight="25.0" prefWidth="174.0" />
+      <Label layoutX="226.0" layoutY="270.0" text="Cause" />
+      <Label layoutX="226.0" layoutY="306.0" text="Unit id" />
+      <TextField fx:id="unitIdTextField" layoutX="339.0" layoutY="302.0" prefHeight="25.0" prefWidth="174.0" />
+      <TextField fx:id="causeTextField" layoutX="339.0" layoutY="266.0" prefHeight="25.0" prefWidth="174.0" />
+      <Label layoutX="226.0" layoutY="398.0" text="Caller first name" />
+      <Label layoutX="226.0" layoutY="434.0" text="Caller middle name" />
+      <TextField fx:id="callerMnTextField" layoutX="339.0" layoutY="430.0" prefHeight="25.0" prefWidth="174.0" />
+      <TextField fx:id="callerFnTextField" layoutX="339.0" layoutY="394.0" prefHeight="25.0" prefWidth="174.0" />
+      <Label layoutX="226.0" layoutY="469.0" text="Caller last name" />
+      <TextField fx:id="callerLnTextField" layoutX="339.0" layoutY="465.0" prefHeight="25.0" prefWidth="174.0" />
+      <Button fx:id="addCallButton" layoutX="551.0" layoutY="600.0" mnemonicParsing="false" onAction="#AddCall" text="Add call" />
+      <Label layoutX="226.0" layoutY="89.0" text="Call information">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Label layoutX="640.0" layoutY="89.0" text="Units">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Label layoutX="226.0" layoutY="357.0" text="Caller information">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>

@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.coursework.cassandraambulance.controllers.UpdateCallController">
+   <children>
+      <TableView fx:id="dataTable" layoutX="226.0" layoutY="153.0" prefHeight="259.0" prefWidth="1031.0" AnchorPane.bottomAnchor="308.0" AnchorPane.leftAnchor="226.0" AnchorPane.rightAnchor="23.0" AnchorPane.topAnchor="153.0" />
+      <Button fx:id="getDataButton" layoutX="1184.0" layoutY="115.0" mnemonicParsing="false" onAction="#GetCallsByDate" prefHeight="25.0" prefWidth="73.0" text="Get Calls" AnchorPane.bottomAnchor="580.0" AnchorPane.leftAnchor="1184.0" AnchorPane.rightAnchor="23.0" AnchorPane.topAnchor="115.0" />
+      <Label layoutX="226.0" layoutY="24.0" text="Add call">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <Separator layoutX="200.0" orientation="VERTICAL" prefHeight="720.0" prefWidth="4.0" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0" />
+      <VBox layoutX="13.0" layoutY="146.0" prefHeight="428.0" prefWidth="174.0" AnchorPane.bottomAnchor="146.0" AnchorPane.topAnchor="146.0">
+         <children>
+            <Label fx:id="getByDateLabel" onMouseClicked="#SwitchToCallByDate" prefHeight="40.0" text="Get call by date" textFill="#00000099">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label fx:id="getCallByAddress" onMouseClicked="#SwitchToCallByAddress" prefHeight="40.0" text="Get call by address" textFill="#00000099">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label fx:id="getCallByUnit" prefHeight="40.0" text="Get call by unit" textFill="#00000099">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label fx:id="getReportByCall" prefHeight="40.0" text="Get report by call" textFill="#00000099">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label fx:id="getReportByHosp" prefHeight="40.0" text="Get report by hospitalization" textFill="#00000099">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label fx:id="getUnitById" prefHeight="40.0" text="Get unit by ID" textFill="#00000099">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label fx:id="getUnitByEmp" prefHeight="40.0" prefWidth="150.0" text="Get unit by employee" textFill="#00000099">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label fx:id="getPersons" prefHeight="40.0" prefWidth="150.0" text="Get persons" textFill="#00000099">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label fx:id="addCall" layoutX="10.0" layoutY="290.0" onMouseClicked="#SwitchToAddCall" prefHeight="40.0" prefWidth="150.0" text="Add call" textFill="#00000099">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label fx:id="addReport" layoutX="10.0" layoutY="330.0" onMouseClicked="#SwitchToAddReport" prefHeight="40.0" prefWidth="150.0" text="Add report" textFill="#00000099">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label fx:id="updateCallLabel" onMouseClicked="#SwitchToAddReport" prefHeight="40.0" prefWidth="150.0" text="Update call">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
+            <Label fx:id="updateReportLabel" onMouseClicked="#SwitchToAddReport" prefHeight="40.0" prefWidth="150.0" text="Update report" textFill="#00000099">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+         </children>
+      </VBox>
+      <Button fx:id="updateCallButton" layoutX="1202.0" layoutY="671.0" mnemonicParsing="false" onAction="#UpdateCall" text="Update" />
+      <Label layoutX="226.0" layoutY="422.0" text="Old information">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Label layoutX="548.0" layoutY="461.0" text="Locality" />
+      <Label layoutX="548.0" layoutY="497.0" text="Thoroughfare" />
+      <TextField fx:id="newThoroughfareTextField" layoutX="661.0" layoutY="493.0" prefHeight="25.0" prefWidth="174.0" />
+      <TextField fx:id="newLocalityTextField" layoutX="661.0" layoutY="457.0" prefHeight="25.0" prefWidth="174.0" />
+      <Label layoutX="548.0" layoutY="532.0" text="Premise" />
+      <Label layoutX="548.0" layoutY="568.0" text="Sub premise" />
+      <TextField fx:id="newSubPremiseTextField" layoutX="661.0" layoutY="564.0" prefHeight="25.0" prefWidth="174.0" />
+      <TextField fx:id="newPremiseTextField" layoutX="661.0" layoutY="528.0" prefHeight="25.0" prefWidth="174.0" />
+      <Label layoutX="548.0" layoutY="603.0" text="Cause" />
+      <Label layoutX="548.0" layoutY="639.0" text="Unit id" />
+      <TextField fx:id="newUnitIdTextField" layoutX="661.0" layoutY="635.0" prefHeight="25.0" prefWidth="174.0" />
+      <TextField fx:id="newCauseTextField" layoutX="661.0" layoutY="599.0" prefHeight="25.0" prefWidth="174.0" />
+      <Label layoutX="861.0" layoutY="461.0" text="Caller first name" />
+      <Label layoutX="861.0" layoutY="497.0" text="Caller middle name" />
+      <TextField fx:id="newCallerMnTextField" layoutX="974.0" layoutY="493.0" prefHeight="25.0" prefWidth="174.0" />
+      <TextField fx:id="newCallerFnTextField" layoutX="974.0" layoutY="457.0" prefHeight="25.0" prefWidth="174.0" />
+      <Label layoutX="861.0" layoutY="532.0" text="Caller last name" />
+      <TextField fx:id="newCallerLnTextField" layoutX="974.0" layoutY="528.0" prefHeight="25.0" prefWidth="174.0" />
+      <Label layoutX="548.0" layoutY="422.0" text="New information">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Label layoutX="225.0" layoutY="533.0" text="Call id" />
+      <TextField fx:id="oldCallIdTextField" layoutX="338.0" layoutY="529.0" prefHeight="25.0" prefWidth="174.0" />
+      <DatePicker fx:id="oldDatePicker" layoutX="339.0" layoutY="457.0" />
+      <Label layoutX="225.0" layoutY="462.0" text="Date" />
+      <Label layoutX="225.0" layoutY="498.0" text="Time" />
+      <TextField fx:id="oldTimeTextField" layoutX="338.0" layoutY="493.0" prefHeight="25.0" prefWidth="174.0" promptText="14-30-00" />
+      <DatePicker fx:id="searchDatePicker" layoutX="282.0" layoutY="79.0" />
+      <Label layoutX="226.0" layoutY="83.0" text="Date" />
+      <Label layoutX="226.0" layoutY="119.0" text="Time" />
+      <TextField fx:id="searchTimeTextField" layoutX="281.0" layoutY="115.0" prefHeight="25.0" prefWidth="174.0" promptText="14-30-00" />
+      <Label layoutX="539.0" layoutY="83.0" text="Locality" />
+      <Label layoutX="539.0" layoutY="119.0" text="Thoroughfare" />
+      <TextField fx:id="searchThoroughfareTextField" layoutX="642.0" layoutY="115.0" prefHeight="25.0" prefWidth="174.0" />
+      <TextField fx:id="searchLocalityTextField" layoutX="642.0" layoutY="79.0" prefHeight="25.0" prefWidth="174.0" />
+      <Button fx:id="removeCallButton" layoutX="453.0" layoutY="671.0" mnemonicParsing="false" onAction="#RemoveCall" text="Remove" />
+   </children>
+</AnchorPane>
