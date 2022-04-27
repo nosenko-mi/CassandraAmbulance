@@ -1,23 +1,18 @@
 package org.coursework.cassandraambulance.controllers;
 
-import com.datastax.oss.driver.api.core.cql.*;
-import com.datastax.oss.driver.api.querybuilder.QueryBuilder;
-import com.datastax.oss.driver.api.querybuilder.delete.Delete;
-import com.datastax.oss.driver.api.querybuilder.relation.Relation;
-import com.datastax.oss.driver.api.querybuilder.update.Assignment;
-import com.datastax.oss.driver.api.querybuilder.update.UpdateStart;
+import com.datastax.oss.driver.api.core.cql.BoundStatement;
+import com.datastax.oss.driver.api.core.cql.PreparedStatement;
+import com.datastax.oss.driver.api.core.cql.ResultSet;
+import com.datastax.oss.driver.api.core.cql.Row;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
-import org.coursework.cassandraambulance.DBConnector;
-import org.coursework.cassandraambulance.TableUtils;
-import org.coursework.cassandraambulance.ViewSwitcher;
+import org.coursework.cassandraambulance.*;
 import org.coursework.cassandraambulance.models.EmergencyCall;
-import static com.datastax.oss.driver.api.querybuilder.QueryBuilder.*;
+import org.coursework.cassandraambulance.models.Person;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -43,7 +38,7 @@ public class UpdateCallController {
     public DatePicker oldDatePicker;
     public TextField oldTimeTextField;
 
-    public TableView dataTable;
+    public TableView<EmergencyCall> dataTable;
     public DatePicker searchDatePicker;
     public TextField searchTimeTextField;
     public TextField searchThoroughfareTextField;
@@ -56,54 +51,11 @@ public class UpdateCallController {
     private String localityToSearch = null, thoroughfareToSearch = null;
     private UUID oldCallId = null;
 
-    private TableColumn<EmergencyCall, UUID> idCol = new TableColumn<EmergencyCall, UUID>("id");
-    private TableColumn<EmergencyCall, UUID> unitIdCol = new TableColumn<EmergencyCall, UUID>("unitId");
-    private TableColumn<EmergencyCall, LocalDate> dateCol = new TableColumn<EmergencyCall, LocalDate>("date");
-    private TableColumn<EmergencyCall, LocalTime> timeCol = new TableColumn<EmergencyCall, LocalTime>("time");
-    private TableColumn<EmergencyCall, String> localityCol = new TableColumn<EmergencyCall, String>("locality");
-    private TableColumn<EmergencyCall, String> thoroughfareCol = new TableColumn<EmergencyCall, String>("thoroughfareCol");
-    private TableColumn<EmergencyCall, String> premiseCol = new TableColumn<EmergencyCall, String>("premiseCol");
-    private TableColumn<EmergencyCall, String> subPremiseCol = new TableColumn<EmergencyCall, String>("subPremiseCol");
-    private TableColumn<EmergencyCall, String> causeCol = new TableColumn<EmergencyCall, String>("causeCol");
-    private TableColumn<EmergencyCall, UUID> callerIdCol = new TableColumn<EmergencyCall, UUID>("callerId");
-
-
-    private final String tableName = "call_by_date";
-
-    public void GetUnits(ActionEvent event) {
-    }
-
     @FXML
     protected void GetCallsByDate() {
 
         GetSearchValues();
-
-        ResultSet rs;
-        if (dateToSearch == null && timeToSearch == null && localityToSearch.isEmpty() && thoroughfareToSearch.isEmpty()){
-            final String getCalls = "SELECT * FROM " + tableName + " LIMIT 100";
-            rs = DBConnector.getSession().execute(getCalls);
-        } else if (timeToSearch == null && localityToSearch.isEmpty() && thoroughfareToSearch.isEmpty()) {
-            PreparedStatement selectAllCallsByDate = DBConnector.getSession().prepare(
-                    "SELECT * FROM " + tableName + " WHERE date = ? LIMIT 100"
-            );
-            BoundStatement boundStatement = selectAllCallsByDate.bind(dateToSearch);
-            rs = DBConnector.getSession().execute(boundStatement);
-        } else if (localityToSearch.isEmpty() && thoroughfareToSearch.isEmpty()){
-            PreparedStatement selectAllCallsByDate = DBConnector.getSession().prepare(
-                    "SELECT * FROM " + tableName + " WHERE date = ? AND time = ? LIMIT 100"
-            );
-            BoundStatement boundStatement = selectAllCallsByDate.bind(dateToSearch, timeToSearch);
-            rs = DBConnector.getSession().execute(boundStatement);
-        } else if (thoroughfareToSearch.isEmpty()) {
-            PreparedStatement selectAllCallsByDate = DBConnector.getSession().prepare(
-                    "SELECT * FROM " + tableName + " WHERE date = ? AND time = ? AND a_locality = ? LIMIT 100"
-            );
-            BoundStatement boundStatement = selectAllCallsByDate.bind(dateToSearch, timeToSearch, localityToSearch);
-            rs = DBConnector.getSession().execute(boundStatement);
-        }  else {
-            final String getCalls = "SELECT * FROM " + tableName + " LIMIT 100";
-            rs = DBConnector.getSession().execute(getCalls);
-        }
+        ResultSet rs = Query.GetCallsByDateQuery(dateToSearch, localityToSearch, thoroughfareToSearch);
 
         ObservableList<EmergencyCall> callObservableList = FXCollections.observableArrayList();
         for (Row row : rs){
@@ -119,22 +71,7 @@ public class UpdateCallController {
 
         dataTable.getColumns().clear();
 
-        dataTable.setEditable(true);
-
-        idCol.setCellValueFactory(new PropertyValueFactory<EmergencyCall, UUID>("id"));
-        unitIdCol.setCellValueFactory(new PropertyValueFactory<EmergencyCall, UUID>("unitId"));
-        dateCol.setCellValueFactory(new PropertyValueFactory<EmergencyCall, LocalDate>("date"));
-        timeCol.setCellValueFactory(new PropertyValueFactory<EmergencyCall, LocalTime>("time"));
-        localityCol.setCellValueFactory(new PropertyValueFactory<EmergencyCall, String>("locality"));
-        thoroughfareCol.setCellValueFactory(new PropertyValueFactory<EmergencyCall, String>("thoroughfare"));
-        premiseCol.setCellValueFactory(new PropertyValueFactory<EmergencyCall, String>("premise"));
-        subPremiseCol.setCellValueFactory(new PropertyValueFactory<EmergencyCall, String>("subPremise"));
-        causeCol.setCellValueFactory(new PropertyValueFactory<EmergencyCall, String>("cause"));
-        callerIdCol.setCellValueFactory(new PropertyValueFactory<EmergencyCall, UUID>("callerId"));
-
-
-        dataTable.setItems(callObservableList);
-        dataTable.getColumns().addAll(idCol, unitIdCol, dateCol, timeCol, localityCol, thoroughfareCol, premiseCol, subPremiseCol, causeCol, callerIdCol);
+       EmergencyCallTable.SetColumns(dataTable, callObservableList);
 
         dataTable.getSelectionModel().setCellSelectionEnabled(true);
         dataTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
@@ -144,8 +81,9 @@ public class UpdateCallController {
 
     public void UpdateCall(ActionEvent event) {
         GetOldData();
+        // обрати виклик, що буде змінюватися
         PreparedStatement selectOneCall = DBConnector.getSession().prepare(
-                "SELECT * FROM " + tableName + " WHERE date = ? AND time = ? and id = ? LIMIT 1"
+                "SELECT * FROM " + TableName.CALL_BY_DATE + " WHERE date = ? AND time = ? and id = ?"
         );
         BoundStatement boundStatement = selectOneCall.bind(oldDate, oldTime, oldCallId);
         ResultSet rs = DBConnector.getSession().execute(boundStatement);
@@ -156,21 +94,24 @@ public class UpdateCallController {
                 row.getLocalTime("time"),
                 row.getUuid("id"), row.getUuid("unit_id"), row.getUuid("caller_id")
         );
+        PreparedStatement selectOneCaller = DBConnector.getSession().prepare(
+                "SELECT * FROM " + TableName.PERSONS + " WHERE type = 'Викликач' AND id = ?"
+        );
+        boundStatement = selectOneCaller.bind(emergencyCall.getCallerId());
+
+        rs = DBConnector.getSession().execute(boundStatement);
+        row = rs.one();
+        Person caller = new Person(
+                row.getString("type"), row.getUuid("id"),
+                row.getString("first_name"), row.getString("middle_name"), row.getString("last_name"));
 
 
-        System.out.println(emergencyCall.toString());
-
-//        newCause = emergencyCall.getCause();
-//        newLocality = emergencyCall.getCause();
-//        newPremise = emergencyCall.getCause();
-//        newSubPremise = emergencyCall.getCause();
-//        newThoroughfare = emergencyCall.getCause();
-//        newCause = emergencyCall.getCause();
-
-        GetNewData(emergencyCall);
-
+        System.out.println(emergencyCall);
+        // Встановити нові дані
+        GetNewData(emergencyCall, caller);
+        // Оновити дані виклику
         PreparedStatement updateCall = DBConnector.getSession().prepare(
-                "UPDATE " + tableName +
+                "UPDATE " + TableName.CALL_BY_DATE +
                         " SET a_locality = ? , a_thoroughfare = ? , a_premise = ?, a_sub_premise = ?, cause = ?, unit_id = ?" +
                         " WHERE date = ? AND time = ? AND id = ?;"
         );
@@ -178,6 +119,23 @@ public class UpdateCallController {
         System.out.println(boundStatement);
 
         DBConnector.getSession().execute(boundStatement);
+
+        // Оновити дані викликача
+        if (newCallerFn.equals(caller.getFirstName()) && newCallerMn.equals(caller.getMiddleName()) && newCallerLn.equals(caller.getLastName())){
+            System.out.println("Caller not changed");
+
+        } else {
+            System.out.println("Caller changed");
+
+            PreparedStatement updateCaller = DBConnector.getSession().prepare(
+                    "UPDATE " + TableName.PERSONS +
+                            " SET first_name = ? , middle_name = ? , last_name = ?" +
+                            " WHERE type = ? AND id = ? ;"
+            );
+            boundStatement = updateCaller.bind(newCallerFn, newCallerMn, newCallerLn, "Викликач", caller.getId());
+
+            DBConnector.getSession().execute(boundStatement);
+        }
 
 
     }
@@ -206,7 +164,7 @@ public class UpdateCallController {
         System.out.println("Thoroughfare: " + thoroughfareToSearch);
 
 
-//        UpdateStart update = (UpdateStart) update(tableName).set(
+//        UpdateStart update = (UpdateStart) update(TableName.CALL_BY_DATE).set(
 //                Assignment.setColumn("a_locality", bindMarker()),
 //                Assignment.setColumn("a_thoroughfare", bindMarker()),
 //                Assignment.setColumn("a_premise", bindMarker()),
@@ -221,14 +179,14 @@ public class UpdateCallController {
     public void RemoveCall(ActionEvent event) {
         GetOldData();
         PreparedStatement deleteCall = DBConnector.getSession().prepare(
-                "DELETE FROM " + tableName + " WHERE date = ? AND time = ? AND id = ?;"
+                "DELETE FROM " + TableName.CALL_BY_DATE + " WHERE date = ? AND time = ? AND id = ?;"
         );
         BoundStatement boundStatement = deleteCall.bind(oldDate, oldTime, oldCallId);
         DBConnector.getSession().execute(boundStatement);
 
 
-        //doesn't work
-//        Delete delete = deleteFrom(tableName)
+        // переделать
+//        Delete delete = deleteFrom(TableName.CALL_BY_DATE)
 //                .where(Relation.column("date").isEqualTo(bindMarker()))
 //                .where(Relation.column("time").isEqualTo(bindMarker()))
 //                .where(Relation.column("id").isEqualTo(bindMarker()));
@@ -257,22 +215,27 @@ public class UpdateCallController {
 
     }
 
-    protected void GetNewData(EmergencyCall emergencyCall){
+    protected void GetNewData(EmergencyCall emergencyCall, Person caller){
         try {
             newLocality = newLocalityTextField.getText();
             newThoroughfare = newThoroughfareTextField.getText();
             newPremise = newPremiseTextField.getText();
             newSubPremise = newSubPremiseTextField.getText();
             newCause = newCauseTextField.getText();
+
+            newCallerFn = newCallerFnTextField.getText();
+            newCallerMn = newCallerMnTextField.getText();
+            newCallerLn = newCallerLnTextField.getText();
+
+
             newUnitId = UUID.fromString(newUnitIdTextField.getText());
+
 
         } catch (IllegalArgumentException e){
             System.out.println(e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
 
         if (newLocality.isEmpty()){
             newLocality = emergencyCall.getLocality();
@@ -291,6 +254,15 @@ public class UpdateCallController {
         }
         if (newUnitId == null){
             newUnitId = emergencyCall.getUnitId();
+        }
+        if (newCallerFn.isEmpty()){
+            newCallerFn = caller.getFirstName();
+        }
+        if (newCallerMn.isEmpty()){
+            newCallerMn = caller.getMiddleName();
+        }
+        if (newCallerLn.isEmpty()){
+            newCallerLn = caller.getLastName();
         }
 
         System.out.println("newLocality:  " + newLocality);

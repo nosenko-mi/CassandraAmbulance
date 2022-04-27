@@ -1,45 +1,32 @@
 package org.coursework.cassandraambulance.controllers;
 
 import com.datastax.oss.driver.api.core.cql.*;
+import com.datastax.oss.driver.api.querybuilder.select.SelectFrom;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.SelectionMode;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
-import javafx.stage.Stage;
-import javafx.util.Callback;
 import org.coursework.cassandraambulance.*;
 import org.coursework.cassandraambulance.models.EmergencyCall;
-import org.w3c.dom.views.DocumentView;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.Locale;
-import java.util.UUID;
+
+import static com.datastax.oss.driver.api.querybuilder.QueryBuilder.selectFrom;
 
 public class GetByDateController{
 
     @FXML
     private TableView<EmergencyCall> dataTable;
     @FXML
-    private Button getDataButton;
-    @FXML
     private DatePicker datePicker;
     @FXML
     private TextField timeTextField, localityTextField, thoroughfareTextField;
-    @FXML
-    private Label getCallByAddress;
 
 
 
@@ -48,51 +35,25 @@ public class GetByDateController{
     private LocalTime timeToSearch = null;
     private String localityToSearch = null, thoroughfareToSearch = null;
 
-    private TableColumn<EmergencyCall, UUID> idCol = new TableColumn<EmergencyCall, UUID>("id");
-    private TableColumn<EmergencyCall, UUID> unitIdCol = new TableColumn<EmergencyCall, UUID>("unitId");
-    private TableColumn<EmergencyCall, LocalDate> dateCol = new TableColumn<EmergencyCall, LocalDate>("date");
-    private TableColumn<EmergencyCall, LocalTime> timeCol = new TableColumn<EmergencyCall, LocalTime>("time");
-    private TableColumn<EmergencyCall, String> localityCol = new TableColumn<EmergencyCall, String>("locality");
-    private TableColumn<EmergencyCall, String> thoroughfareCol = new TableColumn<EmergencyCall, String>("thoroughfareCol");
-    private TableColumn<EmergencyCall, String> premiseCol = new TableColumn<EmergencyCall, String>("premiseCol");
-    private TableColumn<EmergencyCall, String> subPremiseCol = new TableColumn<EmergencyCall, String>("subPremiseCol");
-    private TableColumn<EmergencyCall, String> causeCol = new TableColumn<EmergencyCall, String>("causeCol");
-    private TableColumn<EmergencyCall, UUID> callerIdCol = new TableColumn<EmergencyCall, UUID>("callerId");
+//    private final TableColumn<EmergencyCall, UUID> idCol = new TableColumn<EmergencyCall, UUID>("id");
+//    private final TableColumn<EmergencyCall, UUID> unitIdCol = new TableColumn<EmergencyCall, UUID>("unitId");
+//    private final TableColumn<EmergencyCall, LocalDate> dateCol = new TableColumn<EmergencyCall, LocalDate>("date");
+//    private final TableColumn<EmergencyCall, LocalTime> timeCol = new TableColumn<EmergencyCall, LocalTime>("time");
+//    private final TableColumn<EmergencyCall, String> localityCol = new TableColumn<EmergencyCall, String>("locality");
+//    private final TableColumn<EmergencyCall, String> thoroughfareCol = new TableColumn<EmergencyCall, String>("thoroughfareCol");
+//    private final TableColumn<EmergencyCall, String> premiseCol = new TableColumn<EmergencyCall, String>("premiseCol");
+//    private final TableColumn<EmergencyCall, String> subPremiseCol = new TableColumn<EmergencyCall, String>("subPremiseCol");
+//    private final TableColumn<EmergencyCall, String> causeCol = new TableColumn<EmergencyCall, String>("causeCol");
+//    private final TableColumn<EmergencyCall, UUID> callerIdCol = new TableColumn<EmergencyCall, UUID>("callerId");
 
 
-    private final String tableName = "call_by_date";
-    
+
     @FXML
     protected void GetCallsByDate() {
 
         GetSearchValues();
 
-//        if (dateToSearch == null && timeToSearch == null && localityToSearch.isEmpty() && thoroughfareToSearch.isEmpty()){
-//            final String getCalls = "SELECT * FROM " + tableName + " LIMIT 100";
-//            rs = DBConnector.getSession().execute(getCalls);
-//        } else if (timeToSearch == null && localityToSearch.isEmpty() && thoroughfareToSearch.isEmpty()) {
-//            PreparedStatement selectAllCallsByDate = DBConnector.getSession().prepare(
-//                    "SELECT * FROM " + tableName + " WHERE date = ? LIMIT 100"
-//            );
-//            BoundStatement boundStatement = selectAllCallsByDate.bind(dateToSearch);
-//            rs = DBConnector.getSession().execute(boundStatement);
-//        } else if (localityToSearch.isEmpty() && thoroughfareToSearch.isEmpty()){
-//            PreparedStatement selectAllCallsByDate = DBConnector.getSession().prepare(
-//                    "SELECT * FROM " + tableName + " WHERE date = ? AND time = ? LIMIT 100"
-//            );
-//            BoundStatement boundStatement = selectAllCallsByDate.bind(dateToSearch, timeToSearch);
-//            rs = DBConnector.getSession().execute(boundStatement);
-//        } else if (thoroughfareToSearch.isEmpty()) {
-//            PreparedStatement selectAllCallsByDate = DBConnector.getSession().prepare(
-//                    "SELECT * FROM " + tableName + " WHERE date = ? AND time = ? AND a_locality = ? LIMIT 100"
-//            );
-//            BoundStatement boundStatement = selectAllCallsByDate.bind(dateToSearch, timeToSearch, localityToSearch);
-//            rs = DBConnector.getSession().execute(boundStatement);
-//        }  else {
-//            final String getCalls = "SELECT * FROM " + tableName + " LIMIT 100";
-//            rs = DBConnector.getSession().execute(getCalls);
-//        }
-        ResultSet rs = PrepareAndExecuteStatement();
+        ResultSet rs = Query.GetCallsByDateQuery(dateToSearch, localityToSearch, thoroughfareToSearch);
         ObservableList<EmergencyCall> callObservableList = FXCollections.observableArrayList();
 
         for (Row row : rs){
@@ -108,26 +69,7 @@ public class GetByDateController{
 
         dataTable.getColumns().clear();
 
-        dataTable.setEditable(true);
-
-        idCol.setCellValueFactory(new PropertyValueFactory<EmergencyCall, UUID>("id"));
-        unitIdCol.setCellValueFactory(new PropertyValueFactory<EmergencyCall, UUID>("unitId"));
-        dateCol.setCellValueFactory(new PropertyValueFactory<EmergencyCall, LocalDate>("date"));
-        timeCol.setCellValueFactory(new PropertyValueFactory<EmergencyCall, LocalTime>("time"));
-        localityCol.setCellValueFactory(new PropertyValueFactory<EmergencyCall, String>("locality"));
-        thoroughfareCol.setCellValueFactory(new PropertyValueFactory<EmergencyCall, String>("thoroughfare"));
-        premiseCol.setCellValueFactory(new PropertyValueFactory<EmergencyCall, String>("premise"));
-        subPremiseCol.setCellValueFactory(new PropertyValueFactory<EmergencyCall, String>("subPremise"));
-        causeCol.setCellValueFactory(new PropertyValueFactory<EmergencyCall, String>("cause"));
-        callerIdCol.setCellValueFactory(new PropertyValueFactory<EmergencyCall, UUID>("callerId"));
-
-//
-//        final GetCallService getCallsService = new GetCallService();
-//        dataTable.itemsProperty().bind(getCallsService.valueProperty());
-//        getCallsService.start();
-
-        dataTable.setItems(callObservableList);
-        dataTable.getColumns().addAll(idCol, unitIdCol, dateCol, timeCol, localityCol, thoroughfareCol, premiseCol, subPremiseCol, causeCol, callerIdCol);
+        EmergencyCallTable.SetColumns(dataTable, callObservableList);
 
         dataTable.getSelectionModel().setCellSelectionEnabled(true);
         dataTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
@@ -183,135 +125,77 @@ public class GetByDateController{
 
     @FXML
     public void SwitchToAddReport(MouseEvent mouseEvent) {
-        ViewSwitcher.SwitchToAddReport(mouseEvent);
+        ViewSwitcher.Switch(mouseEvent, "add_report_view.fxml", "/style.css");
+
     }
 
     public void initialize(){
-
-
-
-
-
-        dateCol.setOnEditCommit(
-                new EventHandler<TableColumn.CellEditEvent<EmergencyCall, LocalDate>>() {
-                    @Override
-                    public void handle(TableColumn.CellEditEvent<EmergencyCall, LocalDate> t) {
-                        ((EmergencyCall) t.getTableView().getItems().get(
-                                t.getTablePosition().getRow())
-                        ).setDate(t.getNewValue());
-                    }
-                }
-        );
-        timeCol.setOnEditCommit(
-                new EventHandler<TableColumn.CellEditEvent<EmergencyCall, LocalTime>>() {
-                    @Override
-                    public void handle(TableColumn.CellEditEvent<EmergencyCall, LocalTime> t) {
-                        ((EmergencyCall) t.getTableView().getItems().get(
-                                t.getTablePosition().getRow())
-                        ).setTime(t.getNewValue());
-                    }
-                }
-        );
-        unitIdCol.setOnEditCommit(
-                new EventHandler<TableColumn.CellEditEvent<EmergencyCall, UUID>>() {
-                    @Override
-                    public void handle(TableColumn.CellEditEvent<EmergencyCall, UUID> t) {
-                        ((EmergencyCall) t.getTableView().getItems().get(
-                                t.getTablePosition().getRow())
-                        ).setUnitId(t.getNewValue());
-                    }
-                }
-        );
-        localityCol.setOnEditCommit(
-                new EventHandler<TableColumn.CellEditEvent<EmergencyCall, String>>() {
-                    @Override
-                    public void handle(TableColumn.CellEditEvent<EmergencyCall, String> t) {
-                        ((EmergencyCall) t.getTableView().getItems().get(
-                                t.getTablePosition().getRow())
-                        ).setLocality(t.getNewValue());
-                    }
-                }
-        );
-
-        thoroughfareCol.setOnEditCommit(
-                new EventHandler<TableColumn.CellEditEvent<EmergencyCall, String>>() {
-                    @Override
-                    public void handle(TableColumn.CellEditEvent<EmergencyCall, String> t) {
-                        ((EmergencyCall) t.getTableView().getItems().get(
-                                t.getTablePosition().getRow())
-                        ).setThoroughfare(t.getNewValue());
-                    }
-                }
-        );
-        premiseCol.setOnEditCommit(
-                new EventHandler<TableColumn.CellEditEvent<EmergencyCall, String>>() {
-                    @Override
-                    public void handle(TableColumn.CellEditEvent<EmergencyCall, String> t) {
-                        ((EmergencyCall) t.getTableView().getItems().get(
-                                t.getTablePosition().getRow())
-                        ).setPremise(t.getNewValue());
-                    }
-                }
-        );
-        subPremiseCol.setOnEditCommit(
-                new EventHandler<TableColumn.CellEditEvent<EmergencyCall, String>>() {
-                    @Override
-                    public void handle(TableColumn.CellEditEvent<EmergencyCall, String> t) {
-                        ((EmergencyCall) t.getTableView().getItems().get(
-                                t.getTablePosition().getRow())
-                        ).setSubPremise(t.getNewValue());
-                    }
-                }
-        );
-        causeCol.setOnEditCommit(
-                new EventHandler<TableColumn.CellEditEvent<EmergencyCall, String>>() {
-                    @Override
-                    public void handle(TableColumn.CellEditEvent<EmergencyCall, String> t) {
-                        ((EmergencyCall) t.getTableView().getItems().get(
-                                t.getTablePosition().getRow())
-                        ).setCause(t.getNewValue());
-                    }
-                }
-        );
-        callerIdCol.setOnEditCommit(
-                new EventHandler<TableColumn.CellEditEvent<EmergencyCall, UUID>>() {
-                    @Override
-                    public void handle(TableColumn.CellEditEvent<EmergencyCall, UUID> t) {
-                        ((EmergencyCall) t.getTableView().getItems().get(
-                                t.getTablePosition().getRow())
-                        ).setCallerId(t.getNewValue());
-                    }
-                }
-        );
 
     }
 
     protected ResultSet PrepareAndExecuteStatement(){
         ResultSet rs;
-        if (dateToSearch == null && timeToSearch == null && localityToSearch.isEmpty() && thoroughfareToSearch.isEmpty()){
-            final String getCalls = "SELECT * FROM " + tableName + " LIMIT 100";
+        if (dateToSearch == null && localityToSearch.isEmpty() && thoroughfareToSearch.isEmpty()){
+
+//            StringBuilder sb = new StringBuilder("CREATE TABLE IF NOT EXISTS ")
+//                    .append("booksByTitle").append("(")
+//                    .append("id uuid, ")
+//                    .append("title text,")
+//                    .append("PRIMARY KEY (title, id));");
+
+            final String getCalls = "SELECT * FROM " + TableName.CALL_BY_DATE + " LIMIT 100";
             rs = DBConnector.getSession().execute(getCalls);
-        } else if (timeToSearch == null && localityToSearch.isEmpty() && thoroughfareToSearch.isEmpty()) {
+            SimpleStatement simpleStatement = (SimpleStatement) selectFrom(TableName.CALL_BY_DATE).all().limit(100);
+            SelectFrom selectCall =
+                    (SelectFrom)
+                    selectFrom(TableName.CALL_BY_DATE)
+                    .all()
+                    .limit(100);
+
+
+
+        } else if (dateToSearch == null && thoroughfareToSearch.isEmpty()) {
             PreparedStatement selectAllCallsByDate = DBConnector.getSession().prepare(
-                    "SELECT * FROM " + tableName + " WHERE date = ? LIMIT 100"
+                    "SELECT * FROM " + TableName.CALL_BY_DATE + " WHERE a_locality = ? LIMIT 100"
+            );
+            BoundStatement boundStatement = selectAllCallsByDate.bind(localityToSearch);
+            rs = DBConnector.getSession().execute(boundStatement);
+        } else if (dateToSearch == null && localityToSearch.isEmpty()) {
+            PreparedStatement selectAllCallsByDate = DBConnector.getSession().prepare(
+                    "SELECT * FROM " + TableName.CALL_BY_DATE + " WHERE a_thoroughfare = ? LIMIT 100"
+            );
+            BoundStatement boundStatement = selectAllCallsByDate.bind(thoroughfareToSearch);
+            rs = DBConnector.getSession().execute(boundStatement);
+        } else if (dateToSearch == null) {
+            PreparedStatement selectAllCallsByDate = DBConnector.getSession().prepare(
+                    "SELECT * FROM " + TableName.CALL_BY_DATE + " WHERE a_locality = ? AND a_thoroughfare = ? LIMIT 100"
+            );
+            BoundStatement boundStatement = selectAllCallsByDate.bind( localityToSearch,thoroughfareToSearch);
+            rs = DBConnector.getSession().execute(boundStatement);
+        } else if ( localityToSearch.isEmpty() && thoroughfareToSearch.isEmpty()){
+            PreparedStatement selectAllCallsByDate = DBConnector.getSession().prepare(
+                    "SELECT * FROM " + TableName.CALL_BY_DATE + " WHERE date = ? LIMIT 100"
             );
             BoundStatement boundStatement = selectAllCallsByDate.bind(dateToSearch);
             rs = DBConnector.getSession().execute(boundStatement);
-        } else if (localityToSearch.isEmpty() && thoroughfareToSearch.isEmpty()){
+        }  else if (thoroughfareToSearch.isEmpty()) {
             PreparedStatement selectAllCallsByDate = DBConnector.getSession().prepare(
-                    "SELECT * FROM " + tableName + " WHERE date = ? AND time = ? LIMIT 100"
+                    "SELECT * FROM " + TableName.CALL_BY_DATE + " WHERE date = ?  AND a_locality = ? LIMIT 100"
             );
-            BoundStatement boundStatement = selectAllCallsByDate.bind(dateToSearch, timeToSearch);
+            BoundStatement boundStatement = selectAllCallsByDate.bind(dateToSearch, localityToSearch);
             rs = DBConnector.getSession().execute(boundStatement);
-        } else if (thoroughfareToSearch.isEmpty()) {
+        } else if (localityToSearch.isEmpty()) {
             PreparedStatement selectAllCallsByDate = DBConnector.getSession().prepare(
-                    "SELECT * FROM " + tableName + " WHERE date = ? AND time = ? AND a_locality = ? LIMIT 100"
+                    "SELECT * FROM " + TableName.CALL_BY_DATE + " WHERE date = ?  AND a_thoroughfare = ? LIMIT 100"
             );
-            BoundStatement boundStatement = selectAllCallsByDate.bind(dateToSearch, timeToSearch, localityToSearch);
+            BoundStatement boundStatement = selectAllCallsByDate.bind(dateToSearch, thoroughfareToSearch);
             rs = DBConnector.getSession().execute(boundStatement);
-        }  else {
-            final String getCalls = "SELECT * FROM " + tableName + " LIMIT 100";
-            rs = DBConnector.getSession().execute(getCalls);
+        } else {
+            PreparedStatement selectAllCallsByDate = DBConnector.getSession().prepare(
+                    "SELECT * FROM " + TableName.CALL_BY_DATE + " WHERE date = ?  AND a_locality = ? AND a_thoroughfare = ? LIMIT 100 ALLOW FILTERING"
+            );
+            BoundStatement boundStatement = selectAllCallsByDate.bind(dateToSearch, localityToSearch, thoroughfareToSearch);
+            rs = DBConnector.getSession().execute(boundStatement);
         }
         return rs;
     }
@@ -322,5 +206,17 @@ public class GetByDateController{
     }
 
     public void SwitchToUpdateReport(MouseEvent mouseEvent) {
+    }
+
+    public void SwitchToReportByCall(MouseEvent mouseEvent) {
+        ViewSwitcher.Switch(mouseEvent, "report_by_call_view.fxml", "/style.css");
+    }
+
+    public void SwitchToUnitByEmployee(MouseEvent mouseEvent) {
+        ViewSwitcher.Switch(mouseEvent, "unit_by_emp_view.fxml", "/style.css");
+
+    }
+
+    public void SwitchToGetPersons(MouseEvent mouseEvent) {
     }
 }
