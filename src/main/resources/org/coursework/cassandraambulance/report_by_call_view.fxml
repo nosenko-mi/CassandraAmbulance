@@ -55,7 +55,7 @@
                   <Font size="18.0" />
                </font>
             </Label>
-            <Label fx:id="getUnitById" prefHeight="40.0" text="Get unit by ID" textFill="#00000099">
+            <Label fx:id="getUnitById" onMouseClicked="#SwitchToUnitById" prefHeight="40.0" text="Get unit by ID" textFill="#00000099">
                <font>
                   <Font size="18.0" />
                </font>
@@ -94,7 +94,7 @@
       </VBox>
       <Label layoutX="226.0" layoutY="397.0" text="Call id" />
       <TextField fx:id="callIdTextField" layoutX="329.0" layoutY="393.0" prefHeight="25.0" prefWidth="174.0" />
-      <Button fx:id="getReportButton" layoutX="1163.0" layoutY="393.0" mnemonicParsing="false" onAction="#GetReportsByCall" text="Get report" />
+      <Button fx:id="getReportButton" layoutX="1163.0" layoutY="393.0" mnemonicParsing="false" onAction="#GetReportByCall" text="Get report" />
       <TableView fx:id="reportTable" layoutX="224.0" layoutY="428.0" prefHeight="273.0" prefWidth="1010.0" />
    </children>
 </AnchorPane>

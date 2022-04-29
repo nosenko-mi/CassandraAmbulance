@@ -47,17 +47,17 @@
                   <Font size="18.0" />
                </font>
             </Label>
-            <Label fx:id="getUnitById" prefHeight="40.0" text="Get unit by ID" textFill="#00000099">
+            <Label fx:id="getUnitById" onMouseClicked="#SwitchToUnitById" prefHeight="40.0" text="Get unit by ID" textFill="#00000099">
                <font>
                   <Font size="18.0" />
                </font>
             </Label>
-            <Label fx:id="getUnitByEmp" prefHeight="40.0" prefWidth="150.0" text="Get unit by employee" textFill="#00000099">
+            <Label fx:id="getUnitByEmp" onMouseClicked="#SwitchToUnitByEmployee"  prefHeight="40.0" prefWidth="150.0" text="Get unit by employee" textFill="#00000099">
                <font>
                   <Font size="18.0" />
                </font>
             </Label>
-            <Label fx:id="getPersons" prefHeight="40.0" prefWidth="150.0" text="Get persons" textFill="#00000099">
+            <Label fx:id="getPersons"  onMouseClicked="#SwitchToGetPersons"  prefHeight="40.0" prefWidth="150.0" text="Get persons" textFill="#00000099">
                <font>
                   <Font size="18.0" />
                </font>
@@ -72,12 +72,12 @@
                   <Font size="18.0" />
                </font>
             </Label>
-            <Label fx:id="updateCallLabel" onMouseClicked="#SwitchToAddReport" prefHeight="40.0" prefWidth="150.0" text="Update call">
+            <Label fx:id="updateCallLabel" onMouseClicked="#SwitchToUpdateCall" prefHeight="40.0" prefWidth="150.0" text="Update call">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>
             </Label>
-            <Label fx:id="updateReportLabel" onMouseClicked="#SwitchToAddReport" prefHeight="40.0" prefWidth="150.0" text="Update report" textFill="#00000099">
+            <Label fx:id="updateReportLabel" onMouseClicked="#SwitchToUpdateReport" prefHeight="40.0" prefWidth="150.0" text="Update report" textFill="#00000099">
                <font>
                   <Font size="18.0" />
                </font>

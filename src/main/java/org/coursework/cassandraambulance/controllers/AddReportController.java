@@ -4,23 +4,22 @@ import com.datastax.oss.driver.api.core.cql.BoundStatement;
 import com.datastax.oss.driver.api.core.cql.PreparedStatement;
 import com.datastax.oss.driver.api.core.cql.ResultSet;
 import com.datastax.oss.driver.api.core.cql.Row;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import org.coursework.cassandraambulance.*;
 import org.coursework.cassandraambulance.models.EmergencyCall;
+import org.coursework.cassandraambulance.tables.EmergencyCallTable;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
 import java.util.UUID;
 
-public class AddReportController {
+public class AddReportController extends Controller{
 
     public MenuButton resultMenuButton;
     public MenuButton hospitalizationMenuButton;
@@ -75,7 +74,7 @@ public class AddReportController {
                 DBConnector
                         .getSession()
                         .prepare(
-                                "INSERT INTO " + TableName.REPORT_BY_CALL +
+                                "INSERT INTO " + StringResources.REPORT_BY_CALL +
                                         " (call_id, id, unit_id, patient_id," +
                                         " a_locality, a_thoroughfare, a_premise, a_sub_premise," +
                                         " departure_time, arrival_time, completion_time, return_time," +
@@ -137,20 +136,6 @@ public class AddReportController {
 
     }
 
-    public void SwitchToCallByDate(MouseEvent mouseEvent) {
-        ViewSwitcher.Switch(mouseEvent, "call_by_date_view.fxml", "/style.css");
-    }
-
-    public void SwitchToCallByAddress(MouseEvent mouseEvent) {
-        ViewSwitcher.SwitchToCallByAddress(mouseEvent);
-    }
-
-    public void SwitchToAddReport(MouseEvent mouseEvent) {
-    }
-
-    public void SwitchToAddCall(MouseEvent mouseEvent) {
-        ViewSwitcher.SwitchToAddCall(mouseEvent);
-    }
 
     public void GetSearchDate(ActionEvent event) {
     }
@@ -184,8 +169,6 @@ public class AddReportController {
     }
 
     protected void GetSearchValues(){
-
-
 
         dateToSearch = null;
         timeToSearch = null;

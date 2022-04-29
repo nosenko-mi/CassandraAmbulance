@@ -24,7 +24,7 @@ import java.time.format.DateTimeParseException;
 import java.util.Date;
 import java.util.UUID;
 
-public class GetCallByAddressController {
+public class GetCallByAddressController extends Controller {
     @FXML
     private TableView<EmergencyCall> dataTable;
     @FXML
@@ -168,15 +168,4 @@ public class GetCallByAddressController {
     }
 
 
-    @FXML
-    public void SwitchToAddCall(MouseEvent mouseEvent) throws IOException {
-        ViewSwitcher.SwitchToAddCall(mouseEvent);
-    }
-
-    @FXML
-    public void SwitchToAddReport(MouseEvent mouseEvent) {
-    }
-
-    public void SwitchToCallByAddress(MouseEvent mouseEvent) {
-    }
 }

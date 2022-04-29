@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TableView?>
@@ -10,18 +9,18 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/17.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.coursework.cassandraambulance.controllers.GetUnitByEmployeeController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.coursework.cassandraambulance.controllers.GetUnitByIdController">
    <children>
-      <TableView fx:id="employeeTable" layoutX="226.0" layoutY="110.0" prefHeight="257.0" prefWidth="1010.0" AnchorPane.bottomAnchor="353.0" AnchorPane.leftAnchor="226.0" AnchorPane.rightAnchor="44.0" AnchorPane.topAnchor="110.0" />
-      <Button fx:id="getEmployeesButton" layoutX="1141.0" layoutY="75.0" mnemonicParsing="false" onAction="#GetEmployees" text="Get employees" AnchorPane.rightAnchor="44.0" />
-      <Label layoutX="226.0" layoutY="24.0" text="Get unit by employee">
+      <TableView fx:id="unitTable" layoutX="226.0" layoutY="134.0" prefHeight="537.0" prefWidth="1010.0" AnchorPane.bottomAnchor="49.0" AnchorPane.leftAnchor="226.0" AnchorPane.rightAnchor="44.0" AnchorPane.topAnchor="134.0" />
+      <Button fx:id="getDataButton" layoutX="1174.0" layoutY="99.0" mnemonicParsing="false" onAction="#GetUnitById" text="Get data" AnchorPane.rightAnchor="44.0" />
+      <Label layoutX="226.0" layoutY="24.0" text="Get unit by id">
          <font>
             <Font size="24.0" />
          </font>
       </Label>
       <Separator layoutX="200.0" orientation="VERTICAL" prefHeight="720.0" prefWidth="4.0" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0" />
-      <Label layoutX="226.0" layoutY="-71.0" text="Time" />
-      <TextField fx:id="timeTextField" layoutX="281.0" layoutY="-75.0" prefHeight="25.0" prefWidth="174.0" promptText="14-30-00" />
+      <Label layoutX="226.0" layoutY="103.0" text="Unit id" />
+      <TextField fx:id="unitIdTextField" layoutX="329.0" layoutY="99.0" prefHeight="25.0" prefWidth="174.0" />
       <VBox layoutX="13.0" layoutY="146.0" prefHeight="428.0" prefWidth="174.0" AnchorPane.bottomAnchor="146.0" AnchorPane.topAnchor="146.0">
          <children>
             <Label fx:id="getByDateLabel" onMouseClicked="#SwitchToCallByDate" prefHeight="40.0" text="Get call by date" textFill="#00000099">
@@ -49,14 +48,14 @@
                   <Font size="18.0" />
                </font>
             </Label>
-            <Label fx:id="getUnitById" onMouseClicked="#SwitchToUnitById" prefHeight="40.0" text="Get unit by ID" textFill="#00000099">
-               <font>
-                  <Font size="18.0" />
-               </font>
-            </Label>
-            <Label fx:id="getUnitByEmp" prefHeight="40.0" prefWidth="150.0" text="Get unit by employee">
+            <Label fx:id="getUnitById" prefHeight="40.0" text="Get unit by ID">
                <font>
                   <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
+            <Label fx:id="getUnitByEmp" onMouseClicked="#SwitchToUnitByEmployee" prefHeight="40.0" prefWidth="150.0" text="Get unit by employee" textFill="#00000099">
+               <font>
+                  <Font size="18.0" />
                </font>
             </Label>
             <Label fx:id="getPersons" onMouseClicked="#SwitchToGetPersons" prefHeight="40.0" prefWidth="150.0" text="Get persons" textFill="#00000099">
@@ -86,12 +85,5 @@
             </Label>
          </children>
       </VBox>
-      <CheckBox fx:id="doctorCheckBox" layoutX="226.0" layoutY="79.0" mnemonicParsing="false" onAction="#DoctorChecked" text="Лікар" />
-      <CheckBox fx:id="orderlyCheckBox" layoutX="301.0" layoutY="79.0" mnemonicParsing="false" onAction="#OrderlyChecked" text="Санітар" />
-      <CheckBox fx:id="driverCheckBox" layoutX="384.0" layoutY="79.0" mnemonicParsing="false" onAction="#DriverChecked" text="Водій" />
-      <TableView fx:id="employeeUnitTable" layoutX="226.0" layoutY="439.0" prefHeight="257.0" prefWidth="1010.0" />
-      <Button fx:id="getUnitButton" layoutX="1177.0" layoutY="404.0" mnemonicParsing="false" onAction="#GetUnitsByEmployee" text="Get unit" AnchorPane.rightAnchor="44.0" />
-      <Label layoutX="226.0" layoutY="408.0" text="Employee id" />
-      <TextField fx:id="employeeIdTextField" layoutX="301.0" layoutY="404.0" />
    </children>
 </AnchorPane>

@@ -55,7 +55,7 @@
                   <Font size="18.0" />
                </font>
             </Label>
-            <Label fx:id="getUnitById" prefHeight="40.0" text="Get unit by ID" textFill="#00000099">
+            <Label fx:id="getUnitById" onMouseClicked="#SwitchToUnitById" prefHeight="40.0" text="Get unit by ID" textFill="#00000099">
                <font>
                   <Font size="18.0" />
                </font>

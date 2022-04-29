@@ -13,13 +13,14 @@ import javafx.scene.input.MouseEvent;
 import org.coursework.cassandraambulance.*;
 import org.coursework.cassandraambulance.models.EmergencyCall;
 import org.coursework.cassandraambulance.models.Person;
+import org.coursework.cassandraambulance.tables.EmergencyCallTable;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
 import java.util.UUID;
 
-public class UpdateCallController {
+public class UpdateCallController extends Controller {
 
     public TextField newThoroughfareTextField;
     public TextField newLocalityTextField;
@@ -83,7 +84,7 @@ public class UpdateCallController {
         GetOldData();
         // обрати виклик, що буде змінюватися
         PreparedStatement selectOneCall = DBConnector.getSession().prepare(
-                "SELECT * FROM " + TableName.CALL_BY_DATE + " WHERE date = ? AND time = ? and id = ?"
+                "SELECT * FROM " + StringResources.CALL_BY_DATE + " WHERE date = ? AND time = ? and id = ?"
         );
         BoundStatement boundStatement = selectOneCall.bind(oldDate, oldTime, oldCallId);
         ResultSet rs = DBConnector.getSession().execute(boundStatement);
@@ -95,7 +96,7 @@ public class UpdateCallController {
                 row.getUuid("id"), row.getUuid("unit_id"), row.getUuid("caller_id")
         );
         PreparedStatement selectOneCaller = DBConnector.getSession().prepare(
-                "SELECT * FROM " + TableName.PERSONS + " WHERE type = 'Викликач' AND id = ?"
+                "SELECT * FROM " + StringResources.PERSONS + " WHERE type = 'Викликач' AND id = ?"
         );
         boundStatement = selectOneCaller.bind(emergencyCall.getCallerId());
 
@@ -111,7 +112,7 @@ public class UpdateCallController {
         GetNewData(emergencyCall, caller);
         // Оновити дані виклику
         PreparedStatement updateCall = DBConnector.getSession().prepare(
-                "UPDATE " + TableName.CALL_BY_DATE +
+                "UPDATE " + StringResources.CALL_BY_DATE +
                         " SET a_locality = ? , a_thoroughfare = ? , a_premise = ?, a_sub_premise = ?, cause = ?, unit_id = ?" +
                         " WHERE date = ? AND time = ? AND id = ?;"
         );
@@ -128,7 +129,7 @@ public class UpdateCallController {
             System.out.println("Caller changed");
 
             PreparedStatement updateCaller = DBConnector.getSession().prepare(
-                    "UPDATE " + TableName.PERSONS +
+                    "UPDATE " + StringResources.PERSONS +
                             " SET first_name = ? , middle_name = ? , last_name = ?" +
                             " WHERE type = ? AND id = ? ;"
             );
@@ -179,7 +180,7 @@ public class UpdateCallController {
     public void RemoveCall(ActionEvent event) {
         GetOldData();
         PreparedStatement deleteCall = DBConnector.getSession().prepare(
-                "DELETE FROM " + TableName.CALL_BY_DATE + " WHERE date = ? AND time = ? AND id = ?;"
+                "DELETE FROM " + StringResources.CALL_BY_DATE + " WHERE date = ? AND time = ? AND id = ?;"
         );
         BoundStatement boundStatement = deleteCall.bind(oldDate, oldTime, oldCallId);
         DBConnector.getSession().execute(boundStatement);
@@ -273,21 +274,5 @@ public class UpdateCallController {
         System.out.println("newUnitId:  " + newUnitId);
     }
 
-    public void SwitchToCallByDate(MouseEvent mouseEvent) {
-        ViewSwitcher.Switch(mouseEvent, "call_by_date_view.fxml", "/style.css");
-    }
 
-    public void SwitchToCallByAddress(MouseEvent mouseEvent) {
-    }
-
-    public void SwitchToAddReport(MouseEvent mouseEvent) {
-    }
-
-    public void SwitchToUpdateReport(MouseEvent mouseEvent) {
-    }
-
-
-    public void SwitchToAddCall(MouseEvent mouseEvent) {
-        ViewSwitcher.Switch(mouseEvent, "add_call_view.fxml", "/style.css");
-    }
 }

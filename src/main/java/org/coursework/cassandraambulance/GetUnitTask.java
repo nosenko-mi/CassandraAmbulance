@@ -7,6 +7,9 @@ import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import org.coursework.cassandraambulance.models.Unit;
 
+
+// зараз не використовується
+// необхідно для асинхронного запиту до бази даних
 public class GetUnitTask extends Task<ObservableList<Unit>> {
     @Override
     protected ObservableList<Unit> call() throws Exception {

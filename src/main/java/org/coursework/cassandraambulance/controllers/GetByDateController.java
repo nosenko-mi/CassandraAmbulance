@@ -4,6 +4,7 @@ import com.datastax.oss.driver.api.core.cql.*;
 import com.datastax.oss.driver.api.querybuilder.select.SelectFrom;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.SelectionMode;
@@ -12,6 +13,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import org.coursework.cassandraambulance.*;
 import org.coursework.cassandraambulance.models.EmergencyCall;
+import org.coursework.cassandraambulance.tables.EmergencyCallTable;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -19,7 +21,7 @@ import java.time.format.DateTimeParseException;
 
 import static com.datastax.oss.driver.api.querybuilder.QueryBuilder.selectFrom;
 
-public class GetByDateController{
+public class GetByDateController extends Controller {
 
     @FXML
     private TableView<EmergencyCall> dataTable;
@@ -113,25 +115,7 @@ public class GetByDateController{
     }
 
 
-    @FXML
-    protected void SwitchToCallByAddress(MouseEvent mouseEvent){
-        ViewSwitcher.SwitchToCallByAddress(mouseEvent);
-    }
 
-    @FXML
-    public void SwitchToAddCall(MouseEvent mouseEvent) {
-        ViewSwitcher.SwitchToAddCall(mouseEvent);
-    }
-
-    @FXML
-    public void SwitchToAddReport(MouseEvent mouseEvent) {
-        ViewSwitcher.Switch(mouseEvent, "add_report_view.fxml", "/style.css");
-
-    }
-
-    public void initialize(){
-
-    }
 
     protected ResultSet PrepareAndExecuteStatement(){
         ResultSet rs;
@@ -143,12 +127,12 @@ public class GetByDateController{
 //                    .append("title text,")
 //                    .append("PRIMARY KEY (title, id));");
 
-            final String getCalls = "SELECT * FROM " + TableName.CALL_BY_DATE + " LIMIT 100";
+            final String getCalls = "SELECT * FROM " + StringResources.CALL_BY_DATE + " LIMIT 100";
             rs = DBConnector.getSession().execute(getCalls);
-            SimpleStatement simpleStatement = (SimpleStatement) selectFrom(TableName.CALL_BY_DATE).all().limit(100);
+            SimpleStatement simpleStatement = (SimpleStatement) selectFrom(StringResources.CALL_BY_DATE).all().limit(100);
             SelectFrom selectCall =
                     (SelectFrom)
-                    selectFrom(TableName.CALL_BY_DATE)
+                    selectFrom(StringResources.CALL_BY_DATE)
                     .all()
                     .limit(100);
 
@@ -156,43 +140,43 @@ public class GetByDateController{
 
         } else if (dateToSearch == null && thoroughfareToSearch.isEmpty()) {
             PreparedStatement selectAllCallsByDate = DBConnector.getSession().prepare(
-                    "SELECT * FROM " + TableName.CALL_BY_DATE + " WHERE a_locality = ? LIMIT 100"
+                    "SELECT * FROM " + StringResources.CALL_BY_DATE + " WHERE a_locality = ? LIMIT 100"
             );
             BoundStatement boundStatement = selectAllCallsByDate.bind(localityToSearch);
             rs = DBConnector.getSession().execute(boundStatement);
         } else if (dateToSearch == null && localityToSearch.isEmpty()) {
             PreparedStatement selectAllCallsByDate = DBConnector.getSession().prepare(
-                    "SELECT * FROM " + TableName.CALL_BY_DATE + " WHERE a_thoroughfare = ? LIMIT 100"
+                    "SELECT * FROM " + StringResources.CALL_BY_DATE + " WHERE a_thoroughfare = ? LIMIT 100"
             );
             BoundStatement boundStatement = selectAllCallsByDate.bind(thoroughfareToSearch);
             rs = DBConnector.getSession().execute(boundStatement);
         } else if (dateToSearch == null) {
             PreparedStatement selectAllCallsByDate = DBConnector.getSession().prepare(
-                    "SELECT * FROM " + TableName.CALL_BY_DATE + " WHERE a_locality = ? AND a_thoroughfare = ? LIMIT 100"
+                    "SELECT * FROM " + StringResources.CALL_BY_DATE + " WHERE a_locality = ? AND a_thoroughfare = ? LIMIT 100"
             );
             BoundStatement boundStatement = selectAllCallsByDate.bind( localityToSearch,thoroughfareToSearch);
             rs = DBConnector.getSession().execute(boundStatement);
         } else if ( localityToSearch.isEmpty() && thoroughfareToSearch.isEmpty()){
             PreparedStatement selectAllCallsByDate = DBConnector.getSession().prepare(
-                    "SELECT * FROM " + TableName.CALL_BY_DATE + " WHERE date = ? LIMIT 100"
+                    "SELECT * FROM " + StringResources.CALL_BY_DATE + " WHERE date = ? LIMIT 100"
             );
             BoundStatement boundStatement = selectAllCallsByDate.bind(dateToSearch);
             rs = DBConnector.getSession().execute(boundStatement);
         }  else if (thoroughfareToSearch.isEmpty()) {
             PreparedStatement selectAllCallsByDate = DBConnector.getSession().prepare(
-                    "SELECT * FROM " + TableName.CALL_BY_DATE + " WHERE date = ?  AND a_locality = ? LIMIT 100"
+                    "SELECT * FROM " + StringResources.CALL_BY_DATE + " WHERE date = ?  AND a_locality = ? LIMIT 100"
             );
             BoundStatement boundStatement = selectAllCallsByDate.bind(dateToSearch, localityToSearch);
             rs = DBConnector.getSession().execute(boundStatement);
         } else if (localityToSearch.isEmpty()) {
             PreparedStatement selectAllCallsByDate = DBConnector.getSession().prepare(
-                    "SELECT * FROM " + TableName.CALL_BY_DATE + " WHERE date = ?  AND a_thoroughfare = ? LIMIT 100"
+                    "SELECT * FROM " + StringResources.CALL_BY_DATE + " WHERE date = ?  AND a_thoroughfare = ? LIMIT 100"
             );
             BoundStatement boundStatement = selectAllCallsByDate.bind(dateToSearch, thoroughfareToSearch);
             rs = DBConnector.getSession().execute(boundStatement);
         } else {
             PreparedStatement selectAllCallsByDate = DBConnector.getSession().prepare(
-                    "SELECT * FROM " + TableName.CALL_BY_DATE + " WHERE date = ?  AND a_locality = ? AND a_thoroughfare = ? LIMIT 100 ALLOW FILTERING"
+                    "SELECT * FROM " + StringResources.CALL_BY_DATE + " WHERE date = ?  AND a_locality = ? AND a_thoroughfare = ? LIMIT 100 ALLOW FILTERING"
             );
             BoundStatement boundStatement = selectAllCallsByDate.bind(dateToSearch, localityToSearch, thoroughfareToSearch);
             rs = DBConnector.getSession().execute(boundStatement);
@@ -201,22 +185,40 @@ public class GetByDateController{
     }
 
 
-    public void SwitchToUpdateCall(MouseEvent mouseEvent) {
-        ViewSwitcher.Switch(mouseEvent, "update_call_view.fxml", "/style.css");
-    }
+//    @FXML
+//    protected void SwitchToCallByAddress(MouseEvent mouseEvent){
+//        ViewSwitcher.SwitchToCallByAddress(mouseEvent);
+//    }
+//
+//    @FXML
+//    public void SwitchToAddCall(MouseEvent mouseEvent) {
+//        ViewSwitcher.Switch(mouseEvent, "add_call_view.fxml", "/style.css");
+//
+//    }
+//
+////    @FXML
+////    public void SwitchToAddReport(MouseEvent mouseEvent) {
+////        ViewSwitcher.Switch(mouseEvent, "add_report_view.fxml", "/style.css");
+////
+////    }
+//
+//    public void SwitchToUpdateCall(MouseEvent mouseEvent) {
+//        ViewSwitcher.Switch(mouseEvent, "update_call_view.fxml", "/style.css");
+//    }
+//
+//    public void SwitchToUpdateReport(MouseEvent mouseEvent) {
+//    }
+//
+//    public void SwitchToReportByCall(MouseEvent mouseEvent) {
+//        ViewSwitcher.Switch(mouseEvent, "report_by_call_view.fxml", "/style.css");
+//    }
+//
+//    public void SwitchToUnitByEmployee(MouseEvent mouseEvent) {
+//        ViewSwitcher.Switch(mouseEvent, "unit_by_emp_view.fxml", "/style.css");
+//
+//    }
+//
+//    public void SwitchToGetPersons(MouseEvent mouseEvent) {
+//    }
 
-    public void SwitchToUpdateReport(MouseEvent mouseEvent) {
-    }
-
-    public void SwitchToReportByCall(MouseEvent mouseEvent) {
-        ViewSwitcher.Switch(mouseEvent, "report_by_call_view.fxml", "/style.css");
-    }
-
-    public void SwitchToUnitByEmployee(MouseEvent mouseEvent) {
-        ViewSwitcher.Switch(mouseEvent, "unit_by_emp_view.fxml", "/style.css");
-
-    }
-
-    public void SwitchToGetPersons(MouseEvent mouseEvent) {
-    }
 }

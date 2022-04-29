@@ -1,11 +1,12 @@
 package org.coursework.cassandraambulance;
+
 import com.datastax.oss.driver.api.core.AllNodesFailedException;
 import com.datastax.oss.driver.api.core.CqlSession;
-import com.datastax.oss.driver.api.core.cql.*;
-import com.datastax.oss.driver.api.core.metadata.Metadata;
 
 import java.net.InetSocketAddress;
 
+
+// клас, необхідний для з'єднання з базою даних
 public class DBConnector {
 
     static CqlSession session;
@@ -18,6 +19,7 @@ public class DBConnector {
     }
 
     public static void connectDB(){
+        // за замовчуванням використовуєтсья сокет: localhost порт: 9042
         try{
             session = CqlSession.builder()
                     .withKeyspace("ambulance_ver3")

@@ -2,25 +2,31 @@ package org.coursework.cassandraambulance.models;
 
 import java.util.UUID;
 
+// клас, що представляє бригаду
+
 public class Unit {
     private UUID id, doctorId, orderlyId, driverId, carId;
-    private String doctorFN, doctorMN, doctorLN, orderlyFN, orderlyMN, orderlyLN, driverFN, driverMN, driverLN, carSerialNumber;
+    private String doctorFn, doctorMn, doctorLn, orderlyFn, orderlyMn, orderlyLn, driverFn, driverMn, driverLn, carSerialNumber;
 
-    public Unit(UUID id, UUID doctorId, UUID orderlyId, UUID driverId, UUID carId, String doctorFN, String doctorMN, String doctorLN, String orderlyFN, String orderlyMN, String orderlyLN, String driverFN, String driverMN, String driverLN, String carSerialNumber) {
+    public Unit(UUID id, UUID doctorId, UUID orderlyId, UUID driverId, UUID carId,
+                String doctorFn, String doctorMn, String doctorLn,
+                String orderlyFn, String orderlyMn, String orderlyLn,
+                String driverFn, String driverMn, String driverLn,
+                String carSerialNumber) {
         this.id = id;
         this.doctorId = doctorId;
         this.orderlyId = orderlyId;
         this.driverId = driverId;
         this.carId = carId;
-        this.doctorFN = doctorFN;
-        this.doctorMN = doctorMN;
-        this.doctorLN = doctorLN;
-        this.orderlyFN = orderlyFN;
-        this.orderlyMN = orderlyMN;
-        this.orderlyLN = orderlyLN;
-        this.driverFN = driverFN;
-        this.driverMN = driverMN;
-        this.driverLN = driverLN;
+        this.doctorFn = doctorFn;
+        this.doctorMn = doctorMn;
+        this.doctorLn = doctorLn;
+        this.orderlyFn = orderlyFn;
+        this.orderlyMn = orderlyMn;
+        this.orderlyLn = orderlyLn;
+        this.driverFn = driverFn;
+        this.driverMn = driverMn;
+        this.driverLn = driverLn;
         this.carSerialNumber = carSerialNumber;
     }
 
@@ -64,76 +70,76 @@ public class Unit {
         this.carId = carId;
     }
 
-    public String getDoctorFN() {
-        return doctorFN;
+    public String getDoctorFn() {
+        return doctorFn;
     }
 
-    public void setDoctorFN(String doctorFN) {
-        this.doctorFN = doctorFN;
+    public void setDoctorFn(String doctorFn) {
+        this.doctorFn = doctorFn;
     }
 
-    public String getDoctorMN() {
-        return doctorMN;
+    public String getDoctorMn() {
+        return doctorMn;
     }
 
-    public void setDoctorMN(String doctorMN) {
-        this.doctorMN = doctorMN;
+    public void setDoctorMn(String doctorMn) {
+        this.doctorMn = doctorMn;
     }
 
-    public String getDoctorLN() {
-        return doctorLN;
+    public String getDoctorLn() {
+        return doctorLn;
     }
 
-    public void setDoctorLN(String doctorLN) {
-        this.doctorLN = doctorLN;
+    public void setDoctorLn(String doctorLn) {
+        this.doctorLn = doctorLn;
     }
 
-    public String getOrderlyFN() {
-        return orderlyFN;
+    public String getOrderlyFn() {
+        return orderlyFn;
     }
 
-    public void setOrderlyFN(String orderlyFN) {
-        this.orderlyFN = orderlyFN;
+    public void setOrderlyFn(String orderlyFn) {
+        this.orderlyFn = orderlyFn;
     }
 
-    public String getOrderlyMN() {
-        return orderlyMN;
+    public String getOrderlyMn() {
+        return orderlyMn;
     }
 
-    public void setOrderlyMN(String orderlyMN) {
-        this.orderlyMN = orderlyMN;
+    public void setOrderlyMn(String orderlyMn) {
+        this.orderlyMn = orderlyMn;
     }
 
-    public String getOrderlyLN() {
-        return orderlyLN;
+    public String getOrderlyLn() {
+        return orderlyLn;
     }
 
-    public void setOrderlyLN(String orderlyLN) {
-        this.orderlyLN = orderlyLN;
+    public void setOrderlyLn(String orderlyLn) {
+        this.orderlyLn = orderlyLn;
     }
 
-    public String getDriverFN() {
-        return driverFN;
+    public String getDriverFn() {
+        return driverFn;
     }
 
-    public void setDriverFN(String driverFN) {
-        this.driverFN = driverFN;
+    public void setDriverFn(String driverFn) {
+        this.driverFn = driverFn;
     }
 
-    public String getDriverMN() {
-        return driverMN;
+    public String getDriverMn() {
+        return driverMn;
     }
 
-    public void setDriverMN(String driverMN) {
-        this.driverMN = driverMN;
+    public void setDriverMn(String driverMn) {
+        this.driverMn = driverMn;
     }
 
-    public String getDriverLN() {
-        return driverLN;
+    public String getDriverLn() {
+        return driverLn;
     }
 
-    public void setDriverLN(String driverLN) {
-        this.driverLN = driverLN;
+    public void setDriverLn(String driverLn) {
+        this.driverLn = driverLn;
     }
 
     public String getCarSerialNumber() {

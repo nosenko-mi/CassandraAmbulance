@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.UUID;
 
+// клас, що представляє виклик
 public class EmergencyCall {
 
     @Override

@@ -2,6 +2,7 @@ package org.coursework.cassandraambulance.models;
 
 import java.util.UUID;
 
+// клас, що представляє особу (водій, лікар, санітар, викликач)
 public class Person {
     private String type;
     private UUID id;

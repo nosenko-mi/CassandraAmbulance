@@ -7,17 +7,20 @@ import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import org.coursework.cassandraambulance.models.EmergencyCall;
 
+// зараз не використовується
+// необхідно для асинхронного запиту до бази даних
 public class GetCallTask extends Task<ObservableList<EmergencyCall>> {
     @Override
     protected ObservableList<EmergencyCall> call() throws Exception {
 
-
+        // запит
         final String getUnits = "SELECT * FROM call_by_date";
         ResultSet rs = DBConnector.getSession().execute(getUnits);
 
-        // создаем список объектов
+        // створення списку об'єктів
         ObservableList<EmergencyCall> callObservableList = FXCollections.observableArrayList();
 
+        // обробка отриманих рядків.
         for (Row row : rs){
             callObservableList
                     .add(new EmergencyCall(

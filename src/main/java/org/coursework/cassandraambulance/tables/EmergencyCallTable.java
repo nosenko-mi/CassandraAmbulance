@@ -1,4 +1,4 @@
-package org.coursework.cassandraambulance;
+package org.coursework.cassandraambulance.tables;
 
 import com.datastax.oss.driver.api.core.cql.ResultSet;
 import com.datastax.oss.driver.api.core.cql.Row;
@@ -8,12 +8,17 @@ import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import org.coursework.cassandraambulance.Query;
+import org.coursework.cassandraambulance.TableUtils;
 import org.coursework.cassandraambulance.models.EmergencyCall;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.UUID;
 
+
+// клас, що представляє таблицю викликів
+// необхідний для створення столбців у існуючій таблиці, а також для отримання та внесення даних у таблицю
 public class EmergencyCallTable {
 
     public static final TableColumn<EmergencyCall, UUID> idCol = new TableColumn<EmergencyCall, UUID>("id");

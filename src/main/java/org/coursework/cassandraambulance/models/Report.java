@@ -3,9 +3,11 @@ package org.coursework.cassandraambulance.models;
 import java.time.LocalTime;
 import java.util.UUID;
 
+
+// клас, що представляє звіт
 public class Report {
     private UUID id, callId, patientId, unitId;
-    private String preliminary_diagnosis, diagnosis_code, result, hospStatus, traumaStatus, onsetStatus, appliedBeforeStatus, fruitlessStatus, locality, thoroughfare, premise, subPremise;
+    private String preliminaryDiagnosis, diagnosisCode, resultStatus, hospitalizationStatus, traumaStatus, onsetStatus, appliedBeforeStatus, fruitlessStatus, locality, thoroughfare, premise, subPremise;
     private LocalTime departureTime, arrivalTime, completionTime, returnTime;
 
     public UUID getId() {
@@ -40,36 +42,36 @@ public class Report {
         this.unitId = unitId;
     }
 
-    public String getPreliminary_diagnosis() {
-        return preliminary_diagnosis;
+    public String getPreliminaryDiagnosis() {
+        return preliminaryDiagnosis;
     }
 
-    public void setPreliminary_diagnosis(String preliminary_diagnosis) {
-        this.preliminary_diagnosis = preliminary_diagnosis;
+    public void setPreliminaryDiagnosis(String preliminaryDiagnosis) {
+        this.preliminaryDiagnosis = preliminaryDiagnosis;
     }
 
-    public String getDiagnosis_code() {
-        return diagnosis_code;
+    public String getDiagnosisCode() {
+        return diagnosisCode;
     }
 
-    public void setDiagnosis_code(String diagnosis_code) {
-        this.diagnosis_code = diagnosis_code;
+    public void setDiagnosisCode(String diagnosisCode) {
+        this.diagnosisCode = diagnosisCode;
     }
 
-    public String getResult() {
-        return result;
+    public String getResultStatus() {
+        return resultStatus;
     }
 
-    public void setResult(String result) {
-        this.result = result;
+    public void setResultStatus(String resultStatus) {
+        this.resultStatus = resultStatus;
     }
 
-    public String getHospStatus() {
-        return hospStatus;
+    public String getHospitalizationStatus() {
+        return hospitalizationStatus;
     }
 
-    public void setHospStatus(String hospStatus) {
-        this.hospStatus = hospStatus;
+    public void setHospitalizationStatus(String hospitalizationStatus) {
+        this.hospitalizationStatus = hospitalizationStatus;
     }
 
     public String getTraumaStatus() {
@@ -168,15 +170,15 @@ public class Report {
         this.returnTime = returnTime;
     }
 
-    public Report(UUID id, UUID callId, UUID patientId, UUID unitId, String preliminary_diagnosis, String diagnosis_code, String result, String hospStatus, String traumaStatus, String onsetStatus, String appliedBeforeStatus, String fruitlessStatus, String locality, String thoroughfare, String premise, String subPremise, LocalTime departureTime, LocalTime arrivalTime, LocalTime completionTime, LocalTime returnTime) {
+    public Report(UUID id, UUID callId, UUID patientId, UUID unitId, String preliminaryDiagnosis, String diagnosisDode, String resultStatus, String hospitalizatonStatus, String traumaStatus, String onsetStatus, String appliedBeforeStatus, String fruitlessStatus, String locality, String thoroughfare, String premise, String subPremise, LocalTime departureTime, LocalTime arrivalTime, LocalTime completionTime, LocalTime returnTime) {
         this.id = id;
         this.callId = callId;
         this.patientId = patientId;
         this.unitId = unitId;
-        this.preliminary_diagnosis = preliminary_diagnosis;
-        this.diagnosis_code = diagnosis_code;
-        this.result = result;
-        this.hospStatus = hospStatus;
+        this.preliminaryDiagnosis = preliminaryDiagnosis;
+        this.diagnosisCode = diagnosisDode;
+        this.resultStatus = resultStatus;
+        this.hospitalizationStatus = hospitalizatonStatus;
         this.traumaStatus = traumaStatus;
         this.onsetStatus = onsetStatus;
         this.appliedBeforeStatus = appliedBeforeStatus;

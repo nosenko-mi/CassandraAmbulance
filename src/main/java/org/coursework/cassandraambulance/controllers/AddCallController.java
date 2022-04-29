@@ -12,13 +12,13 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import org.coursework.cassandraambulance.*;
 import org.coursework.cassandraambulance.models.Unit;
+import org.coursework.cassandraambulance.tables.UnitTable;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.UUID;
 
-public class AddCallController {
+public class AddCallController extends Controller {
 
     @FXML
     public TextField thoroughfareTextField;
@@ -46,45 +46,45 @@ public class AddCallController {
     private final TableColumn<Unit, UUID> orderlyIdCol = new TableColumn<>("orderlyId");
     private final TableColumn<Unit, UUID> driverIdCol = new TableColumn<>("driverId");
     private final TableColumn<Unit, UUID> carIdCol = new TableColumn<>("carId");
-    private final TableColumn<Unit, String> doctorFN = new TableColumn<>("doctorFN");
-    private final TableColumn<Unit, String> doctorMN = new TableColumn<>("doctorMN");
-    private final TableColumn<Unit, String> doctorLN = new TableColumn<>("doctorLN");
-    private final TableColumn<Unit, String> orderlyFN = new TableColumn<>("orderlyFN");
-    private final TableColumn<Unit, String> orderlyMN = new TableColumn<>("orderlyMN");
-    private final TableColumn<Unit, String> orderlyLN = new TableColumn<>("orderlyLN");
-    private final TableColumn<Unit, String> driverFN = new TableColumn<>("driverFN");
-    private final TableColumn<Unit, String> driverMN = new TableColumn<>("driverMN");
-    private final TableColumn<Unit, String> driverLN = new TableColumn<>("driverLN");
+    private final TableColumn<Unit, String> doctorFn = new TableColumn<>("doctorFn");
+    private final TableColumn<Unit, String> doctorMn = new TableColumn<>("doctorMn");
+    private final TableColumn<Unit, String> doctorLn = new TableColumn<>("doctorLn");
+    private final TableColumn<Unit, String> orderlyFn = new TableColumn<>("orderlyFn");
+    private final TableColumn<Unit, String> orderlyMn = new TableColumn<>("orderlyMn");
+    private final TableColumn<Unit, String> orderlyLn = new TableColumn<>("orderlyLn");
+    private final TableColumn<Unit, String> driverFn = new TableColumn<>("driverFn");
+    private final TableColumn<Unit, String> driverMn = new TableColumn<>("driverMn");
+    private final TableColumn<Unit, String> driverLn = new TableColumn<>("driverLn");
     private final TableColumn<Unit, String> carSerialNumberCol = new TableColumn<>("carSerialNumber");
 
     public void GetUnits(ActionEvent event) {
 
         dataTable.getColumns().clear();
 
-
         idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
         doctorIdCol.setCellValueFactory(new PropertyValueFactory<>("doctorId"));
         orderlyIdCol.setCellValueFactory(new PropertyValueFactory<>("orderlyId"));
         driverIdCol.setCellValueFactory(new PropertyValueFactory<>("driverId"));
         carIdCol.setCellValueFactory(new PropertyValueFactory<>("carId"));
-        doctorFN.setCellValueFactory(new PropertyValueFactory<>("doctorFN"));
-        doctorMN.setCellValueFactory(new PropertyValueFactory<>("doctorMN"));
-        doctorLN.setCellValueFactory(new PropertyValueFactory<>("doctorLN"));
-        orderlyFN.setCellValueFactory(new PropertyValueFactory<>("orderlyFN"));
-        orderlyMN.setCellValueFactory(new PropertyValueFactory<>("orderlyMN"));
-        orderlyLN.setCellValueFactory(new PropertyValueFactory<>("orderlyLN"));
-        driverFN.setCellValueFactory(new PropertyValueFactory<>("driverFN"));
-        driverMN.setCellValueFactory(new PropertyValueFactory<>("driverMN"));
-        driverLN.setCellValueFactory(new PropertyValueFactory<>("driverLN"));
+        doctorFn.setCellValueFactory(new PropertyValueFactory<>("doctorFn"));
+        doctorMn.setCellValueFactory(new PropertyValueFactory<>("doctorMn"));
+        doctorLn.setCellValueFactory(new PropertyValueFactory<>("doctorLn"));
+        orderlyFn.setCellValueFactory(new PropertyValueFactory<>("orderlyFn"));
+        orderlyMn.setCellValueFactory(new PropertyValueFactory<>("orderlyMn"));
+        orderlyLn.setCellValueFactory(new PropertyValueFactory<>("orderlyLn"));
+        driverFn.setCellValueFactory(new PropertyValueFactory<>("driverFn"));
+        driverMn.setCellValueFactory(new PropertyValueFactory<>("driverMn"));
+        driverLn.setCellValueFactory(new PropertyValueFactory<>("driverLn"));
         carSerialNumberCol.setCellValueFactory(new PropertyValueFactory<>("carSerialNumber"));
 
         final GetUnitService getUnitsService = new GetUnitService();
         dataTable.itemsProperty().bind(getUnitsService.valueProperty());
         getUnitsService.start();
+        
 
         dataTable.getColumns().addAll(
                 idCol, doctorIdCol, orderlyIdCol, carIdCol,
-                doctorFN, doctorMN, doctorLN, orderlyFN, orderlyMN, orderlyLN, driverFN, driverMN, driverLN, carSerialNumberCol);
+                doctorFn, doctorMn, doctorLn, orderlyFn, orderlyMn, orderlyLn, driverFn, driverMn, driverLn, carSerialNumberCol);
 
         dataTable.getSelectionModel().setCellSelectionEnabled(true);
         dataTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
@@ -102,7 +102,7 @@ public class AddCallController {
                 DBConnector
                         .getSession()
                         .prepare(
-                                "INSERT INTO " + TableName.CALL_BY_DATE +
+                                "INSERT INTO " + StringResources.CALL_BY_DATE +
                                         "(date, time, a_locality, a_thoroughfare, a_premise, a_sub_premise, id, cause, unit_id, caller_id)" +
                                         "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
 
@@ -122,7 +122,7 @@ public class AddCallController {
                 DBConnector
                         .getSession()
                         .prepare(
-                                "INSERT INTO " + TableName.PERSONS +
+                                "INSERT INTO " + StringResources.PERSONS +
                                         " (id, type, first_name, middle_name, last_name)" +
                                         "VALUES(?, ?, ?, ?, ?);");
         BoundStatement boundStatement = addCallerStatement
@@ -132,19 +132,4 @@ public class AddCallController {
 
     }
 
-
-    public void SwitchToCallByDate(MouseEvent mouseEvent){
-        ViewSwitcher.SwitchToCallByDate(mouseEvent);
-    }
-
-    public void SwitchToCallByAddress(MouseEvent mouseEvent){
-        ViewSwitcher.SwitchToCallByAddress(mouseEvent);
-    }
-
-    public void SwitchToAddReport(MouseEvent mouseEvent){
-        ViewSwitcher.SwitchToAddReport(mouseEvent);
-    }
-
-    public void GetSearchDate(ActionEvent event) {
-    }
 }

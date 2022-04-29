@@ -3,6 +3,7 @@ package org.coursework.cassandraambulance.models;
 import java.time.LocalDate;
 import java.util.UUID;
 
+// клас, що представляє пацієнта
 public class Patient {
     private LocalDate dob;
     private UUID id;

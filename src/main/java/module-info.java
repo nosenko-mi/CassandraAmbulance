@@ -17,4 +17,6 @@ module org.coursework.cassandraambulance {
     opens org.coursework.cassandraambulance.models to javafx.fxml;
     exports org.coursework.cassandraambulance.controllers;
     opens org.coursework.cassandraambulance.controllers to javafx.fxml;
+    exports org.coursework.cassandraambulance.tables;
+    opens org.coursework.cassandraambulance.tables to javafx.fxml;
 }
