@@ -91,6 +91,7 @@ public class AddReportController extends Controller{
                         resultMenuButton.getText() ,traumaMenuButton.getText(), appliedMenuButton.getText(), onsetMenuButton.getText(), fruitlessMenuButton.getText()
                 );
         DBConnector.getSession().execute(boundStatement);
+
         System.out.println("[Report added]");
 
     }
@@ -144,28 +145,6 @@ public class AddReportController extends Controller{
     @FXML
     protected void GetCallsByDate(ActionEvent event) {
         GetSearchValues();
-
-//        ResultSet rs = Query.GetCallsByDateQuery(dateToSearch, localityToSearch, thoroughfareToSearch);
-//        ObservableList<EmergencyCall> callObservableList = FXCollections.observableArrayList();
-//
-//        for (Row row : rs){
-//            callObservableList
-//                    .add(new EmergencyCall(
-//                            row.getString("a_locality"), row.getString("a_thoroughfare"), row.getString("a_premise"),
-//                            row.getString("a_sub_premise"), row.getString("cause"), row.getLocalDate("date"),
-//                            row.getLocalTime("time"),
-//                            row.getUuid("caller_id"), row.getUuid("id"), row.getUuid("unit_id")
-//                    ));
-//
-//        }
-//        dataTable.getColumns().clear();
-//
-//
-//        EmergencyCallTable.SetColumns(dataTable, callObservableList);
-//
-//        dataTable.getSelectionModel().setCellSelectionEnabled(true);
-//        dataTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-//        TableUtils.installCopyPasteHandler(dataTable);
         EmergencyCallTable.GetByDate(dataTable, dateToSearch, localityToSearch, thoroughfareToSearch);
 
     }

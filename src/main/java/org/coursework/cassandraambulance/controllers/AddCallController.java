@@ -114,7 +114,28 @@ public class AddCallController extends Controller {
                         UUID.fromString(unitIdTextField.getText()) , callerUuid);
 
         DBConnector.getSession().execute(boundStatement);
+        // додати звіт до таблиці call_by_address
+        addCallStatement =
+                DBConnector
+                        .getSession()
+                        .prepare(
+                                "INSERT INTO " + StringResources.CALL_BY_ADDRESS +
+                                        "(date, time, a_locality, a_thoroughfare, a_premise, a_sub_premise, id, cause, unit_id, caller_id)" +
+                                        "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
+
+        boundStatement = addCallStatement
+                .bind(
+                        LocalDate.now(), LocalTime.now(), localityTextField.getText(),
+                        thoroughfareTextField.getText(), premiseTextField.getText(),
+                        subPremiseTextField.getText(), UUID.randomUUID(), causeTextField.getText(),
+                        UUID.fromString(unitIdTextField.getText()) , callerUuid);
+
+        DBConnector.getSession().execute(boundStatement);
+
+
         System.out.println("[Call added]");
+
+
     }
 
     public void addCaller(UUID callerUuid){
