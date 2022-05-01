@@ -3,6 +3,7 @@ package org.coursework.cassandraambulance;
 import com.datastax.oss.driver.api.core.cql.BoundStatement;
 import com.datastax.oss.driver.api.core.cql.PreparedStatement;
 import com.datastax.oss.driver.api.core.cql.ResultSet;
+import javafx.scene.control.Alert;
 import javafx.scene.control.CheckBox;
 
 import java.time.LocalDate;
@@ -68,6 +69,89 @@ public class Query {
             rs = DBConnector.getSession().execute(boundStatement);
         }
         return rs;
+    }
+
+    public static ResultSet GetCallByAddress(String localityToSearch, String thoroughfareToSearch, String premiseToSearch, String subPremiseToSearch){
+        ResultSet rs = null;
+        if(!localityToSearch.isEmpty() && !thoroughfareToSearch.isEmpty() && !premiseToSearch.isEmpty() && !subPremiseToSearch.isEmpty()){
+
+            PreparedStatement selectAllCallsByAddress = DBConnector.getSession().prepare(
+                    "SELECT * FROM  " + StringResources.CALL_BY_ADDRESS + "  WHERE a_locality = ? AND a_thoroughfare = ? AND a_premise = ? AND a_sub_premise = ? LIMIT 100"
+            );
+            BoundStatement boundStatement = selectAllCallsByAddress.bind(localityToSearch, thoroughfareToSearch, premiseToSearch, subPremiseToSearch);
+            rs = DBConnector.getSession().execute(boundStatement);
+
+        } else if (!localityToSearch.isEmpty() && !thoroughfareToSearch.isEmpty() && !premiseToSearch.isEmpty() && subPremiseToSearch.isEmpty()) {
+
+            PreparedStatement selectAllCallsByAddress = DBConnector.getSession().prepare(
+                    "SELECT * FROM  " + StringResources.CALL_BY_ADDRESS + "  WHERE a_locality = ? AND a_thoroughfare = ? AND a_premise = ? LIMIT 100"
+            );
+            BoundStatement boundStatement = selectAllCallsByAddress.bind(localityToSearch, thoroughfareToSearch, premiseToSearch);
+            rs = DBConnector.getSession().execute(boundStatement);
+
+        } else if (!localityToSearch.isEmpty() && !thoroughfareToSearch.isEmpty() && premiseToSearch.isEmpty() && subPremiseToSearch.isEmpty()){
+
+            PreparedStatement selectAllCallsByAddress = DBConnector.getSession().prepare(
+                    "SELECT * FROM  " + StringResources.CALL_BY_ADDRESS + "  WHERE a_locality = ? AND a_thoroughfare = ? LIMIT 100"
+            );
+            BoundStatement boundStatement = selectAllCallsByAddress.bind(localityToSearch, thoroughfareToSearch);
+            rs = DBConnector.getSession().execute(boundStatement);
+
+        } else if (!localityToSearch.isEmpty() && thoroughfareToSearch.isEmpty() && premiseToSearch.isEmpty() && subPremiseToSearch.isEmpty()) {
+
+            PreparedStatement selectAllCallsByAddress = DBConnector.getSession().prepare(
+                    "SELECT * FROM  " + StringResources.CALL_BY_ADDRESS + "  WHERE a_locality = ?"
+            );
+            BoundStatement boundStatement = selectAllCallsByAddress.bind(localityToSearch);
+            rs = DBConnector.getSession().execute(boundStatement);
+
+        } else if(localityToSearch.isEmpty() && thoroughfareToSearch.isEmpty() && premiseToSearch.isEmpty() && subPremiseToSearch.isEmpty()) {
+
+            final String getCalls = "SELECT * FROM  " + StringResources.CALL_BY_ADDRESS + "  LIMIT 100";
+            rs = DBConnector.getSession().execute(getCalls);
+
+        } else {
+
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Selection error");
+            alert.setHeaderText("Possible selection options: Locality - > Thoroughfare -> Premise -> Sub premise");
+            alert.showAndWait();
+        }
+        return rs;
+
+//        if(localityToSearch.isEmpty() && thoroughfareToSearch.isEmpty() && premiseToSearch.isEmpty() && subPremiseToSearch.isEmpty()){
+//            final String getCalls = "SELECT * FROM  " + StringResources.CALL_BY_ADDRESS + "  LIMIT 100";
+//            rs = DBConnector.getSession().execute(getCalls);
+//        } else if (thoroughfareToSearch.isEmpty() && premiseToSearch.isEmpty() && subPremiseToSearch.isEmpty()) {
+//            PreparedStatement selectAllCallsByAddress = DBConnector.getSession().prepare(
+//                    "SELECT * FROM  " + StringResources.CALL_BY_ADDRESS + "  WHERE a_locality = ?"
+//            );
+//            BoundStatement boundStatement = selectAllCallsByAddress.bind(localityToSearch);
+//            rs = DBConnector.getSession().execute(boundStatement);
+//        } else if (premiseToSearch.isEmpty() && subPremiseToSearch.isEmpty()){
+//            PreparedStatement selectAllCallsByAddress = DBConnector.getSession().prepare(
+//                    "SELECT * FROM  " + StringResources.CALL_BY_ADDRESS + "  WHERE a_locality = ? AND a_thoroughfare = ? LIMIT 100"
+//            );
+//            BoundStatement boundStatement = selectAllCallsByAddress.bind(localityToSearch, thoroughfareToSearch);
+//            rs = DBConnector.getSession().execute(boundStatement);
+//        } else if (subPremiseToSearch.isEmpty()) {
+//            PreparedStatement selectAllCallsByAddress = DBConnector.getSession().prepare(
+//                    "SELECT * FROM  " + StringResources.CALL_BY_ADDRESS + "  WHERE a_locality = ? AND a_thoroughfare = ? AND a_premise = ? LIMIT 100"
+//            );
+//            BoundStatement boundStatement = selectAllCallsByAddress.bind(localityToSearch, thoroughfareToSearch, premiseToSearch);
+//            rs = DBConnector.getSession().execute(boundStatement);
+//        } else if (!localityToSearch.isEmpty() && !thoroughfareToSearch.isEmpty() && !premiseToSearch.isEmpty() && !subPremiseToSearch.isEmpty()) {
+//            PreparedStatement selectAllCallsByAddress = DBConnector.getSession().prepare(
+//                    "SELECT * FROM  " + StringResources.CALL_BY_ADDRESS + "  WHERE a_locality = ? AND a_thoroughfare = ? AND a_premise = ? and a_sub_premise = ? LIMIT 100"
+//            );
+//            BoundStatement boundStatement = selectAllCallsByAddress.bind(localityToSearch, thoroughfareToSearch, premiseToSearch, subPremiseToSearch);
+//            rs = DBConnector.getSession().execute(boundStatement);
+//        } else {
+//            Alert alert = new Alert(Alert.AlertType.ERROR);
+//            alert.setTitle("Selection error");
+//            alert.setHeaderText("Possible selection options: Locality - > Thoroughfare -> Premise -> Sub premise");
+//            alert.showAndWait();
+//        }
     }
 
     public static ResultSet GetEmployees(CheckBox doctorCheckBox, CheckBox OrderlyCheckBox, CheckBox DriverCheckBox){

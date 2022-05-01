@@ -51,7 +51,7 @@ public class EmergencyCallTable {
 
     }
 
-    public static void GetByDate(TableView<EmergencyCall> emergencyCallTable,LocalDate dateToSearch, String localityToSearch, String thoroughfareToSearch){
+    public static void GetByDate(TableView<EmergencyCall> emergencyCallTable, LocalDate dateToSearch, String localityToSearch, String thoroughfareToSearch){
         ResultSet rs = Query.GetCallsByDateQuery(dateToSearch, localityToSearch, thoroughfareToSearch);
         ObservableList<EmergencyCall> callObservableList = FXCollections.observableArrayList();
 
@@ -73,6 +73,37 @@ public class EmergencyCallTable {
         emergencyCallTable.getSelectionModel().setCellSelectionEnabled(true);
         emergencyCallTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         TableUtils.installCopyPasteHandler(emergencyCallTable);
+    }
+
+    public static void GetByAddress(TableView<EmergencyCall> emergencyCallTable, String localityToSearch, String thoroughfareToSearch, String premiseToSearch, String subPremiseToSearch){
+        ResultSet rs = Query.GetCallByAddress(localityToSearch, thoroughfareToSearch, premiseToSearch, subPremiseToSearch);
+
+        if (rs != null){
+            ObservableList<EmergencyCall> callObservableList = FXCollections.observableArrayList();
+
+            for (Row row : rs){
+                callObservableList
+                        .add(new EmergencyCall(
+                                row.getString("a_locality"), row.getString("a_thoroughfare"), row.getString("a_premise"),
+                                row.getString("a_sub_premise"), row.getString("cause"), row.getLocalDate("date"),
+                                row.getLocalTime("time"),
+                                row.getUuid("id"), row.getUuid("unit_id"), row.getUuid("caller_id")
+                        ));
+
+            }
+
+            emergencyCallTable.getColumns().clear();
+
+            EmergencyCallTable.SetColumns(emergencyCallTable, callObservableList);
+
+            emergencyCallTable.getSelectionModel().setCellSelectionEnabled(true);
+            emergencyCallTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+            TableUtils.installCopyPasteHandler(emergencyCallTable);
+        } else {
+            System.out.println("[Incorrect selection]");
+        }
+
+
     }
 
 }
