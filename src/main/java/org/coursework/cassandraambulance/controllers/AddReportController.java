@@ -113,11 +113,12 @@ public class AddReportController extends Controller{
     }
 
     public void AddPatient(UUID patientUuid){
-        LocalDate patientDob = LocalDate.now();
+        LocalDate patientDob;
 
         try {
             patientDob = LocalDate.parse(patientDobTextField.getText());
         } catch (DateTimeParseException e) {
+            patientDob = LocalDate.MIN;
             System.out.println("[Error] " + e);
         }
 
@@ -356,9 +357,4 @@ public class AddReportController extends Controller{
         InitMenuButtons();
     }
 
-    public void SwitchToUpdateCall(MouseEvent mouseEvent) {
-    }
-
-    public void SwitchToUpdateReport(MouseEvent mouseEvent) {
-    }
 }

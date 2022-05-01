@@ -71,10 +71,8 @@ public class ReportTable {
         dataTable.getColumns().addAll(
                 idCol, callIdCol, patientIdCol, unitIdCol,
                 localityCol, thoroughfareCol, premiseCol, subPremiseCol,
-                departureTimeCol, resultCol, hospitalizationCol, diagnosisCodeCol,
+                departureTimeCol, resultCol, hospitalizationCol, diagnosisCol, diagnosisCodeCol,
                 traumaCol, onsetCol, appliedBeforeCol, fruitlessCol);
-
-
     }
 
 

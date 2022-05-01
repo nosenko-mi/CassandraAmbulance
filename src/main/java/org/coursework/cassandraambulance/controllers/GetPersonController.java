@@ -16,6 +16,7 @@ public class GetPersonController extends Controller {
     public TextField personLnTextField;
     public MenuButton typeMenuButton;
     public TextField personIdTextField;
+    public TextField patientIdTextField;
 
     private UUID personId;
     private String personFn, personMn, personLn, personType;
@@ -30,7 +31,6 @@ public class GetPersonController extends Controller {
         } else if(personType != null) {
             PersonTable.GetByTypeName(personTable, personType, personFn, personMn, personLn);
         } else {
-
             PersonTable.GetAll(personTable);
 
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -38,8 +38,6 @@ public class GetPersonController extends Controller {
             alert.setHeaderText("Selection parameters is incorrect");
             alert.setContentText("Available parameters type -> id or type -> name or name parameters\nCurrently selected all rows");
             alert.showAndWait();
-
-
         }
 
     }
@@ -91,4 +89,6 @@ public class GetPersonController extends Controller {
     public void initialize(){
         InitMenuButtons();
     }
+
+
 }

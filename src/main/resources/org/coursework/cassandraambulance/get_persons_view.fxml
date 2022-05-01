@@ -14,7 +14,7 @@
    <children>
       <TableView fx:id="personTable" layoutX="226.0" layoutY="224.0" prefHeight="472.0" prefWidth="1010.0" AnchorPane.bottomAnchor="24.0" AnchorPane.leftAnchor="226.0" AnchorPane.rightAnchor="44.0" AnchorPane.topAnchor="224.0" />
       <Button fx:id="getDataButton" layoutX="1174.0" layoutY="189.0" mnemonicParsing="false" onAction="#GetPerson" text="Get data" AnchorPane.rightAnchor="44.0" />
-      <Label layoutX="226.0" layoutY="24.0" text="Get call by date">
+      <Label layoutX="226.0" layoutY="24.0" text="Get persons">
          <font>
             <Font size="24.0" />
          </font>
@@ -22,9 +22,9 @@
       <Separator layoutX="200.0" orientation="VERTICAL" prefHeight="720.0" prefWidth="4.0" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0" />
       <VBox layoutX="13.0" layoutY="146.0" prefHeight="428.0" prefWidth="174.0" AnchorPane.bottomAnchor="146.0" AnchorPane.topAnchor="146.0">
          <children>
-            <Label fx:id="getByDateLabel" prefHeight="40.0" text="Get call by date">
+            <Label fx:id="getByDateLabel" prefHeight="40.0" text="Get call by date" textFill="#00000099">
                <font>
-                  <Font name="System Bold" size="18.0" />
+                  <Font size="18.0" />
                </font>
             </Label>
             <Label fx:id="getCallByAddress" onMouseClicked="#SwitchToCallByAddress" prefHeight="40.0" text="Get call by address" textFill="#00000099">
@@ -57,11 +57,17 @@
                   <Font size="18.0" />
                </font>
             </Label>
-            <Label fx:id="getPersons" onMouseClicked="#SwitchToGetPersons" prefHeight="40.0" prefWidth="150.0" text="Get persons" textFill="#00000099">
+            <Label fx:id="getPersons" onMouseClicked="#SwitchToGetPersons" prefHeight="40.0" prefWidth="150.0" text="Get persons">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
+            <Label fx:id="getPatients" layoutX="10.0" layoutY="241.0" onMouseClicked="#SwitchToGetPatients" prefHeight="40.0" prefWidth="150.0" text="Get patients" textFill="#00000099">
                <font>
                   <Font size="18.0" />
                </font>
             </Label>
+
             <Label fx:id="addCall" layoutX="10.0" layoutY="290.0" onMouseClicked="#SwitchToAddCall" prefHeight="40.0" prefWidth="150.0" text="Add call" textFill="#00000099">
                <font>
                   <Font size="18.0" />
@@ -82,6 +88,12 @@
                   <Font size="18.0" />
                </font>
             </Label>
+            <Label fx:id="updatePersonLabel" onMouseClicked="#SwitchToUpdatePerson" prefHeight="40.0" prefWidth="150.0" text="Update person" textFill="#00000099">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+
          </children>
       </VBox>
       <Label layoutX="539.0" layoutY="73.0" text="First name" />

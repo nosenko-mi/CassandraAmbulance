@@ -240,5 +240,32 @@ public class Query {
         return rs;
     }
 
+    public  static ResultSet GetOneCall(){
+        ResultSet rs = null;
+        return rs;
+    }
+
+    public  static ResultSet GetOneReport(UUID callId, UUID reportId){
+        ResultSet rs;
+
+        PreparedStatement getOneCall = DBConnector.getSession().prepare(
+                "SELECT * FROM " + StringResources.REPORT_BY_CALL + " WHERE call_id = ? AND id = ? ;"
+        );
+        BoundStatement boundStatement = getOneCall.bind(callId, reportId);
+        rs = DBConnector.getSession().execute(boundStatement);
+        return rs;
+    }
+
+    public static ResultSet GetOnePatient(UUID id){
+        ResultSet rs;
+
+        PreparedStatement getOnePatient = DBConnector.getSession().prepare(
+                "SELECT * FROM " + StringResources.PATIENTS + " WHERE id = ? ;"
+        );
+        BoundStatement boundStatement = getOnePatient.bind(id);
+        rs = DBConnector.getSession().execute(boundStatement);
+        return rs;
+    }
+
 
 }

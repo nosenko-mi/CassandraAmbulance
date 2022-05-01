@@ -49,5 +49,12 @@ public class Controller {
         ViewSwitcher.Switch(mouseEvent, "update_call_view.fxml", "/style.css");
     }
 
+    public void SwitchToUpdatePerson(MouseEvent mouseEvent) {
+        ViewSwitcher.Switch(mouseEvent, "update_person_view.fxml", "/style.css");
+    }
+
+    public void SwitchToGetPatients(MouseEvent mouseEvent){
+        ViewSwitcher.Switch(mouseEvent, "get_patients_view.fxml", "/style.css");
+    }
 
 }

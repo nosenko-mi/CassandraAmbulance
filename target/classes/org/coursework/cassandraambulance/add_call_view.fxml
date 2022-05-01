@@ -65,6 +65,11 @@
                   <Font size="18.0" />
                </font>
             </Label>
+            <Label fx:id="getPatients" layoutX="10.0" layoutY="241.0" onMouseClicked="#SwitchToGetPatients" prefHeight="40.0" prefWidth="150.0" text="Get patients" textFill="#00000099">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
             <Label fx:id="addCall" layoutX="10.0" layoutY="290.0" prefHeight="40.0" prefWidth="150.0" text="Add call">
                <font>
                   <Font name="System Bold" size="18.0" />
@@ -85,6 +90,12 @@
                   <Font size="18.0" />
                </font>
             </Label>
+            <Label fx:id="updatePersonLabel" onMouseClicked="#SwitchToUpdatePerson" prefHeight="40.0" prefWidth="150.0" text="Update person" textFill="#00000099">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+
          </children>
       </VBox>
       <Label layoutX="226.0" layoutY="199.0" text="Premise" />

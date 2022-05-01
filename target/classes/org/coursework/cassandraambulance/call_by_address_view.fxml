@@ -30,12 +30,12 @@
       <TextField fx:id="localityTextField" layoutX="329.0" layoutY="79.0" prefHeight="25.0" prefWidth="174.0" />
       <VBox layoutX="13.0" layoutY="146.0" prefHeight="428.0" prefWidth="174.0" AnchorPane.bottomAnchor="146.0" AnchorPane.topAnchor="146.0">
          <children>
-            <Label fx:id="getByDateLabel" prefHeight="40.0" text="Get call by date" textFill="#00000099">
+            <Label fx:id="getByDateLabel" onMouseClicked="#SwitchToCallByDate" prefHeight="40.0" text="Get call by date" textFill="#00000099">
                <font>
                   <Font size="18.0" />
                </font>
             </Label>
-            <Label fx:id="getCallByAddress" onMouseClicked="#SwitchToCallByAddress" prefHeight="40.0" text="Get call by address">
+            <Label fx:id="getCallByAddress" prefHeight="40.0" text="Get call by address">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>
@@ -45,7 +45,7 @@
                   <Font size="18.0" />
                </font>
             </Label>
-            <Label fx:id="getReportByCall" prefHeight="40.0" text="Get report by call" textFill="#00000099">
+            <Label fx:id="getReportByCall" onMouseClicked="#SwitchToReportByCall" prefHeight="40.0" text="Get report by call" textFill="#00000099">
                <font>
                   <Font size="18.0" />
                </font>
@@ -60,26 +60,49 @@
                   <Font size="18.0" />
                </font>
             </Label>
-            <Label fx:id="getUnitByEmp" prefHeight="40.0" prefWidth="150.0" text="Get unit by employee" textFill="#00000099">
+            <Label fx:id="getUnitByEmp" onMouseClicked="#SwitchToUnitByEmployee" prefHeight="40.0" prefWidth="150.0" text="Get unit by employee" textFill="#00000099">
                <font>
                   <Font size="18.0" />
                </font>
             </Label>
-            <Label fx:id="getPersons" prefHeight="40.0" prefWidth="150.0" text="Get persons" textFill="#00000099">
+            <Label fx:id="getPersons" onMouseClicked="#SwitchToGetPersons" prefHeight="40.0" prefWidth="150.0" text="Get persons" textFill="#00000099">
                <font>
                   <Font size="18.0" />
                </font>
             </Label>
+            <Label fx:id="getPatients" layoutX="10.0" layoutY="241.0" onMouseClicked="#SwitchToGetPatients" prefHeight="40.0" prefWidth="150.0" text="Get patients" textFill="#00000099">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+
             <Label fx:id="addCall" onMouseClicked="#SwitchToAddCall" prefHeight="40.0" prefWidth="150.0" text="Add call" textFill="#00000099">
                <font>
                   <Font size="18.0" />
                </font>
             </Label>
+
             <Label fx:id="addReport" onMouseClicked="#SwitchToAddReport" prefHeight="40.0" prefWidth="150.0" text="Add report" textFill="#00000099">
                <font>
                   <Font size="18.0" />
                </font>
             </Label>
+            <Label fx:id="updateCallLabel" onMouseClicked="#SwitchToUpdateCall" prefHeight="40.0" prefWidth="150.0" text="Update call" textFill="#00000099">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label fx:id="updateReportLabel" onMouseClicked="#SwitchToUpdateReport" prefHeight="40.0" prefWidth="150.0" text="Update report" textFill="#00000099">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label fx:id="updatePersonLabel" onMouseClicked="#SwitchToUpdatePerson" prefHeight="40.0" prefWidth="150.0" text="Update person" textFill="#00000099">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+
          </children>
       </VBox>
       <Label fx:id="premiseLabel" layoutX="533.0" layoutY="83.0" text="Premise" />

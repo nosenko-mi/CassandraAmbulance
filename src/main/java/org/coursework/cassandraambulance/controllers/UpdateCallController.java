@@ -95,6 +95,7 @@ public class UpdateCallController extends Controller {
                 row.getLocalTime("time"),
                 row.getUuid("id"), row.getUuid("unit_id"), row.getUuid("caller_id")
         );
+        // обрати викликача, що буде змінюватися
         PreparedStatement selectOneCaller = DBConnector.getSession().prepare(
                 "SELECT * FROM " + StringResources.PERSONS + " WHERE type = 'Викликач' AND id = ?"
         );
@@ -123,7 +124,7 @@ public class UpdateCallController extends Controller {
 
         // Оновити дані викликача
         if (newCallerFn.equals(caller.getFirstName()) && newCallerMn.equals(caller.getMiddleName()) && newCallerLn.equals(caller.getLastName())){
-            System.out.println("Caller not changed");
+            System.out.println("Caller is not changed");
 
         } else {
             System.out.println("Caller changed");

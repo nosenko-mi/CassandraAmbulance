@@ -67,6 +67,12 @@
                   <Font size="18.0" />
                </font>
             </Label>
+            <Label fx:id="getPatients" layoutX="10.0" layoutY="241.0" onMouseClicked="#SwitchToGetPatients" prefHeight="40.0" prefWidth="150.0" text="Get patients" textFill="#00000099">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+
             <Label fx:id="addCall" layoutX="10.0" layoutY="290.0" onMouseClicked="#SwitchToAddCall" prefHeight="40.0" prefWidth="150.0" text="Add call" textFill="#00000099">
                <font>
                   <Font size="18.0" />
@@ -87,6 +93,13 @@
                   <Font size="18.0" />
                </font>
             </Label>
+
+            <Label fx:id="updatePersonLabel" onMouseClicked="#SwitchToUpdatePerson" prefHeight="40.0" prefWidth="150.0" text="Update person" textFill="#00000099">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+
          </children>
       </VBox>
       <Label layoutX="226.0" layoutY="199.0" text="Premise" />
@@ -144,7 +157,7 @@
          </font>
       </Label>
       <Label layoutX="915.0" layoutY="593.0" text="Patient date of birth" />
-      <TextField fx:id="patientDobTextField" layoutX="1028.0" layoutY="589.0" prefHeight="25.0" prefWidth="174.0" />
+      <TextField fx:id="patientDobTextField" layoutX="1028.0" layoutY="589.0" prefHeight="25.0" prefWidth="174.0" promptText="1976-04-24" />
       <DatePicker fx:id="datePicker" layoutX="687.0" layoutY="59.0" onAction="#GetSearchDate" />
       <Label layoutX="631.0" layoutY="63.0" text="Date" />
       <Label layoutX="631.0" layoutY="-71.0" text="Time" />
