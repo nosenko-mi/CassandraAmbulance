@@ -1,30 +1,16 @@
 package org.coursework.cassandraambulance.controllers;
 
-import com.datastax.oss.driver.api.core.cql.BoundStatement;
-import com.datastax.oss.driver.api.core.cql.PreparedStatement;
-import com.datastax.oss.driver.api.core.cql.ResultSet;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
-import javafx.scene.control.DatePicker;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import org.coursework.cassandraambulance.DBConnector;
-import org.coursework.cassandraambulance.StringResources;
 import org.coursework.cassandraambulance.models.EmergencyCall;
 import org.coursework.cassandraambulance.tables.EmergencyCallTable;
-
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.format.DateTimeParseException;
 
 public class GetCallByAddressController extends Controller {
     @FXML
     private TableView<EmergencyCall> dataTable;
-    @FXML
-    private DatePicker datePicker;
-    @FXML
-    private TextField timeTextField;
     @FXML
     private TextField thoroughfareTextField;
     @FXML
@@ -35,8 +21,7 @@ public class GetCallByAddressController extends Controller {
     private TextField premiseTextField;
 
     private String localityToSearch, thoroughfareToSearch, premiseToSearch, subPremiseToSearch;
-    private LocalDate dateToSearch;
-    private LocalTime timeToSearch;
+
 
     public void GetCallByAddress(ActionEvent event) {
 
@@ -83,26 +68,17 @@ public class GetCallByAddressController extends Controller {
 
     }
 
-    public void GetSearchDate(ActionEvent event) {
-    }
-
     protected void GetSearchValues(){
         try {
             localityToSearch = localityTextField.getText();
             thoroughfareToSearch = thoroughfareTextField.getText();
             premiseToSearch = premiseTextField.getText();
             subPremiseToSearch = subPremiseTextField.getText();
-            dateToSearch = datePicker.getValue();
-            timeToSearch = LocalTime.parse(timeTextField.getText());
-        } catch (DateTimeParseException e) {
-            System.out.println("[Error] " + e);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
 
-        System.out.println("Date: " + dateToSearch);
-        System.out.println("Time: " + timeToSearch);
         System.out.println("Locality: " + localityToSearch);
         System.out.println("Thoroughfare: " + thoroughfareToSearch);
         System.out.println("Premise: " + premiseToSearch);
