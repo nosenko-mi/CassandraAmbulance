@@ -25,7 +25,7 @@ public class PersonTable {
     public static final TableColumn<Person, String> fnCol = new TableColumn<>("First name");
     public static final TableColumn<Person, String> mnCol = new TableColumn<>("Middle name");
     public static final TableColumn<Person, String> lnCol = new TableColumn<>("Last name");
-    private static ObservableList<Person> personObservableList = FXCollections.observableArrayList();
+    private static final ObservableList<Person> personObservableList = FXCollections.observableArrayList();
 
     public static void SetColumns(TableView<Person> dataTable, ObservableList<Person> callObservableList ){
 

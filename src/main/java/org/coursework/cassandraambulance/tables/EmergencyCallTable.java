@@ -21,29 +21,32 @@ import java.util.UUID;
 // необхідний для створення столбців у існуючій таблиці, а також для отримання та внесення даних у таблицю
 public class EmergencyCallTable {
 
-    public static final TableColumn<EmergencyCall, UUID> idCol = new TableColumn<EmergencyCall, UUID>("id");
-    public static final TableColumn<EmergencyCall, UUID> unitIdCol = new TableColumn<EmergencyCall, UUID>("unitId");
-    public static final TableColumn<EmergencyCall, LocalDate> dateCol = new TableColumn<EmergencyCall, LocalDate>("date");
-    public static final TableColumn<EmergencyCall, LocalTime> timeCol = new TableColumn<EmergencyCall, LocalTime>("time");
-    public static final TableColumn<EmergencyCall, String> localityCol = new TableColumn<EmergencyCall, String>("locality");
-    public static final TableColumn<EmergencyCall, String> thoroughfareCol = new TableColumn<EmergencyCall, String>("thoroughfareCol");
-    public static final TableColumn<EmergencyCall, String> premiseCol = new TableColumn<EmergencyCall, String>("premiseCol");
-    public static final TableColumn<EmergencyCall, String> subPremiseCol = new TableColumn<EmergencyCall, String>("subPremiseCol");
-    public static final TableColumn<EmergencyCall, String> causeCol = new TableColumn<EmergencyCall, String>("causeCol");
-    public static final TableColumn<EmergencyCall, UUID> callerIdCol = new TableColumn<EmergencyCall, UUID>("callerId");
+    public static final TableColumn<EmergencyCall, UUID> idCol = new TableColumn<>("id");
+    public static final TableColumn<EmergencyCall, UUID> unitIdCol = new TableColumn<>("unitId");
+    public static final TableColumn<EmergencyCall, LocalDate> dateCol = new TableColumn<>("date");
+    public static final TableColumn<EmergencyCall, LocalTime> timeCol = new TableColumn<>("time");
+    public static final TableColumn<EmergencyCall, String> localityCol = new TableColumn<>("locality");
+    public static final TableColumn<EmergencyCall, String> thoroughfareCol = new TableColumn<>("thoroughfareCol");
+    public static final TableColumn<EmergencyCall, String> premiseCol = new TableColumn<>("premiseCol");
+    public static final TableColumn<EmergencyCall, String> subPremiseCol = new TableColumn<>("subPremiseCol");
+    public static final TableColumn<EmergencyCall, String> causeCol = new TableColumn<>("causeCol");
+    public static final TableColumn<EmergencyCall, UUID> callerIdCol = new TableColumn<>("callerId");
+
+    private static final ObservableList<EmergencyCall> callObservableList = FXCollections.observableArrayList();
+
 
     public static void SetColumns(TableView<EmergencyCall> dataTable, ObservableList<EmergencyCall> callObservableList ){
 
-        idCol.setCellValueFactory(new PropertyValueFactory<EmergencyCall, UUID>("id"));
-        unitIdCol.setCellValueFactory(new PropertyValueFactory<EmergencyCall, UUID>("unitId"));
-        dateCol.setCellValueFactory(new PropertyValueFactory<EmergencyCall, LocalDate>("date"));
-        timeCol.setCellValueFactory(new PropertyValueFactory<EmergencyCall, LocalTime>("time"));
-        localityCol.setCellValueFactory(new PropertyValueFactory<EmergencyCall, String>("locality"));
-        thoroughfareCol.setCellValueFactory(new PropertyValueFactory<EmergencyCall, String>("thoroughfare"));
-        premiseCol.setCellValueFactory(new PropertyValueFactory<EmergencyCall, String>("premise"));
-        subPremiseCol.setCellValueFactory(new PropertyValueFactory<EmergencyCall, String>("subPremise"));
-        causeCol.setCellValueFactory(new PropertyValueFactory<EmergencyCall, String>("cause"));
-        callerIdCol.setCellValueFactory(new PropertyValueFactory<EmergencyCall, UUID>("callerId"));
+        idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+        unitIdCol.setCellValueFactory(new PropertyValueFactory<>("unitId"));
+        dateCol.setCellValueFactory(new PropertyValueFactory<>("date"));
+        timeCol.setCellValueFactory(new PropertyValueFactory<>("time"));
+        localityCol.setCellValueFactory(new PropertyValueFactory<>("locality"));
+        thoroughfareCol.setCellValueFactory(new PropertyValueFactory<>("thoroughfare"));
+        premiseCol.setCellValueFactory(new PropertyValueFactory<>("premise"));
+        subPremiseCol.setCellValueFactory(new PropertyValueFactory<>("subPremise"));
+        causeCol.setCellValueFactory(new PropertyValueFactory<>("cause"));
+        callerIdCol.setCellValueFactory(new PropertyValueFactory<>("callerId"));
 
         dataTable.setItems(callObservableList);
         dataTable.getColumns().addAll(idCol, unitIdCol, dateCol, timeCol, localityCol, thoroughfareCol, premiseCol, subPremiseCol, causeCol, callerIdCol);
@@ -53,18 +56,10 @@ public class EmergencyCallTable {
 
     public static void GetByDate(TableView<EmergencyCall> emergencyCallTable, LocalDate dateToSearch, String localityToSearch, String thoroughfareToSearch){
         ResultSet rs = Query.GetCallsByDateQuery(dateToSearch, localityToSearch, thoroughfareToSearch);
-        ObservableList<EmergencyCall> callObservableList = FXCollections.observableArrayList();
+        callObservableList.clear();
 
-        for (Row row : rs){
-            callObservableList
-                    .add(new EmergencyCall(
-                            row.getString("a_locality"), row.getString("a_thoroughfare"), row.getString("a_premise"),
-                            row.getString("a_sub_premise"), row.getString("cause"), row.getLocalDate("date"),
-                            row.getLocalTime("time"),
-                            row.getUuid("id"), row.getUuid("unit_id"), row.getUuid("caller_id")
-                    ));
 
-        }
+        HandleRows(rs);
 
         emergencyCallTable.getColumns().clear();
 
@@ -79,18 +74,10 @@ public class EmergencyCallTable {
         ResultSet rs = Query.GetCallByAddress(localityToSearch, thoroughfareToSearch, premiseToSearch, subPremiseToSearch);
 
         if (rs != null){
-            ObservableList<EmergencyCall> callObservableList = FXCollections.observableArrayList();
 
-            for (Row row : rs){
-                callObservableList
-                        .add(new EmergencyCall(
-                                row.getString("a_locality"), row.getString("a_thoroughfare"), row.getString("a_premise"),
-                                row.getString("a_sub_premise"), row.getString("cause"), row.getLocalDate("date"),
-                                row.getLocalTime("time"),
-                                row.getUuid("id"), row.getUuid("unit_id"), row.getUuid("caller_id")
-                        ));
+            callObservableList.clear();
 
-            }
+            HandleRows(rs);
 
             emergencyCallTable.getColumns().clear();
 
@@ -104,6 +91,19 @@ public class EmergencyCallTable {
         }
 
 
+    }
+
+    private static void HandleRows(ResultSet rs){
+        for (Row row : rs){
+            callObservableList
+                    .add(new EmergencyCall(
+                            row.getString("a_locality"), row.getString("a_thoroughfare"), row.getString("a_premise"),
+                            row.getString("a_sub_premise"), row.getString("cause"), row.getLocalDate("date"),
+                            row.getLocalTime("time"),
+                            row.getUuid("id"), row.getUuid("unit_id"), row.getUuid("caller_id")
+                    ));
+
+        }
     }
 
 }
