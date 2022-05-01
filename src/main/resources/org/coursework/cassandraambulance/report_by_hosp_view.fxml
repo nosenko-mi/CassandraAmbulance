@@ -10,19 +10,18 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.coursework.cassandraambulance.controllers.GetPersonController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.coursework.cassandraambulance.controllers.GetReportByHospController">
    <children>
-      <TableView fx:id="personTable" layoutX="226.0" layoutY="224.0" prefHeight="138.0" prefWidth="1010.0" AnchorPane.bottomAnchor="358.0" AnchorPane.leftAnchor="226.0" AnchorPane.rightAnchor="44.0" AnchorPane.topAnchor="224.0" />
-      <Button fx:id="getDataButton" layoutX="1174.0" layoutY="189.0" mnemonicParsing="false" onAction="#GetPerson" text="Get data" AnchorPane.rightAnchor="44.0" />
-      <Label layoutX="226.0" layoutY="24.0" text="Update person">
+      <Label layoutX="226.0" layoutY="24.0" text="Get report by hospitalization status">
          <font>
             <Font size="24.0" />
          </font>
       </Label>
       <Separator layoutX="200.0" orientation="VERTICAL" prefHeight="720.0" prefWidth="4.0" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0" />
+      <Label layoutX="226.0" layoutY="-71.0" text="Time" />
       <VBox layoutX="13.0" layoutY="146.0" prefHeight="428.0" prefWidth="174.0" AnchorPane.bottomAnchor="146.0" AnchorPane.topAnchor="146.0">
          <children>
-            <Label fx:id="getByDateLabel" prefHeight="40.0" text="Get call by date" textFill="#00000099">
+            <Label fx:id="getByDateLabel" onMouseClicked="#SwitchToCallByDate" prefHeight="40.0" text="Get call by date" textFill="#00000099">
                <font>
                   <Font size="18.0" />
                </font>
@@ -37,14 +36,14 @@
                   <Font size="18.0" />
                </font>
             </Label>
-            <Label fx:id="getReportByCall" onMouseClicked="#SwitchToReportByCall" prefHeight="40.0" text="Get report by call" textFill="#00000099">
+            <Label fx:id="getReportByCall" prefHeight="40.0" text="Get report by call" textFill="#00000099">
                <font>
                   <Font size="18.0" />
                </font>
             </Label>
-            <Label fx:id="getReportByHosp" onMouseClicked="#SwitchToReportByHosp" prefHeight="40.0" text="Get report by hospitalization" textFill="#00000099">
+            <Label fx:id="getReportByHosp" prefHeight="40.0" text="Get report by hospitalization">
                <font>
-                  <Font size="18.0" />
+                  <Font name="System Bold" size="18.0" />
                </font>
             </Label>
             <Label fx:id="getUnitById" onMouseClicked="#SwitchToUnitById" prefHeight="40.0" text="Get unit by ID" textFill="#00000099">
@@ -57,9 +56,9 @@
                   <Font size="18.0" />
                </font>
             </Label>
-            <Label fx:id="getPersons" onMouseClicked="#SwitchToGetPersons" prefHeight="40.0" prefWidth="150.0" text="Get persons">
+            <Label fx:id="getPersons" onMouseClicked="#SwitchToGetPersons" prefHeight="40.0" prefWidth="150.0" text="Get persons" textFill="#00000099">
                <font>
-                  <Font name="System Bold" size="18.0" />
+                  <Font size="18.0" />
                </font>
             </Label>
             <Label fx:id="getPatients" layoutX="10.0" layoutY="241.0" onMouseClicked="#SwitchToGetPatients" prefHeight="40.0" prefWidth="150.0" text="Get patients" textFill="#00000099">
@@ -96,15 +95,9 @@
 
          </children>
       </VBox>
-      <Label layoutX="539.0" layoutY="73.0" text="First name" />
-      <Label layoutX="539.0" layoutY="109.0" text="Middle name" />
-      <TextField fx:id="personMnTextField" layoutX="642.0" layoutY="105.0" prefHeight="25.0" prefWidth="174.0" />
-      <TextField fx:id="personFnTextField" layoutX="642.0" layoutY="69.0" prefHeight="25.0" prefWidth="174.0" />
-      <Label layoutX="539.0" layoutY="145.0" text="Last name" />
-      <TextField fx:id="personLnTextField" layoutX="642.0" layoutY="141.0" prefHeight="25.0" prefWidth="174.0" />
-      <MenuButton fx:id="typeMenuButton" layoutX="329.0" layoutY="78.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="111.0" text="Type" />
-      <Label layoutX="226.0" layoutY="82.0" text="Type" />
-      <Label layoutX="226.0" layoutY="118.0" text="Id" />
-      <TextField fx:id="personIdTextField" layoutX="272.0" layoutY="118.0" prefHeight="25.0" prefWidth="174.0" />
+      <Button fx:id="getReportButton" layoutX="1165.0" layoutY="122.0" mnemonicParsing="false" onAction="#GetReportByHosp" text="Get report" />
+      <TableView fx:id="reportTable" layoutX="226.0" layoutY="157.0" prefHeight="528.0" prefWidth="1010.0" />
+      <MenuButton fx:id="hospitalizationMenuButton" layoutX="344.0" layoutY="69.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" text="Hospitalization" />
+      <Label layoutX="226.0" layoutY="73.0" text="Hospitalization" />
    </children>
 </AnchorPane>

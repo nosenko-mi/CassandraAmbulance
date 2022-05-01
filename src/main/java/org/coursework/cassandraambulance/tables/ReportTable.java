@@ -44,6 +44,9 @@ public class ReportTable {
     public static final TableColumn<Report, String> appliedBeforeCol = new TableColumn<>("Applied before");
     public static final TableColumn<Report, String> fruitlessCol = new TableColumn<>("Fruitless");
 
+    private static ObservableList<Report> reportObservableList = FXCollections.observableArrayList();
+
+
     public static void SetColumns(TableView<Report> dataTable, ObservableList<Report> callObservableList ){
 
         idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -90,8 +93,48 @@ public class ReportTable {
             rs = DBConnector.getSession().execute(getAllReports);
         }
 
-        ObservableList<Report> reportObservableList = FXCollections.observableArrayList();
+        reportObservableList.clear();
 
+        HandleRows(rs);
+
+        reportTable.getColumns().clear();
+
+        ReportTable.SetColumns(reportTable, reportObservableList);
+
+        reportTable.getSelectionModel().setCellSelectionEnabled(true);
+        reportTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        TableUtils.installCopyPasteHandler(reportTable);
+
+    }
+
+    public static void  GetByHosp(TableView<Report> reportTable, String hospitalizationStatus){
+        ResultSet rs;
+        if (!hospitalizationStatus.equals("Hospitalization")){
+            PreparedStatement getReports = DBConnector.getSession().prepare(
+                    "SELECT * FROM " + StringResources.REPORT_BY_CALL + " WHERE hospitalization_status = ? ;"
+            );
+            BoundStatement boundStatement = getReports.bind(hospitalizationStatus);
+            rs = DBConnector.getSession().execute(boundStatement);
+
+        } else {
+            String getAllReports = "SELECT * FROM " + StringResources.REPORT_BY_CALL + " LIMIT 100;";
+            rs = DBConnector.getSession().execute(getAllReports);
+        }
+
+        reportObservableList.clear();
+
+        HandleRows(rs);
+
+        reportTable.getColumns().clear();
+
+        ReportTable.SetColumns(reportTable, reportObservableList);
+
+        reportTable.getSelectionModel().setCellSelectionEnabled(true);
+        reportTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        TableUtils.installCopyPasteHandler(reportTable);
+    }
+
+    private static void HandleRows(ResultSet rs){
         for (Row row : rs){
             reportObservableList
                     .add(new Report(
@@ -106,14 +149,6 @@ public class ReportTable {
 
                     ));
         }
-        reportTable.getColumns().clear();
-
-        ReportTable.SetColumns(reportTable, reportObservableList);
-
-        reportTable.getSelectionModel().setCellSelectionEnabled(true);
-        reportTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        TableUtils.installCopyPasteHandler(reportTable);
-
     }
 
 }

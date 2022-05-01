@@ -57,4 +57,9 @@ public class Controller {
         ViewSwitcher.Switch(mouseEvent, "get_patients_view.fxml", "/style.css");
     }
 
+    public void SwitchToReportByHosp(MouseEvent mouseEvent){
+        ViewSwitcher.Switch(mouseEvent, "report_by_hosp_view.fxml", "/style.css");
+
+    }
+
 }

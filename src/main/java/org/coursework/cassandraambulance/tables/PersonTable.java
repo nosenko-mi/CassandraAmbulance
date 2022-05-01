@@ -29,11 +29,11 @@ public class PersonTable {
 
     public static void SetColumns(TableView<Person> dataTable, ObservableList<Person> callObservableList ){
 
-        idCol.setCellValueFactory(new PropertyValueFactory<Person, UUID>("id"));
-        typeCol.setCellValueFactory(new PropertyValueFactory<Person, String>("type"));
-        fnCol.setCellValueFactory(new PropertyValueFactory<Person, String>("firstName"));
-        mnCol.setCellValueFactory(new PropertyValueFactory<Person, String>("middleName"));
-        lnCol.setCellValueFactory(new PropertyValueFactory<Person, String>("lastName"));
+        idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+        typeCol.setCellValueFactory(new PropertyValueFactory<>("type"));
+        fnCol.setCellValueFactory(new PropertyValueFactory<>("firstName"));
+        mnCol.setCellValueFactory(new PropertyValueFactory<>("middleName"));
+        lnCol.setCellValueFactory(new PropertyValueFactory<>("lastName"));
 
         dataTable.setItems(callObservableList);
         dataTable.getColumns().addAll(idCol, typeCol, fnCol, mnCol, lnCol);

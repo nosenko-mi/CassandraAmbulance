@@ -49,7 +49,7 @@
                   <Font size="18.0" />
                </font>
             </Label>
-            <Label fx:id="getReportByHosp" prefHeight="40.0" text="Get report by hospitalization" textFill="#00000099">
+            <Label fx:id="getReportByHosp" onMouseClicked="#SwitchToReportByHosp" prefHeight="40.0" text="Get report by hospitalization" textFill="#00000099">
                <font>
                   <Font size="18.0" />
                </font>
