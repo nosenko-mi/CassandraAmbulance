@@ -26,7 +26,7 @@ public class GetReportByHospController extends Controller{
 
     }
 
-    private void InitMenyButtons(){
+    private void InitMenuButtons(){
         MenuItem hospItemY = new MenuItem("Госпіталізовано");
         MenuItem hospItemN = new MenuItem("Не госпіталізовано");
         hospitalizationMenuButton.getItems().addAll(hospItemY, hospItemN);
@@ -35,7 +35,7 @@ public class GetReportByHospController extends Controller{
     }
 
     public void initialize(){
-        InitMenyButtons();
+        InitMenuButtons();
     }
 
 
