@@ -36,7 +36,7 @@ public class GetPersonController extends Controller {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Select information");
             alert.setHeaderText("Selection parameters is incorrect");
-            alert.setContentText("Available parameters type -> id or type -> name or name parameters\nCurrently selected all rows");
+            alert.setContentText("Available parameters type -> id or type -> name\nCurrently selected all rows");
             alert.showAndWait();
         }
 
