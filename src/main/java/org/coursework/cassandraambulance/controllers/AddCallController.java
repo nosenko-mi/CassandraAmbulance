@@ -9,10 +9,11 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.MouseEvent;
-import org.coursework.cassandraambulance.*;
+import org.coursework.cassandraambulance.DBConnector;
+import org.coursework.cassandraambulance.GetUnitService;
+import org.coursework.cassandraambulance.StringResources;
+import org.coursework.cassandraambulance.TableUtils;
 import org.coursework.cassandraambulance.models.Unit;
-import org.coursework.cassandraambulance.tables.UnitTable;
 
 import java.time.LocalDate;
 import java.time.LocalTime;

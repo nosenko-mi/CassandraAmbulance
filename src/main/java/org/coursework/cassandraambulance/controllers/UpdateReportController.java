@@ -61,7 +61,11 @@ public class UpdateReportController extends ReportController{
     public TextField newDiagnosisCodeTextField;
 
     private LocalDate dateToSearch = null, newPatientDob;
-    private LocalTime timeToSearch = null, newDepartureTime, newArrivalTime, newCompletionTime, newReturnTime;
+    private final LocalTime timeToSearch = null;
+    private LocalTime newDepartureTime;
+    private LocalTime newArrivalTime;
+    private LocalTime newCompletionTime;
+    private LocalTime newReturnTime;
     private String localityToSearch = null, thoroughfareToSearch = null;
     private UUID callId, reportId, newUnitId;
 
@@ -98,14 +102,13 @@ public class UpdateReportController extends ReportController{
 
     }
 
-
     public void GetReportByCall(ActionEvent event) {
 
         try {
             callId = UUID.fromString(callIdToSearchTextField.getText());
         } catch (IllegalArgumentException e) {
             callId = null;
-            System.out.println(e);
+            System.out.println(e.getMessage());
         }
         ReportTable.GetByCall(reportTable, callId);
 
@@ -113,70 +116,57 @@ public class UpdateReportController extends ReportController{
 
     public void UpdateReport(ActionEvent event) {
         GetOldData();
-//        обрати звіт, що буде змінено
-        ResultSet rs = Query.GetOneReport(callId, reportId);
-        Row row = rs.one();
-        Report oldReport = new Report(
-                row.getUuid("id"), row.getUuid("call_id"), row.getUuid("patient_id"),
-                row.getUuid("unit_id"), row.getString("preliminary_diagnosis"),
-                row.getString("diagnosis_code"), row.getString("result"), row.getString("hospitalization_status"),
-                row.getString("trauma"), row.getString("onset"), row.getString("applied_before"),
-                row.getString("fruitless"), row.getString("a_locality"), row.getString("a_thoroughfare"),
-                row.getString("a_premise"), row.getString("a_sub_premise"),
-                row.getLocalTime("departure_time"), row.getLocalTime("arrival_time"),
-                row.getLocalTime("completion_time"), row.getLocalTime("return_time")
+        try {
+            //        обрати звіт, що буде змінено
+            ResultSet rs = Query.GetOneReport(callId, reportId);
+            Row row = rs.one();
+            Report oldReport = new Report(
+                    row.getUuid("id"), row.getUuid("call_id"), row.getUuid("patient_id"),
+                    row.getUuid("unit_id"), row.getString("preliminary_diagnosis"),
+                    row.getString("diagnosis_code"), row.getString("result"), row.getString("hospitalization_status"),
+                    row.getString("trauma"), row.getString("onset"), row.getString("applied_before"),
+                    row.getString("fruitless"), row.getString("a_locality"), row.getString("a_thoroughfare"),
+                    row.getString("a_premise"), row.getString("a_sub_premise"),
+                    row.getLocalTime("departure_time"), row.getLocalTime("arrival_time"),
+                    row.getLocalTime("completion_time"), row.getLocalTime("return_time")
 
-        );
-//        обрати пацієнта, що буде змінено
-        rs = Query.GetOnePatient(oldReport.getPatientId());
-        row = rs.one();
-        Patient oldPatient = new Patient(
-                row.getLocalDate("dob"), row.getUuid("id"),
-                row.getString("first_name"), row.getString("middle_name"), row.getString("last_name")
-        );
-
-
-//        встановити нові дані
-        GetNewData(oldReport, oldPatient);
-//        оновити дані звіту
-        PreparedStatement updateReport = DBConnector.getSession().prepare(
-                "UPDATE " + StringResources.REPORT_BY_CALL +
-                        " SET a_locality = ? , a_thoroughfare = ? , a_premise = ?, a_sub_premise = ?, " +
-                        "departure_time = ?, arrival_time = ?, completion_time = ?, return_time = ?, " +
-                        "preliminary_diagnosis = ?, diagnosis_code = ?, result = ?, hospitalization_status = ?, " +
-                        "applied_before = ?, trauma = ?, onset = ?, fruitless = ? " +
-                        "WHERE call_id = ? AND id = ?;"
-        );
-        BoundStatement boundStatement = updateReport.bind(
-                newLocality, newThoroughfare, newPremise, newSubPremise,
-                newDepartureTime, newArrivalTime, newCompletionTime, newReturnTime,
-                newDiagnosis, newDiagnosisCode, newResult, newHospitalization,
-                newApplied, newTrauma, newOnset, newFruitless,
-                callId, reportId
-                );
-        System.out.println(boundStatement);
-
-        DBConnector.getSession().execute(boundStatement);
-        System.out.println("[Report updated]");
-//        оновити дані пацієнта
-        if (newPatientFn.equals(oldPatient.getFirstName()) && newPatientMn.equals(oldPatient.getMiddleName()) && newPatientLn.equals(oldPatient.getLastName()) && newPatientDob == oldPatient.getDob()){
-            System.out.println("[Patient is not changed]");
-
-        } else {
-
-            PreparedStatement updatePatient = DBConnector.getSession().prepare(
-                    "UPDATE " + StringResources.PATIENTS +
-                            " SET first_name = ? , middle_name = ? , last_name = ?" +
-                            " WHERE id = ? AND dob = ? ;"
             );
-            boundStatement = updatePatient.bind(newPatientFn, newPatientMn, newPatientLn, oldPatient.getId(), oldPatient.getDob());
+//        обрати пацієнта, що буде змінено
+            rs = Query.GetOnePatient(oldReport.getPatientId());
+            row = rs.one();
+            Patient oldPatient = new Patient(
+                    row.getLocalDate("dob"), row.getUuid("id"),
+                    row.getString("first_name"), row.getString("middle_name"), row.getString("last_name")
+            );
+            //        встановити нові дані
+            GetNewData(oldReport, oldPatient);
+//        оновити дані звіту
+            PreparedStatement updateReport = DBConnector.getSession().prepare(
+                    "UPDATE " + StringResources.REPORT_BY_CALL +
+                            " SET a_locality = ? , a_thoroughfare = ? , a_premise = ?, a_sub_premise = ?, " +
+                            "departure_time = ?, arrival_time = ?, completion_time = ?, return_time = ?, " +
+                            "preliminary_diagnosis = ?, diagnosis_code = ?, result = ?, hospitalization_status = ?, " +
+                            "applied_before = ?, trauma = ?, onset = ?, fruitless = ? " +
+                            "WHERE call_id = ? AND id = ?;"
+            );
+            BoundStatement boundStatement = updateReport.bind(
+                    newLocality, newThoroughfare, newPremise, newSubPremise,
+                    newDepartureTime, newArrivalTime, newCompletionTime, newReturnTime,
+                    newDiagnosis, newDiagnosisCode, newResult, newHospitalization,
+                    newApplied, newTrauma, newOnset, newFruitless,
+                    callId, reportId
+            );
+            System.out.println(boundStatement);
 
             DBConnector.getSession().execute(boundStatement);
-            System.out.println("[Patient changed]");
-
+            System.out.println("[Report updated]");
+//        оновити дані пацієнта
+            UpdatePatient(oldPatient);
+        } catch (NullPointerException e){
+            System.out.println(e);
         }
-    }
 
+    }
 
     public void RemoveReport(ActionEvent event) {
         GetOldData();
@@ -190,7 +180,7 @@ public class UpdateReportController extends ReportController{
             System.out.println("[Report deleted]");
 
         } catch (Exception e){
-            System.out.println(e);
+            System.out.println(e.getMessage());
         }
 
     }
@@ -199,6 +189,56 @@ public class UpdateReportController extends ReportController{
 
     public void initialize(){
         InitMenuButtons();
+    }
+
+    private void UpdatePatient(Patient oldPatient){
+        BoundStatement boundStatement;
+        if (newPatientFn.equals(oldPatient.getFirstName()) && newPatientMn.equals(oldPatient.getMiddleName()) && newPatientLn.equals(oldPatient.getLastName()) && newPatientDob == oldPatient.getDob()){
+            System.out.println("[Patient is not changed]");
+        } else if(newPatientDob != oldPatient.getDob() && oldPatient.getDob() != null){
+            //TODO перемістити у PreparedStatement
+
+            // dob - clustering key у таблиці patients, отже його значення неможливо змінити.
+            // Можливий варіант - створення нового запису, та видалення попереднього
+            UUID patientId = UUID.randomUUID();
+            PreparedStatement addPatient = DBConnector.getSession().prepare(
+                    "INSERT INTO " + StringResources.PATIENTS + " (dob, id, first_name, middle_name, last_name) " +
+                            "VALUES(?, ?, ?, ?, ?);"
+            );
+            boundStatement = addPatient.bind(newPatientDob, patientId, newPatientFn, newPatientMn, newPatientLn);
+            DBConnector.getSession().execute(boundStatement);
+            System.out.println("[Patient added]");
+
+            PreparedStatement updateReport = DBConnector.getSession().prepare(
+                    "UPDATE " + StringResources.REPORT_BY_CALL +
+                            " SET patient_id = ? " +
+                            "WHERE call_id = ? AND id = ?;"
+            );
+            boundStatement = updateReport.bind(patientId, callId, reportId);
+            DBConnector.getSession().execute(boundStatement);
+            System.out.println("[Report changed]");
+
+            PreparedStatement deletePatient = DBConnector.getSession().prepare(
+                    "DELETE FROM " + StringResources.PATIENTS + " WHERE id = ? AND dob = ?;"
+            );
+            boundStatement = deletePatient.bind(oldPatient.getId(), oldPatient.getDob());
+            DBConnector.getSession().execute(boundStatement);
+            System.out.println("[Patient deleted]");
+
+
+        } else {
+
+            PreparedStatement updatePatient = DBConnector.getSession().prepare(
+                    "UPDATE " + StringResources.PATIENTS +
+                            " SET first_name = ? , middle_name = ? , last_name = ?" +
+                            " WHERE id = ? AND dob = ? ;"
+            );
+            boundStatement = updatePatient.bind(newPatientFn, newPatientMn, newPatientLn, oldPatient.getId(), oldPatient.getDob());
+
+            DBConnector.getSession().execute(boundStatement);
+            System.out.println("[Patient changed]");
+        }
+
     }
 
     protected void GetSearchData(){
@@ -231,7 +271,7 @@ public class UpdateReportController extends ReportController{
         } catch (IllegalArgumentException e) {
             callId = null;
             reportId = null;
-            System.out.println(e);
+            System.out.println(e.getMessage());
         }
         ReportTable.GetByCall(reportTable, callId);
     }
@@ -310,39 +350,39 @@ public class UpdateReportController extends ReportController{
             newUnitId = UUID.fromString(newUnitIdTextField.getText());
         } catch (IllegalArgumentException e){
             newUnitId = oldReport.getUnitId();
-            System.out.println(e);
+            System.out.println(e.getMessage());
         }
 
         try {
             newPatientDob = LocalDate.parse(newPatientDobTextField.getText());
         } catch (DateTimeParseException e){
             newPatientDob = oldPatient.getDob();
-            System.out.println(e);
+            System.out.println(e.getMessage());
         }
 
         try {
             newDepartureTime = LocalTime.parse(newDepartureTimeTextField.getText());
         } catch (DateTimeParseException e){
             newDepartureTime = oldReport.getDepartureTime();
-            System.out.println(e);
+            System.out.println(e.getMessage());
         }
         try {
             newArrivalTime = LocalTime.parse(newArrivalTimeTextField.getText());
         } catch (DateTimeParseException e){
             newArrivalTime = oldReport.getArrivalTime();
-            System.out.println(e);
+            System.out.println(e.getMessage());
         }
         try {
             newCompletionTime = LocalTime.parse(newCompletionTimeTextField.getText());
         } catch (DateTimeParseException e){
             newCompletionTime = oldReport.getCompletionTime();
-            System.out.println(e);
+            System.out.println(e.getMessage());
         }
         try {
             newReturnTime = LocalTime.parse(newReturnTimeTextField.getText());
         } catch (DateTimeParseException e){
             newReturnTime = oldReport.getReturnTime();
-            System.out.println(e);
+            System.out.println(e.getMessage());
         }
 
 
