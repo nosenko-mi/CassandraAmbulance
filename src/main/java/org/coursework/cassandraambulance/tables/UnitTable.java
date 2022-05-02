@@ -42,6 +42,9 @@ public class UnitTable {
 
     public static final TableColumn<Unit, String> carSerialNumberCol = new TableColumn<>("Car serial number");
 
+    private static final ObservableList<Unit> personObservableList = FXCollections.observableArrayList();
+
+
     public static void SetColumns(TableView<Unit> dataTable, ObservableList<Unit> callObservableList ){
 
         idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -88,8 +91,22 @@ public class UnitTable {
             rs = DBConnector.getSession().execute(getAllUnits);
         }
 
-        ObservableList<Unit> personObservableList = FXCollections.observableArrayList();
+        personObservableList.clear();
 
+        HandleRows(rs);
+
+        unitTable.getColumns().clear();
+
+        SetColumns(unitTable, personObservableList);
+
+        unitTable.getSelectionModel().setCellSelectionEnabled(true);
+        unitTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        TableUtils.installCopyPasteHandler(unitTable);
+    }
+
+
+
+    private static void HandleRows(ResultSet rs){
         for (Row row : rs){
             personObservableList
                     .add(new Unit(
@@ -101,13 +118,6 @@ public class UnitTable {
                     ));
 
         }
-        unitTable.getColumns().clear();
-
-        SetColumns(unitTable, personObservableList);
-
-        unitTable.getSelectionModel().setCellSelectionEnabled(true);
-        unitTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        TableUtils.installCopyPasteHandler(unitTable);
     }
 
 }

@@ -1,5 +1,7 @@
 package org.coursework.cassandraambulance.tables;
 
+import com.datastax.oss.driver.api.core.cql.BoundStatement;
+import com.datastax.oss.driver.api.core.cql.PreparedStatement;
 import com.datastax.oss.driver.api.core.cql.ResultSet;
 import com.datastax.oss.driver.api.core.cql.Row;
 import javafx.collections.FXCollections;
@@ -8,9 +10,12 @@ import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import org.coursework.cassandraambulance.DBConnector;
 import org.coursework.cassandraambulance.Query;
+import org.coursework.cassandraambulance.StringResources;
 import org.coursework.cassandraambulance.TableUtils;
 import org.coursework.cassandraambulance.models.EmergencyCall;
+import org.coursework.cassandraambulance.models.Unit;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -91,6 +96,33 @@ public class EmergencyCallTable {
         }
 
 
+    }
+
+    public static void GetByUnitId(TableView<EmergencyCall> emergencyCallTable, UUID id){
+        ResultSet rs;
+
+        if (id != null){
+            PreparedStatement getUnitByEmp = DBConnector.getSession().prepare(
+                    "SELECT * FROM " + StringResources.CALL_BY_DATE + " WHERE unit_id = ?;"
+            );
+            BoundStatement boundStatement = getUnitByEmp.bind(id);
+            rs = DBConnector.getSession().execute(boundStatement);
+        } else {
+            String getAllUnits = "SELECT * FROM " + StringResources.CALL_BY_DATE + ";";
+            rs = DBConnector.getSession().execute(getAllUnits);
+        }
+
+        callObservableList.clear();
+
+        HandleRows(rs);
+
+        emergencyCallTable.getColumns().clear();
+
+        EmergencyCallTable.SetColumns(emergencyCallTable, callObservableList);
+
+        emergencyCallTable.getSelectionModel().setCellSelectionEnabled(true);
+        emergencyCallTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        TableUtils.installCopyPasteHandler(emergencyCallTable);
     }
 
     private static void HandleRows(ResultSet rs){

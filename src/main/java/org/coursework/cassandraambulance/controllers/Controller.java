@@ -15,6 +15,11 @@ public class Controller {
 
     }
 
+    public void SwitchToCallByUnit(MouseEvent mouseEvent) {
+        ViewSwitcher.Switch(mouseEvent, "call_by_unit_view.fxml", "/style.css");
+
+    }
+
     public void SwitchToReportByCall(MouseEvent mouseEvent) {
         ViewSwitcher.Switch(mouseEvent, "report_by_call_view.fxml", "/style.css");
 

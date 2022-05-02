@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.coursework.cassandraambulance.controllers.GetPersonController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.coursework.cassandraambulance.controllers.UpdatePersonController">
    <children>
       <TableView fx:id="personTable" layoutX="224.0" layoutY="186.0" prefHeight="201.0" prefWidth="1010.0" AnchorPane.bottomAnchor="333.0" AnchorPane.leftAnchor="224.0" AnchorPane.rightAnchor="46.0" AnchorPane.topAnchor="186.0" />
       <Button fx:id="getDataButton" layoutX="1172.0" layoutY="150.0" mnemonicParsing="false" onAction="#GetPerson" text="Get data" AnchorPane.rightAnchor="46.0" />
@@ -32,7 +32,7 @@
                   <Font size="18.0" />
                </font>
             </Label>
-            <Label fx:id="getCallByUnit" prefHeight="40.0" text="Get call by unit" textFill="#00000099">
+            <Label fx:id="getCallByUnit" onMouseClicked="#SwitchToCallByUnit"  prefHeight="40.0" text="Get call by unit" textFill="#00000099">
                <font>
                   <Font size="18.0" />
                </font>
