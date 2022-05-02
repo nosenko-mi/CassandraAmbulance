@@ -1,5 +1,6 @@
 package org.coursework.cassandraambulance.controllers;
 
+import javafx.scene.control.Alert;
 import javafx.scene.input.MouseEvent;
 import org.coursework.cassandraambulance.ViewSwitcher;
 
@@ -54,6 +55,10 @@ public class Controller {
         ViewSwitcher.Switch(mouseEvent, "update_call_view.fxml", "/style.css");
     }
 
+    public void SwitchToAddEmployee(MouseEvent mouseEvent) {
+        ViewSwitcher.Switch(mouseEvent, "add_employee_view.fxml", "/style.css");
+    }
+
     public void SwitchToUpdatePerson(MouseEvent mouseEvent) {
         ViewSwitcher.Switch(mouseEvent, "update_persons_view.fxml", "/style.css");
     }
@@ -65,6 +70,13 @@ public class Controller {
     public void SwitchToReportByHosp(MouseEvent mouseEvent){
         ViewSwitcher.Switch(mouseEvent, "report_by_hosp_view.fxml", "/style.css");
 
+    }
+
+    protected void SuccessAlert(){
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Success");
+        alert.setHeaderText("Operation succeed");
+        alert.showAndWait();
     }
 
 }

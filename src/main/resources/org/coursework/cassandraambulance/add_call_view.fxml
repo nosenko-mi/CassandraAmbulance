@@ -35,12 +35,12 @@
                   <Font size="18.0" />
                </font>
             </Label>
-            <Label fx:id="getCallByUnit" prefHeight="40.0" text="Get call by unit" textFill="#00000099">
+            <Label fx:id="getCallByUnit" onMouseClicked="#SwitchToCallByUnit" prefHeight="40.0" text="Get call by unit" textFill="#00000099">
                <font>
                   <Font size="18.0" />
                </font>
             </Label>
-            <Label fx:id="getReportByCall" prefHeight="40.0" text="Get report by call" textFill="#00000099">
+            <Label fx:id="getReportByCall" onMouseClicked="#SwitchToReportByCall" prefHeight="40.0" text="Get report by call" textFill="#00000099">
                <font>
                   <Font size="18.0" />
                </font>
@@ -55,17 +55,17 @@
                   <Font size="18.0" />
                </font>
             </Label>
-            <Label fx:id="getUnitByEmp" prefHeight="40.0" prefWidth="150.0" text="Get unit by employee" textFill="#00000099">
+            <Label fx:id="getUnitByEmp" onMouseClicked="#SwitchToUnitByEmployee" prefHeight="40.0" prefWidth="150.0" text="Get unit by employee" textFill="#00000099">
                <font>
                   <Font size="18.0" />
                </font>
             </Label>
-            <Label fx:id="getPersons" prefHeight="40.0" prefWidth="150.0" text="Get persons" textFill="#00000099">
+            <Label fx:id="getPersons" onMouseClicked="#SwitchToGetPersons" prefHeight="40.0" prefWidth="150.0" text="Get persons" textFill="#00000099">
                <font>
                   <Font size="18.0" />
                </font>
             </Label>
-            <Label fx:id="getPatients" layoutX="10.0" layoutY="241.0" onMouseClicked="#SwitchToGetPatients" prefHeight="40.0" prefWidth="150.0" text="Get patients" textFill="#00000099">
+            <Label fx:id="getPatients" onMouseClicked="#SwitchToGetPatients" layoutX="10.0" layoutY="241.0" prefHeight="40.0" prefWidth="150.0" text="Get patients" textFill="#00000099">
                <font>
                   <Font size="18.0" />
                </font>
@@ -75,7 +75,12 @@
                   <Font name="System Bold" size="18.0" />
                </font>
             </Label>
-            <Label fx:id="addReport" layoutX="10.0" layoutY="330.0" onMouseClicked="#SwitchToAddReport" prefHeight="40.0" prefWidth="150.0" text="Add report" textFill="#00000099">
+            <Label fx:id="addReport" onMouseClicked="#SwitchToAddReport" layoutX="10.0" layoutY="330.0" prefHeight="40.0" prefWidth="150.0" text="Add report" textFill="#00000099">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label fx:id="addEmployeeLabel" onMouseClicked="#SwitchToAddEmployee" prefHeight="40.0" prefWidth="150.0" text="Add employee" textFill="#00000099">
                <font>
                   <Font size="18.0" />
                </font>

@@ -80,6 +80,11 @@
                   <Font size="18.0" />
                </font>
             </Label>
+            <Label fx:id="addEmployeeLabel" onMouseClicked="#SwitchToAddEmployee" prefHeight="40.0" prefWidth="150.0" text="Add employee" textFill="#00000099">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
             <Label fx:id="updateCallLabel" onMouseClicked="#SwitchToUpdateCall" prefHeight="40.0" prefWidth="150.0" text="Update call" textFill="#00000099">
                <font>
                   <Font size="18.0" />
