@@ -34,7 +34,7 @@ public class GetPatientController extends Controller{
         if (patient != null){
             BoundStatement boundStatement = PreparedStatements.deleteOnePatientById.bind(patient.getId());
             DBConnector.getSession().execute(boundStatement);
-            System.out.println("[Patient Deleted]");
+            Alerts.SucceedOperation();
         }
 
     }
