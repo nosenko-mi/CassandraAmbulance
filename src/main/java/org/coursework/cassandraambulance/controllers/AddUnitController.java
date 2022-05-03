@@ -5,10 +5,7 @@ import com.datastax.oss.driver.api.core.cql.ResultSet;
 import com.datastax.oss.driver.api.core.cql.Row;
 import javafx.event.ActionEvent;
 import javafx.scene.control.*;
-import org.coursework.cassandraambulance.DBConnector;
-import org.coursework.cassandraambulance.PreparedStatements;
-import org.coursework.cassandraambulance.Query;
-import org.coursework.cassandraambulance.StringResources;
+import org.coursework.cassandraambulance.*;
 import org.coursework.cassandraambulance.models.AmbulanceCar;
 import org.coursework.cassandraambulance.models.Person;
 import org.coursework.cassandraambulance.tables.AmbulanceCarTable;
@@ -94,25 +91,25 @@ public class AddUnitController extends  Controller{
             DBConnector.getSession().execute(boundStatement);
 
             // додати записи у таблицю unit_by_emp для кожного співпрацівника
-            boundStatement = PreparedStatements.addToUnitByEmp.bind(
+            boundStatement = PreparedStatements.AddToUnitByEmp.bind(
                     doctor.getId(), unitId
             );
             DBConnector.getSession().execute(boundStatement);
 
-            boundStatement = PreparedStatements.addToUnitByEmp.bind(
+            boundStatement = PreparedStatements.AddToUnitByEmp.bind(
                     orderly.getId(), unitId
             );
             DBConnector.getSession().execute(boundStatement);
 
-            boundStatement = PreparedStatements.addToUnitByEmp.bind(
+            boundStatement = PreparedStatements.AddToUnitByEmp.bind(
                     driver.getId(), unitId
             );
             DBConnector.getSession().execute(boundStatement);
 
-            SuccessAlert();
+            Alerts.SucceedOperation();
 
         } else {
-            MissingPrimaryKeyAlert();
+            Alerts.MissingPrimaryKey("Primary keys are missing");
         }
     }
 

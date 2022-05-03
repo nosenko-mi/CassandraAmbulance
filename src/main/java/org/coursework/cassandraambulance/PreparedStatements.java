@@ -10,10 +10,28 @@ public class PreparedStatements {
                     " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);"
     );
 
-    public static PreparedStatement addToUnitByEmp = DBConnector.getSession().prepare(
+    public static PreparedStatement AddToUnitByEmp = DBConnector.getSession().prepare(
             "INSERT INTO " + StringResources.UNIT_BY_EMP +
                     " (emp_id, unit_id)" +
                     " VALUES(?, ?);"
+    );
+
+    public static PreparedStatement AddCallToCallByDate = DBConnector.getSession().prepare(
+            "INSERT INTO " + StringResources.CALL_BY_DATE +
+                    "(date, time, a_locality, a_thoroughfare, a_premise, a_sub_premise, id, cause, unit_id, caller_id)" +
+                    "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?);"
+    );
+
+    public static PreparedStatement AddCallToCallByAddress = DBConnector.getSession().prepare(
+            "INSERT INTO " + StringResources.CALL_BY_ADDRESS +
+                    "(date, time, a_locality, a_thoroughfare, a_premise, a_sub_premise, id, cause, unit_id, caller_id)" +
+                    "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?);"
+    );
+
+    public static PreparedStatement AddCallerToPersons = DBConnector.getSession().prepare(
+            "INSERT INTO " + StringResources.PERSONS +
+                    " (id, type, first_name, middle_name, last_name)" +
+                    "VALUES(?, ?, ?, ?, ?);"
     );
 
 }

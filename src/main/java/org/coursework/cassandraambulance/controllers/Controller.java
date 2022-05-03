@@ -77,18 +77,6 @@ public class Controller {
 
     }
 
-    protected void SuccessAlert(){
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Success");
-        alert.setHeaderText("Operation succeed");
-        alert.showAndWait();
-    }
 
-    protected void MissingPrimaryKeyAlert(){
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Error");
-        alert.setHeaderText("Primary key is missing");
-        alert.showAndWait();
-    }
 
 }

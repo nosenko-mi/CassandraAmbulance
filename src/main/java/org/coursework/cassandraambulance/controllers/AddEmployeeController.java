@@ -7,6 +7,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
+import org.coursework.cassandraambulance.Alerts;
 import org.coursework.cassandraambulance.DBConnector;
 import org.coursework.cassandraambulance.StringResources;
 
@@ -35,7 +36,7 @@ public class AddEmployeeController extends Controller{
             DBConnector.getSession().execute(boundStatement);
 
             System.out.println("[Employee added]");
-            SuccessAlert();
+            Alerts.SucceedOperation();
         } else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");

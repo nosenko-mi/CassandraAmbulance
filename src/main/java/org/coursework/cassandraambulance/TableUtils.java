@@ -15,7 +15,8 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.StringTokenizer;
 
-public class TableUtils {
+public class
+TableUtils {
     private static NumberFormat numberFormatter = NumberFormat.getNumberInstance();
 
 

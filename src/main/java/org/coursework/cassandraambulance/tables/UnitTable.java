@@ -104,6 +104,25 @@ public class UnitTable {
         TableUtils.installCopyPasteHandler(unitTable);
     }
 
+    public static void GetAll(TableView<Unit> unitTable){
+
+        ResultSet rs;
+        // обрати записи з таблиці unit_by_emp
+        String getAllUnits = "SELECT * FROM " + StringResources.UNIT_BY_ID + ";";
+        rs = DBConnector.getSession().execute(getAllUnits);
+
+        personObservableList.clear();
+
+        HandleRows(rs);
+
+        unitTable.getColumns().clear();
+
+        SetColumns(unitTable, personObservableList);
+
+        unitTable.getSelectionModel().setCellSelectionEnabled(true);
+        unitTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        TableUtils.installCopyPasteHandler(unitTable);
+    }
 
 
     private static void HandleRows(ResultSet rs){

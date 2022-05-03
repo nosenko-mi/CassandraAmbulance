@@ -4,6 +4,7 @@ import com.datastax.oss.driver.api.core.cql.BoundStatement;
 import com.datastax.oss.driver.api.core.cql.PreparedStatement;
 import javafx.event.ActionEvent;
 import javafx.scene.control.*;
+import org.coursework.cassandraambulance.Alerts;
 import org.coursework.cassandraambulance.DBConnector;
 import org.coursework.cassandraambulance.StringResources;
 import org.coursework.cassandraambulance.models.Person;
@@ -50,7 +51,7 @@ public class UpdatePersonController extends Controller{
             System.out.println("[Person updated]");
         } else {
             System.out.println("[Person is not updated]");
-            AddAlert("Update error");
+            Alerts.MissingPrimaryKey("Primary keys are missing");
         }
 
 
@@ -68,7 +69,7 @@ public class UpdatePersonController extends Controller{
             System.out.println("[Person deleted]");
         } else {
             System.out.println("[Person is not updated]");
-            AddAlert("Delete error");
+            Alerts.MissingPrimaryKey("Add Type and Id in 'Old information' section");
         }
     }
 
@@ -143,13 +144,7 @@ public class UpdatePersonController extends Controller{
         }
     }
 
-    private void AddAlert(String title){
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setHeaderText("Primary keys are missing");
-        alert.setContentText("Add Type and Id in 'Old information' section");
-        alert.showAndWait();
-    }
+
 
     public void InitMenuButtons() {
 

@@ -76,6 +76,11 @@
                   <Font name="System Bold" size="18.0" />
                </font>
             </Label>
+            <Label fx:id="addUnit" onMouseClicked="#SwitchToAddUnit" layoutX="10.0" layoutY="293.0" prefHeight="40.0" prefWidth="150.0" text="Add unit" textFill="#00000099">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
             <Label fx:id="updateCallLabel" onMouseClicked="#SwitchToUpdateCall" prefHeight="40.0" prefWidth="150.0" text="Update call" textFill="#00000099">
                <font>
                   <Font size="18.0" />
