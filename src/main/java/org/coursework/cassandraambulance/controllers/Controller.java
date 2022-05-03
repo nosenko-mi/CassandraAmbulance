@@ -72,10 +72,22 @@ public class Controller {
 
     }
 
+    public void SwitchToAddUnit(MouseEvent mouseEvent){
+        ViewSwitcher.Switch(mouseEvent, "add_unit_view.fxml", "/style.css");
+
+    }
+
     protected void SuccessAlert(){
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Success");
         alert.setHeaderText("Operation succeed");
+        alert.showAndWait();
+    }
+
+    protected void MissingPrimaryKeyAlert(){
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText("Primary key is missing");
         alert.showAndWait();
     }
 

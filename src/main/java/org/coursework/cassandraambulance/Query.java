@@ -190,6 +190,48 @@ public class Query {
         return rs;
     }
 
+    public static ResultSet GetOneCarById(UUID id){
+        ResultSet rs;
+
+        PreparedStatement getCar;
+        BoundStatement boundStatement;
+
+        getCar = DBConnector.getSession().prepare(
+                "SELECT * FROM " + StringResources.AMBULANCE_CARS + " WHERE id = ? ;"
+        );
+        boundStatement = getCar.bind(id);
+
+        rs = DBConnector.getSession().execute(boundStatement);
+
+        return rs;
+    }
+
+    public static ResultSet GetAllCars(){
+        ResultSet rs;
+
+        String getAllCars = "SELECT * FROM " + StringResources.AMBULANCE_CARS + ";";
+
+        rs = DBConnector.getSession().execute(getAllCars);
+
+        return rs;
+    }
+
+    public static ResultSet GetOneCarBySerialNumber(String serialNumber){
+        ResultSet rs;
+
+        PreparedStatement getCar;
+        BoundStatement boundStatement;
+
+        getCar = DBConnector.getSession().prepare(
+                "SELECT * FROM " + StringResources.AMBULANCE_CARS + " WHERE serial_number = ? ;"
+        );
+        boundStatement = getCar.bind(serialNumber);
+
+        rs = DBConnector.getSession().execute(boundStatement);
+
+        return rs;
+    }
+
     public static ResultSet GetPersonByTypeName(String type, String fn, String mn, String ln){
         ResultSet rs;
 
