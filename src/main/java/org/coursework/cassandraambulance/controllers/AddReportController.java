@@ -147,7 +147,7 @@ public class AddReportController extends Controller{
             thoroughfareToSearch = thoroughfareTextField.getText();
         } catch (DateTimeParseException e) {
             System.out.println("[Error] " + e);
-            Alerts.ParseError("Time can't be parsed\nTime format: hh:MM:ss");
+            Alerts.ParseError("Date can't be parsed\nDate format: yyyy-mm-dd");
 
         } catch (Exception e) {
             e.printStackTrace();

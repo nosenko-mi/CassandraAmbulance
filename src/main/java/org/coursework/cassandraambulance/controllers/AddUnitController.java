@@ -145,6 +145,7 @@ public class AddUnitController extends  Controller{
             personId = UUID.fromString(personIdTextField.getText());
         } catch (IllegalArgumentException e) {
             System.out.println("[Error] " + e);
+            Alerts.ParseError("Person id can't be parsed");
             personId = null;
         } catch (Exception e) {
             e.printStackTrace();
