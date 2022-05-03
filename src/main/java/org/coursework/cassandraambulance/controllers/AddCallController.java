@@ -62,7 +62,7 @@ public class AddCallController extends Controller {
         if (unitId != null && addCaller(callerUuid)){
             // додати звіт до таблиці call_by_date
 
-            BoundStatement boundStatement = PreparedStatements.AddCallToCallByDate.bind(
+            BoundStatement boundStatement = PreparedStatements.addCallToCallByDate.bind(
                     LocalDate.now(), LocalTime.now(), localityTextField.getText(),
                     thoroughfareTextField.getText(), premiseTextField.getText(),
                     subPremiseTextField.getText(), UUID.randomUUID(), causeTextField.getText(),
@@ -72,7 +72,7 @@ public class AddCallController extends Controller {
             DBConnector.getSession().execute(boundStatement);
 
             // додати звіт до таблиці call_by_address
-            boundStatement = PreparedStatements.AddCallToCallByAddress.bind(
+            boundStatement = PreparedStatements.addCallToCallByAddress.bind(
                     LocalDate.now(), LocalTime.now(), localityTextField.getText(),
                     thoroughfareTextField.getText(), premiseTextField.getText(),
                     subPremiseTextField.getText(), UUID.randomUUID(), causeTextField.getText(),
@@ -89,7 +89,7 @@ public class AddCallController extends Controller {
     public boolean addCaller(UUID callerUuid){
 
         try {
-            BoundStatement boundStatement = PreparedStatements.AddCallerToPersons.bind(
+            BoundStatement boundStatement = PreparedStatements.addCallerToPersons.bind(
                     callerUuid, StringResources.CALLER_TYPE, callerFnTextField.getText(), callerMnTextField.getText(), callerLnTextField.getText()
             );
             DBConnector.getSession().execute(boundStatement);

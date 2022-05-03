@@ -11,7 +11,6 @@ import org.coursework.cassandraambulance.models.Person;
 import org.coursework.cassandraambulance.tables.AmbulanceCarTable;
 import org.coursework.cassandraambulance.tables.PersonTable;
 
-import java.time.format.DateTimeParseException;
 import java.util.UUID;
 
 public class AddUnitController extends  Controller{
@@ -91,17 +90,17 @@ public class AddUnitController extends  Controller{
             DBConnector.getSession().execute(boundStatement);
 
             // додати записи у таблицю unit_by_emp для кожного співпрацівника
-            boundStatement = PreparedStatements.AddToUnitByEmp.bind(
+            boundStatement = PreparedStatements.addToUnitByEmp.bind(
                     doctor.getId(), unitId
             );
             DBConnector.getSession().execute(boundStatement);
 
-            boundStatement = PreparedStatements.AddToUnitByEmp.bind(
+            boundStatement = PreparedStatements.addToUnitByEmp.bind(
                     orderly.getId(), unitId
             );
             DBConnector.getSession().execute(boundStatement);
 
-            boundStatement = PreparedStatements.AddToUnitByEmp.bind(
+            boundStatement = PreparedStatements.addToUnitByEmp.bind(
                     driver.getId(), unitId
             );
             DBConnector.getSession().execute(boundStatement);

@@ -1,16 +1,12 @@
 package org.coursework.cassandraambulance.controllers;
 
 import com.datastax.oss.driver.api.core.cql.BoundStatement;
-import com.datastax.oss.driver.api.core.cql.PreparedStatement;
-import com.datastax.oss.driver.api.core.cql.ResultSet;
-import com.datastax.oss.driver.api.core.cql.Row;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
-import org.coursework.cassandraambulance.*;
+import org.coursework.cassandraambulance.Alerts;
+import org.coursework.cassandraambulance.DBConnector;
+import org.coursework.cassandraambulance.PreparedStatements;
 import org.coursework.cassandraambulance.models.EmergencyCall;
 import org.coursework.cassandraambulance.tables.EmergencyCallTable;
 
@@ -47,7 +43,7 @@ public class AddReportController extends Controller{
     public TextField patientMnTextField;
     public TextField patientFnTextField;
     public TextField patientLnTextField;
-    public TableView dataTable;
+    public TableView<EmergencyCall> dataTable;
     public TextField patientDobTextField;
 
     public DatePicker datePicker;
@@ -56,86 +52,77 @@ public class AddReportController extends Controller{
     public TextField localityToSearchTextField;
 
     private LocalDate dateToSearch = null;
-    private LocalTime timeToSearch = null, departureTime, arrivalTime, completionTime, returnTime;
+    private LocalTime departureTime, arrivalTime, completionTime, returnTime;
     private String localityToSearch = null, thoroughfareToSearch = null;
 
 
     public void AddReport(ActionEvent event) {
 
-        // додати пацієнта
         UUID patientUuid = UUID.randomUUID();
-        AddPatient(patientUuid);
 
-        // зібрати введені дані
-        GetReportData();
+        if (GetReportData() && AddPatient(patientUuid)){
+            // додати звіт
+            BoundStatement boundStatement = PreparedStatements.addReportToReportByCall
+                    .bind(
+                            UUID.fromString(callIdTextField.getText()), UUID.randomUUID(), UUID.fromString(unitIdTextField.getText()), patientUuid,
+                            localityTextField.getText(), thoroughfareTextField.getText(), premiseTextField.getText(), subPremiseTextField.getText(),
+                            departureTime, arrivalTime, completionTime, returnTime,
+                            hospitalizationMenuButton.getText(), preliminaryDiagnosisTextField.getText(), diagnosisCodeTextField.getText(),
+                            resultMenuButton.getText() ,traumaMenuButton.getText(), appliedMenuButton.getText(), onsetMenuButton.getText(), fruitlessMenuButton.getText()
+                    );
+            DBConnector.getSession().execute(boundStatement);
 
-        // додати звіт
-        PreparedStatement addReportStatement =
-                DBConnector
-                        .getSession()
-                        .prepare(
-                                "INSERT INTO " + StringResources.REPORT_BY_CALL +
-                                        " (call_id, id, unit_id, patient_id," +
-                                        " a_locality, a_thoroughfare, a_premise, a_sub_premise," +
-                                        " departure_time, arrival_time, completion_time, return_time," +
-                                        " hospitalization_status, preliminary_diagnosis, diagnosis_code," +
-                                        " result, trauma, applied_before, onset, fruitless)" +
-                                        "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
+            Alerts.SucceedOperation();
+        }
 
-        BoundStatement boundStatement = addReportStatement
-                .bind(
-                        UUID.fromString(callIdTextField.getText()), UUID.randomUUID(), UUID.fromString(unitIdTextField.getText()), patientUuid,
-                        localityTextField.getText(), thoroughfareTextField.getText(), premiseTextField.getText(), subPremiseTextField.getText(),
-                        departureTime, arrivalTime, completionTime, returnTime,
-                        hospitalizationMenuButton.getText(), preliminaryDiagnosisTextField.getText(), diagnosisCodeTextField.getText(),
-                        resultMenuButton.getText() ,traumaMenuButton.getText(), appliedMenuButton.getText(), onsetMenuButton.getText(), fruitlessMenuButton.getText()
-                );
-        DBConnector.getSession().execute(boundStatement);
 
-        System.out.println("[Report added]");
+
 
     }
 
-    private void GetReportData() {
+    private boolean GetReportData() {
 
-        departureTime = LocalTime.now();
-        arrivalTime = LocalTime.now();
-        completionTime = LocalTime.now();
-        returnTime = LocalTime.now();
+//        departureTime = LocalTime.now();
+//        arrivalTime = LocalTime.now();
+//        completionTime = LocalTime.now();
+//        returnTime = LocalTime.now();
 
         try {
             departureTime = LocalTime.parse(departureTimeTextField.getText());
             arrivalTime = LocalTime.parse(arrivalTimeTextField.getText());
             completionTime = LocalTime.parse(completionTimeTextField.getText());
             returnTime = LocalTime.parse(returnTimeTextField.getText());
+            return true;
         } catch (DateTimeParseException e) {
             System.out.println("[Error] " + e);
+            Alerts.ParseError("Time can't be parsed\nTime format: hh:MM:ss");
         }
+
+        return false;
     }
 
-    public void AddPatient(UUID patientUuid){
+    public boolean AddPatient(UUID patientUuid){
         LocalDate patientDob;
 
         try {
             patientDob = LocalDate.parse(patientDobTextField.getText());
+
+            BoundStatement boundStatement = PreparedStatements.addPatientToPatients.bind(
+                    patientUuid, patientDob,
+                    patientFnTextField.getText(), patientMnTextField.getText(), patientLnTextField.getText());
+            DBConnector.getSession().execute(boundStatement);
+            System.out.println("[Patient added]");
+
+            return true;
         } catch (DateTimeParseException e) {
-            patientDob = LocalDate.MIN;
             System.out.println("[Error] " + e);
+            Alerts.ParseError("Date can't be parsed\nDate format: yyyy-mm-dd");
+
+        } catch (Exception e){
+            System.out.println(e.getMessage());
         }
 
-        PreparedStatement addPatientStatement =
-                DBConnector
-                        .getSession()
-                        .prepare(
-                                "INSERT INTO ambulance_ver3.patients" +
-                                        "(id, dob, first_name, middle_name, last_name)" +
-                                        "VALUES(?, ?, ?, ?, ?);");
-        BoundStatement boundStatement = addPatientStatement
-                .bind(patientUuid, patientDob, patientFnTextField.getText(), patientMnTextField.getText(), patientLnTextField.getText());
-        DBConnector.getSession().execute(boundStatement);
-        System.out.println("[Patient added]");
-
-
+        return false;
     }
 
 
@@ -152,25 +139,19 @@ public class AddReportController extends Controller{
     protected void GetSearchValues(){
 
         dateToSearch = null;
-        timeToSearch = null;
         localityToSearch = null;
         thoroughfareToSearch = null;
         try {
             dateToSearch = datePicker.getValue();
             localityToSearch = localityTextField.getText();
             thoroughfareToSearch = thoroughfareTextField.getText();
-            timeToSearch = LocalTime.parse(timeTextField.getText());
         } catch (DateTimeParseException e) {
             System.out.println("[Error] " + e);
+            Alerts.ParseError("Time can't be parsed\nTime format: hh:MM:ss");
+
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
-        System.out.println("Date: " + dateToSearch);
-        System.out.println("Time: " + timeToSearch);
-        System.out.println("Locality: " + localityToSearch);
-        System.out.println("Thoroughfare: " + thoroughfareToSearch);
 
     }
 
@@ -256,7 +237,8 @@ public class AddReportController extends Controller{
         MenuItem fruitlessItem4 = new MenuItem("Не викликали");
         MenuItem fruitlessItem5 = new MenuItem("Обслужений до приїзду");
         MenuItem fruitlessItem6 = new MenuItem("Відмова від медичної допомоги");
-        fruitlessMenuButton.getItems().addAll(fruitlessItem1, fruitlessItem2, fruitlessItem3, fruitlessItem4, fruitlessItem5, fruitlessItem6);
+        MenuItem fruitlessItem7 = new MenuItem("Ні");
+        fruitlessMenuButton.getItems().addAll(fruitlessItem1, fruitlessItem2, fruitlessItem3, fruitlessItem4, fruitlessItem5, fruitlessItem6, fruitlessItem7);
         fruitlessItem1.setOnAction(event -> fruitlessMenuButton.setText(fruitlessItem1.getText()));
         fruitlessItem1.setOnAction(event -> fruitlessMenuButton.setText(fruitlessItem1.getText()));
         fruitlessItem2.setOnAction(event -> fruitlessMenuButton.setText(fruitlessItem2.getText()));
@@ -264,6 +246,7 @@ public class AddReportController extends Controller{
         fruitlessItem4.setOnAction(event -> fruitlessMenuButton.setText(fruitlessItem4.getText()));
         fruitlessItem5.setOnAction(event -> fruitlessMenuButton.setText(fruitlessItem5.getText()));
         fruitlessItem6.setOnAction(event -> fruitlessMenuButton.setText(fruitlessItem6.getText()));
+        fruitlessItem7.setOnAction(event -> fruitlessMenuButton.setText(fruitlessItem7.getText()));
 
 
     }

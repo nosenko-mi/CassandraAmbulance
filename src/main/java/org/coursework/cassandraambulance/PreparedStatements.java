@@ -10,25 +10,25 @@ public class PreparedStatements {
                     " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);"
     );
 
-    public static PreparedStatement AddToUnitByEmp = DBConnector.getSession().prepare(
+    public static PreparedStatement addToUnitByEmp = DBConnector.getSession().prepare(
             "INSERT INTO " + StringResources.UNIT_BY_EMP +
                     " (emp_id, unit_id)" +
                     " VALUES(?, ?);"
     );
 
-    public static PreparedStatement AddCallToCallByDate = DBConnector.getSession().prepare(
+    public static PreparedStatement addCallToCallByDate = DBConnector.getSession().prepare(
             "INSERT INTO " + StringResources.CALL_BY_DATE +
                     "(date, time, a_locality, a_thoroughfare, a_premise, a_sub_premise, id, cause, unit_id, caller_id)" +
                     "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?);"
     );
 
-    public static PreparedStatement AddCallToCallByAddress = DBConnector.getSession().prepare(
+    public static PreparedStatement addCallToCallByAddress = DBConnector.getSession().prepare(
             "INSERT INTO " + StringResources.CALL_BY_ADDRESS +
                     "(date, time, a_locality, a_thoroughfare, a_premise, a_sub_premise, id, cause, unit_id, caller_id)" +
                     "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?);"
     );
 
-    public static PreparedStatement AddCallerToPersons = DBConnector.getSession().prepare(
+    public static PreparedStatement addCallerToPersons = DBConnector.getSession().prepare(
             "INSERT INTO " + StringResources.PERSONS +
                     " (id, type, first_name, middle_name, last_name)" +
                     "VALUES(?, ?, ?, ?, ?);"
@@ -40,4 +40,18 @@ public class PreparedStatements {
                     " VALUES(?, ?, ?, ?, ?);"
     );
 
+    public static PreparedStatement addReportToReportByCall = DBConnector.getSession().prepare(
+            "INSERT INTO " + StringResources.REPORT_BY_CALL +
+                    " (call_id, id, unit_id, patient_id," +
+                    " a_locality, a_thoroughfare, a_premise, a_sub_premise," +
+                    " departure_time, arrival_time, completion_time, return_time," +
+                    " hospitalization_status, preliminary_diagnosis, diagnosis_code," +
+                    " result, trauma, applied_before, onset, fruitless)" +
+                    "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
+
+    public static PreparedStatement addPatientToPatients =DBConnector.getSession().prepare(
+            "INSERT INTO ambulance_ver3.patients" +
+                    "(id, dob, first_name, middle_name, last_name)" +
+                    "VALUES(?, ?, ?, ?, ?);"
+    );
 }

@@ -15,11 +15,21 @@ public class Alerts {
         alert.showAndWait();
     }
 
+    public static void ParseError(String content){
+        alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(ERROR_TITLE);
+        alert.setHeaderText("Parse error");
+        alert.setContentText(content);
+        alert.showAndWait();
+    }
+
     public static void SucceedOperation(){
         alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(SUCCESS_TITLE);
         alert.setHeaderText("Operation succeed");
         alert.showAndWait();
     }
+
+
 
 }
