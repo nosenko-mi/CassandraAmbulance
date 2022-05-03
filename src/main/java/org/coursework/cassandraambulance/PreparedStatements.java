@@ -34,4 +34,10 @@ public class PreparedStatements {
                     "VALUES(?, ?, ?, ?, ?);"
     );
 
+    public static PreparedStatement AddEmployeeToPersons = DBConnector.getSession().prepare(
+            "INSERT INTO " + StringResources.PERSONS +
+                    " (type, id, first_name, middle_name, last_name) " +
+                    " VALUES(?, ?, ?, ?, ?);"
+    );
+
 }

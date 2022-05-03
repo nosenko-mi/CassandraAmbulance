@@ -83,7 +83,7 @@ public class AddCallController extends Controller {
 
             Alerts.SucceedOperation();
         }
-
+        Alerts.MissingPrimaryKey("Unit id is missing");
     }
 
     public boolean addCaller(UUID callerUuid){

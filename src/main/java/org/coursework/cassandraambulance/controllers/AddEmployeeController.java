@@ -9,11 +9,13 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import org.coursework.cassandraambulance.Alerts;
 import org.coursework.cassandraambulance.DBConnector;
+import org.coursework.cassandraambulance.PreparedStatements;
 import org.coursework.cassandraambulance.StringResources;
 
 import java.util.UUID;
 
 public class AddEmployeeController extends Controller{
+
     public TextField employeeMnTextField;
     public TextField employeeFnTextField;
     public TextField employeeLnTextField;
@@ -24,24 +26,17 @@ public class AddEmployeeController extends Controller{
     public void AddEmployee(ActionEvent event) {
         GetEmployeeData();
 
-
         UUID employeeId = UUID.randomUUID();
         if (employeeType != null){
-            PreparedStatement addEmployee = DBConnector.getSession().prepare(
-                    "INSERT INTO " + StringResources.PERSONS +
-                            " (type, id, first_name, middle_name, last_name) " +
-                            " VALUES(?, ?, ?, ?, ?);"
+
+            BoundStatement boundStatement = PreparedStatements.AddEmployeeToPersons.bind(
+                    employeeType, employeeId, employeeFn, employeeMn, employeeLn
             );
-            BoundStatement boundStatement = addEmployee.bind(employeeType, employeeId, employeeFn, employeeMn, employeeLn);
             DBConnector.getSession().execute(boundStatement);
 
-            System.out.println("[Employee added]");
             Alerts.SucceedOperation();
         } else {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText("Primary keys are missing");
-            alert.showAndWait();
+            Alerts.MissingPrimaryKey("Primary keys are missing");
         }
     }
 
