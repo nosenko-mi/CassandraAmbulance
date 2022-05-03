@@ -54,4 +54,8 @@ public class PreparedStatements {
                     "(id, dob, first_name, middle_name, last_name)" +
                     "VALUES(?, ?, ?, ?, ?);"
     );
+
+    public static PreparedStatement deleteOnePatientById = DBConnector.getSession().prepare(
+            "DELETE FROM " + StringResources.PATIENTS + " WHERE id = ? ;"
+    );
 }

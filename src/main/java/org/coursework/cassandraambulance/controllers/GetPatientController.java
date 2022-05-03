@@ -6,9 +6,7 @@ import com.datastax.oss.driver.api.core.cql.ResultSet;
 import javafx.event.ActionEvent;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import org.coursework.cassandraambulance.DBConnector;
-import org.coursework.cassandraambulance.Query;
-import org.coursework.cassandraambulance.StringResources;
+import org.coursework.cassandraambulance.*;
 import org.coursework.cassandraambulance.models.Patient;
 import org.coursework.cassandraambulance.tables.PatientTable;
 
@@ -17,7 +15,7 @@ import java.util.UUID;
 
 public class GetPatientController extends Controller{
     public TextField patientIdTextField;
-    public TableView patientTable;
+    public TableView<Patient> patientTable;
 
 
     private UUID patientId;
@@ -34,10 +32,7 @@ public class GetPatientController extends Controller{
         GetSearchValues();
         Patient patient = PatientTable.ToModel(patientId);
         if (patient != null){
-            PreparedStatement deleteOne = DBConnector.getSession().prepare(
-                    "DELETE FROM " + StringResources.PATIENTS + " WHERE id = ? ;"
-            );
-            BoundStatement boundStatement = deleteOne.bind(patient.getId());
+            BoundStatement boundStatement = PreparedStatements.deleteOnePatientById.bind(patient.getId());
             DBConnector.getSession().execute(boundStatement);
             System.out.println("[Patient Deleted]");
         }
@@ -49,10 +44,10 @@ public class GetPatientController extends Controller{
             patientId = UUID.fromString(patientIdTextField.getText());
         } catch (IllegalArgumentException e) {
             System.out.println("[Error] " + e);
+            Alerts.ParseError("Patient id can't be parsed");
             patientId = null;
         } catch (Exception e) {
             e.printStackTrace();
         }
-        System.out.println("[Patient id]" + patientId);
     }
 }
