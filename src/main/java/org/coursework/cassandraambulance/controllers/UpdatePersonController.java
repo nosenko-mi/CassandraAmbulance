@@ -6,6 +6,7 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.*;
 import org.coursework.cassandraambulance.Alerts;
 import org.coursework.cassandraambulance.DBConnector;
+import org.coursework.cassandraambulance.PreparedStatements;
 import org.coursework.cassandraambulance.StringResources;
 import org.coursework.cassandraambulance.models.Person;
 import org.coursework.cassandraambulance.tables.PersonTable;
@@ -41,16 +42,10 @@ public class UpdatePersonController extends Controller{
         GetNewValues();
 
         if (oldPersonId != null && oldPersonType != null){
-            PreparedStatement updatePerson = DBConnector.getSession().prepare(
-                    "UPDATE " + StringResources.PERSONS +
-                            " SET  first_name = ?, middle_name = ?, last_name = ?" +
-                            "WHERE type = ? AND id = ?"
-            );
-            BoundStatement boundStatement = updatePerson.bind(newPersonFn, newPersonMn, newPersonLn, oldPersonType, oldPersonId);
+            BoundStatement boundStatement =  PreparedStatements.updatePersonInPersons.bind(newPersonFn, newPersonMn, newPersonLn, oldPersonType, oldPersonId);
             DBConnector.getSession().execute(boundStatement);
-            System.out.println("[Person updated]");
+            Alerts.SucceedOperation();
         } else {
-            System.out.println("[Person is not updated]");
             Alerts.MissingPrimaryKey("Primary keys are missing");
         }
 
@@ -60,15 +55,10 @@ public class UpdatePersonController extends Controller{
     public void RemovePerson(ActionEvent event) {
         GetOldValues();
         if (oldPersonId != null && oldPersonType != null){
-            PreparedStatement deletePerson = DBConnector.getSession().prepare(
-                    "DELETE FROM " + StringResources.PERSONS +
-                            "WHERE type = ? AND id = ?"
-            );
-            BoundStatement boundStatement = deletePerson.bind(oldPersonType, oldPersonId);
+            BoundStatement boundStatement = PreparedStatements.deletePersonFromPersons.bind(oldPersonType, oldPersonId);
             DBConnector.getSession().execute(boundStatement);
-            System.out.println("[Person deleted]");
+            Alerts.SucceedOperation();
         } else {
-            System.out.println("[Person is not updated]");
             Alerts.MissingPrimaryKey("Add Type and Id in 'Old information' section");
         }
     }
@@ -150,10 +140,11 @@ public class UpdatePersonController extends Controller{
 
         // кожне MenuButton повинно мати власні MenuItems
 
-        MenuItem typeItemDoctor = new MenuItem("Лікар");
-        MenuItem typeItemOrderly = new MenuItem("Санітар");
-        MenuItem typeItemDriver = new MenuItem("Водій");
-        MenuItem typeItemCaller = new MenuItem("Викликач");
+        // пошук
+        MenuItem typeItemDoctor = new MenuItem(StringResources.DOCTOR_TYPE);
+        MenuItem typeItemOrderly = new MenuItem(StringResources.ORDERLY_TYPE);
+        MenuItem typeItemDriver = new MenuItem(StringResources.DRIVER_TYPE);
+        MenuItem typeItemCaller = new MenuItem(StringResources.CALLER_TYPE);
         MenuItem typeItemNone = new MenuItem("-");
 
         typeMenuButton.getItems().addAll(typeItemDoctor, typeItemOrderly, typeItemDriver, typeItemCaller, typeItemNone);
@@ -163,11 +154,11 @@ public class UpdatePersonController extends Controller{
         typeItemCaller.setOnAction(event -> typeMenuButton.setText(typeItemCaller.getText()));
         typeItemNone.setOnAction(event -> typeMenuButton.setText("Type"));
 
-
-        MenuItem oldTypeItemDoctor = new MenuItem("Лікар");
-        MenuItem oldTypeItemOrderly = new MenuItem("Санітар");
-        MenuItem oldTypeItemDriver = new MenuItem("Водій");
-        MenuItem oldTypeItemCaller = new MenuItem("Викликач");
+        // дані для оновлення запису
+        MenuItem oldTypeItemDoctor = new MenuItem(StringResources.DOCTOR_TYPE);
+        MenuItem oldTypeItemOrderly = new MenuItem(StringResources.ORDERLY_TYPE);
+        MenuItem oldTypeItemDriver = new MenuItem(StringResources.DRIVER_TYPE);
+        MenuItem oldTypeItemCaller = new MenuItem(StringResources.CALLER_TYPE);
 
         oldTypeMenuButton.getItems().addAll(oldTypeItemDoctor, oldTypeItemOrderly, oldTypeItemDriver, oldTypeItemCaller);
         oldTypeItemDoctor.setOnAction(event -> oldTypeMenuButton.setText(oldTypeItemDoctor.getText()));

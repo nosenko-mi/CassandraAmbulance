@@ -85,4 +85,15 @@ public class PreparedStatements {
                     " SET first_name = ? , middle_name = ? , last_name = ?" +
                     " WHERE type = ? AND id = ? ;"
     );
+
+    public static PreparedStatement updatePersonInPersons = DBConnector.getSession().prepare(
+            "UPDATE " + StringResources.PERSONS +
+                    " SET  first_name = ?, middle_name = ?, last_name = ?" +
+                    "WHERE type = ? AND id = ?"
+    );
+
+    public static PreparedStatement deletePersonFromPersons = DBConnector.getSession().prepare(
+            "DELETE FROM " + StringResources.PERSONS +
+                    "WHERE type = ? AND id = ?"
+    );
 }

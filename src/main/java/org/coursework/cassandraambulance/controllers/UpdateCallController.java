@@ -4,13 +4,15 @@ import com.datastax.oss.driver.api.core.cql.BoundStatement;
 import com.datastax.oss.driver.api.core.cql.PreparedStatement;
 import com.datastax.oss.driver.api.core.cql.ResultSet;
 import com.datastax.oss.driver.api.core.cql.Row;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
-import org.coursework.cassandraambulance.*;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
+import org.coursework.cassandraambulance.Alerts;
+import org.coursework.cassandraambulance.DBConnector;
+import org.coursework.cassandraambulance.PreparedStatements;
+import org.coursework.cassandraambulance.StringResources;
 import org.coursework.cassandraambulance.models.EmergencyCall;
 import org.coursework.cassandraambulance.models.Person;
 import org.coursework.cassandraambulance.tables.EmergencyCallTable;
@@ -103,7 +105,6 @@ public class UpdateCallController extends Controller {
     private void UpdateCallByAddress(EmergencyCall emergencyCall){
         BoundStatement boundStatement = PreparedStatements.deleteCallFromCallByAddress.bind(emergencyCall.getLocality(), emergencyCall.getThoroughfare(), emergencyCall.getPremise(), emergencyCall.getSubPremise(), emergencyCall.getId());
         DBConnector.getSession().execute(boundStatement);
-//        " WHERE a_locality = ? AND a_thoroughfare = ? AND a_premise = ? AND a_sub_premise = ? AND id = ?;"
 
         boundStatement = PreparedStatements.addCallToCallByAddress.bind(emergencyCall.getDate(), emergencyCall.getTime(), newLocality, newThoroughfare, newPremise, newSubPremise, emergencyCall.getId(), newCause, newUnitId, emergencyCall.getCallerId());
         DBConnector.getSession().execute(boundStatement);
@@ -144,17 +145,6 @@ public class UpdateCallController extends Controller {
         System.out.println("Time: " + timeToSearch);
         System.out.println("Locality: " + localityToSearch);
         System.out.println("Thoroughfare: " + thoroughfareToSearch);
-
-
-//        UpdateStart update = (UpdateStart) update(TableName.CALL_BY_DATE).set(
-//                Assignment.setColumn("a_locality", bindMarker()),
-//                Assignment.setColumn("a_thoroughfare", bindMarker()),
-//                Assignment.setColumn("a_premise", bindMarker()),
-//                Assignment.setColumn("a_sub_premise", bindMarker()),
-//                Assignment.setColumn("cause", bindMarker()),
-//                Assignment.setColumn("unit_id", bindMarker())
-//        );
-
 
     }
 
