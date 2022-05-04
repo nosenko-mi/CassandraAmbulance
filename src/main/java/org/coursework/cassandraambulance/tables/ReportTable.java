@@ -109,7 +109,7 @@ public class ReportTable {
 
     public static void  GetByHosp(TableView<Report> reportTable, String hospitalizationStatus){
         ResultSet rs;
-        if (!hospitalizationStatus.equals("Hospitalization")){
+        if (!hospitalizationStatus.equals(StringResources.HOSP_DEFAULT)){
             PreparedStatement getReports = DBConnector.getSession().prepare(
                     "SELECT * FROM " + StringResources.REPORT_BY_CALL + " WHERE hospitalization_status = ? ;"
             );

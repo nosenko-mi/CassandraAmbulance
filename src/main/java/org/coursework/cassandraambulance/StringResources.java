@@ -23,4 +23,8 @@ public class StringResources {
     public static final String DOCTOR_TYPE = "Лікар";
     public static final String CALLER_TYPE = "Викликач";
 
+    public static final String HOSP_TRUE = "Госпіталізовано";
+    public static final String HOSP_FALSE = "Не госпіталізовано";
+    public static final String HOSP_DEFAULT = "Hospitalization";
+
 }
