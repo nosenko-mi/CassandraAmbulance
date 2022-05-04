@@ -56,38 +56,17 @@ public class UpdateCallController extends Controller {
     protected void GetCallsByDate() {
 
         GetSearchValues();
-        ResultSet rs = Query.GetCallsByDateQuery(dateToSearch, localityToSearch, thoroughfareToSearch);
 
-        ObservableList<EmergencyCall> callObservableList = FXCollections.observableArrayList();
-        for (Row row : rs){
-            callObservableList
-                    .add(new EmergencyCall(
-                            row.getString("a_locality"), row.getString("a_thoroughfare"), row.getString("a_premise"),
-                            row.getString("a_sub_premise"), row.getString("cause"), row.getLocalDate("date"),
-                            row.getLocalTime("time"),
-                            row.getUuid("id"), row.getUuid("unit_id"), row.getUuid("caller_id")
-                    ));
-
-        }
-
-        dataTable.getColumns().clear();
-
-       EmergencyCallTable.SetColumns(dataTable, callObservableList);
-
-        dataTable.getSelectionModel().setCellSelectionEnabled(true);
-        dataTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        TableUtils.installCopyPasteHandler(dataTable);
+        EmergencyCallTable.GetByDate(dataTable, dateToSearch, localityToSearch, thoroughfareToSearch);
 
     }
 
     public void UpdateCall(ActionEvent event) {
         GetOldData();
         // обрати виклик, що буде змінюватися
-        PreparedStatement selectOneCall = DBConnector.getSession().prepare(
-                "SELECT * FROM " + StringResources.CALL_BY_DATE + " WHERE date = ? AND time = ? and id = ?"
-        );
-        BoundStatement boundStatement = selectOneCall.bind(oldDate, oldTime, oldCallId);
+        BoundStatement boundStatement = PreparedStatements.selectOneCallFromCallByDate.bind(oldDate, oldTime, oldCallId);
         ResultSet rs = DBConnector.getSession().execute(boundStatement);
+
         Row row = rs.one();
         EmergencyCall emergencyCall = new EmergencyCall(
                 row.getString("a_locality"), row.getString("a_thoroughfare"), row.getString("a_premise"),
@@ -95,51 +74,52 @@ public class UpdateCallController extends Controller {
                 row.getLocalTime("time"),
                 row.getUuid("id"), row.getUuid("unit_id"), row.getUuid("caller_id")
         );
-        // обрати викликача, що буде змінюватися
-        PreparedStatement selectOneCaller = DBConnector.getSession().prepare(
-                "SELECT * FROM " + StringResources.PERSONS + " WHERE type = 'Викликач' AND id = ?"
-        );
-        boundStatement = selectOneCaller.bind(emergencyCall.getCallerId());
 
+        // обрати викликача, що буде змінюватися
+        boundStatement = PreparedStatements.selectOneCallerFromPersons.bind(emergencyCall.getCallerId());
         rs = DBConnector.getSession().execute(boundStatement);
+
         row = rs.one();
         Person caller = new Person(
                 row.getString("type"), row.getUuid("id"),
                 row.getString("first_name"), row.getString("middle_name"), row.getString("last_name"));
 
-
-        System.out.println(emergencyCall);
         // Встановити нові дані
         GetNewData(emergencyCall, caller);
-        // Оновити дані виклику
-        PreparedStatement updateCall = DBConnector.getSession().prepare(
-                "UPDATE " + StringResources.CALL_BY_DATE +
-                        " SET a_locality = ? , a_thoroughfare = ? , a_premise = ?, a_sub_premise = ?, cause = ?, unit_id = ?" +
-                        " WHERE date = ? AND time = ? AND id = ?;"
-        );
-        boundStatement = updateCall.bind(newLocality, newThoroughfare, newPremise, newSubPremise, newCause, newUnitId, oldDate, oldTime, oldCallId);
-        System.out.println(boundStatement);
-
-        DBConnector.getSession().execute(boundStatement);
 
         // Оновити дані викликача
+        UpdateCaller(caller);
+
+        // Оновити дані виклику
+        boundStatement = PreparedStatements.updateCallInCallByDate.bind(newLocality, newThoroughfare, newPremise, newSubPremise, newCause, newUnitId, oldDate, oldTime, oldCallId);
+        DBConnector.getSession().execute(boundStatement);
+
+        // дані дублюються у таблицю call_by_address, але в ній адреса - первинний ключ, тому для оновлення створюється новий запис, а старий видаляється
+        UpdateCallByAddress(emergencyCall);
+
+        Alerts.SucceedOperation();
+    }
+
+    private void UpdateCallByAddress(EmergencyCall emergencyCall){
+        BoundStatement boundStatement = PreparedStatements.deleteCallFromCallByAddress.bind(emergencyCall.getLocality(), emergencyCall.getThoroughfare(), emergencyCall.getPremise(), emergencyCall.getSubPremise(), emergencyCall.getId());
+        DBConnector.getSession().execute(boundStatement);
+//        " WHERE a_locality = ? AND a_thoroughfare = ? AND a_premise = ? AND a_sub_premise = ? AND id = ?;"
+
+        boundStatement = PreparedStatements.addCallToCallByAddress.bind(emergencyCall.getDate(), emergencyCall.getTime(), newLocality, newThoroughfare, newPremise, newSubPremise, emergencyCall.getId(), newCause, newUnitId, emergencyCall.getCallerId());
+        DBConnector.getSession().execute(boundStatement);
+
+    }
+
+    private void UpdateCaller(Person caller){
         if (newCallerFn.equals(caller.getFirstName()) && newCallerMn.equals(caller.getMiddleName()) && newCallerLn.equals(caller.getLastName())){
             System.out.println("Caller is not changed");
 
         } else {
             System.out.println("Caller changed");
 
-            PreparedStatement updateCaller = DBConnector.getSession().prepare(
-                    "UPDATE " + StringResources.PERSONS +
-                            " SET first_name = ? , middle_name = ? , last_name = ?" +
-                            " WHERE type = ? AND id = ? ;"
-            );
-            boundStatement = updateCaller.bind(newCallerFn, newCallerMn, newCallerLn, "Викликач", caller.getId());
-
+            BoundStatement boundStatement = PreparedStatements.updateCallerInPersons.bind(newCallerFn, newCallerMn, newCallerLn, "Викликач", caller.getId());
             DBConnector.getSession().execute(boundStatement);
         }
-
-
     }
 
     protected void GetSearchValues(){

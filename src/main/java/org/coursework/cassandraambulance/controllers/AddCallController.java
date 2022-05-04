@@ -82,8 +82,9 @@ public class AddCallController extends Controller {
             DBConnector.getSession().execute(boundStatement);
 
             Alerts.SucceedOperation();
+        } else {
+            Alerts.MissingPrimaryKey("Unit id is missing");
         }
-        Alerts.MissingPrimaryKey("Unit id is missing");
     }
 
     public boolean addCaller(UUID callerUuid){

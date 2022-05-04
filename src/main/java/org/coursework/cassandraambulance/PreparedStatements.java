@@ -58,4 +58,31 @@ public class PreparedStatements {
     public static PreparedStatement deleteOnePatientById = DBConnector.getSession().prepare(
             "DELETE FROM " + StringResources.PATIENTS + " WHERE id = ? ;"
     );
+
+    public static PreparedStatement selectOneCallFromCallByDate = DBConnector.getSession().prepare(
+            "SELECT * FROM " + StringResources.CALL_BY_DATE + " WHERE date = ? AND time = ? and id = ?"
+    );
+
+    public static PreparedStatement selectOneCallerFromPersons = DBConnector.getSession().prepare(
+            "SELECT * FROM " + StringResources.PERSONS + " WHERE type = 'Викликач' AND id = ?"
+    );
+
+    public static PreparedStatement updateCallInCallByDate = DBConnector.getSession().prepare(
+            "UPDATE " + StringResources.CALL_BY_DATE +
+                    " SET a_locality = ? , a_thoroughfare = ? , a_premise = ?, a_sub_premise = ?, cause = ?, unit_id = ?" +
+                    " WHERE date = ? AND time = ? AND id = ?;"
+    );
+
+
+
+    public static PreparedStatement deleteCallFromCallByAddress = DBConnector.getSession().prepare(
+            "DELETE FROM " + StringResources.CALL_BY_ADDRESS +
+                    " WHERE a_locality = ? AND a_thoroughfare = ? AND a_premise = ? AND a_sub_premise = ? AND id = ?;"
+    );
+
+    public static PreparedStatement updateCallerInPersons = DBConnector.getSession().prepare(
+            "UPDATE " + StringResources.PERSONS +
+                    " SET first_name = ? , middle_name = ? , last_name = ?" +
+                    " WHERE type = ? AND id = ? ;"
+    );
 }
