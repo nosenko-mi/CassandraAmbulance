@@ -49,9 +49,10 @@ public class PreparedStatements {
                     " result, trauma, applied_before, onset, fruitless)" +
                     "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
 
-    public static PreparedStatement addPatientToPatients =DBConnector.getSession().prepare(
-            "INSERT INTO ambulance_ver3.patients" +
-                    "(id, dob, first_name, middle_name, last_name)" +
+
+    public static PreparedStatement addPatientToPatients = DBConnector.getSession().prepare(
+            "INSERT INTO " + StringResources.PATIENTS +
+                    " (dob, id, first_name, middle_name, last_name) " +
                     "VALUES(?, ?, ?, ?, ?);"
     );
 
@@ -96,4 +97,35 @@ public class PreparedStatements {
             "DELETE FROM " + StringResources.PERSONS +
                     "WHERE type = ? AND id = ?"
     );
+
+    public static PreparedStatement updateReportInReportByCall = DBConnector.getSession().prepare(
+            "UPDATE " + StringResources.REPORT_BY_CALL +
+                    " SET a_locality = ? , a_thoroughfare = ? , a_premise = ?, a_sub_premise = ?, " +
+                    "departure_time = ?, arrival_time = ?, completion_time = ?, return_time = ?, " +
+                    "preliminary_diagnosis = ?, diagnosis_code = ?, result = ?, hospitalization_status = ?, " +
+                    "applied_before = ?, trauma = ?, onset = ?, fruitless = ? , unit_id = ?" +
+                    "WHERE call_id = ? AND id = ?;"
+    );
+
+    public static PreparedStatement deleteReportFromReportByCall = DBConnector.getSession().prepare(
+            "DELETE FROM " + StringResources.REPORT_BY_CALL + " WHERE call_id = ? and id = ?;"
+    );
+
+    public static PreparedStatement updatePatientInReportByCall = DBConnector.getSession().prepare(
+            "UPDATE " + StringResources.REPORT_BY_CALL +
+                    " SET patient_id = ? " +
+                    "WHERE call_id = ? AND id = ?;"
+    );
+
+    public static PreparedStatement deletePatientFromPatient = DBConnector.getSession().prepare(
+            "DELETE FROM " + StringResources.PATIENTS + " WHERE id = ? AND dob = ?;"
+    );
+
+    public static PreparedStatement updatePatientNameInPatients = DBConnector.getSession().prepare(
+            "UPDATE " + StringResources.PATIENTS +
+                    " SET first_name = ? , middle_name = ? , last_name = ?" +
+                    " WHERE id = ? AND dob = ? ;"
+    );
+
+
 }

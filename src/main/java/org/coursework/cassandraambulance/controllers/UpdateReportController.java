@@ -1,7 +1,6 @@
 package org.coursework.cassandraambulance.controllers;
 
 import com.datastax.oss.driver.api.core.cql.BoundStatement;
-import com.datastax.oss.driver.api.core.cql.PreparedStatement;
 import com.datastax.oss.driver.api.core.cql.ResultSet;
 import com.datastax.oss.driver.api.core.cql.Row;
 import javafx.collections.FXCollections;
@@ -9,10 +8,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import org.coursework.cassandraambulance.DBConnector;
-import org.coursework.cassandraambulance.Query;
-import org.coursework.cassandraambulance.StringResources;
-import org.coursework.cassandraambulance.TableUtils;
+import org.coursework.cassandraambulance.*;
 import org.coursework.cassandraambulance.models.EmergencyCall;
 import org.coursework.cassandraambulance.models.Patient;
 import org.coursework.cassandraambulance.models.Report;
@@ -131,39 +127,32 @@ public class UpdateReportController extends ReportController{
                     row.getLocalTime("completion_time"), row.getLocalTime("return_time")
 
             );
-//        обрати пацієнта, що буде змінено
+            // обрати пацієнта, що буде змінено
             rs = Query.GetOnePatient(oldReport.getPatientId());
             row = rs.one();
             Patient oldPatient = new Patient(
                     row.getLocalDate("dob"), row.getUuid("id"),
                     row.getString("first_name"), row.getString("middle_name"), row.getString("last_name")
             );
-            //        встановити нові дані
+            // встановити нові дані
             GetNewData(oldReport, oldPatient);
-//        оновити дані звіту
-            PreparedStatement updateReport = DBConnector.getSession().prepare(
-                    "UPDATE " + StringResources.REPORT_BY_CALL +
-                            " SET a_locality = ? , a_thoroughfare = ? , a_premise = ?, a_sub_premise = ?, " +
-                            "departure_time = ?, arrival_time = ?, completion_time = ?, return_time = ?, " +
-                            "preliminary_diagnosis = ?, diagnosis_code = ?, result = ?, hospitalization_status = ?, " +
-                            "applied_before = ?, trauma = ?, onset = ?, fruitless = ? " +
-                            "WHERE call_id = ? AND id = ?;"
-            );
-            BoundStatement boundStatement = updateReport.bind(
+            // оновити дані звіту
+            BoundStatement boundStatement = PreparedStatements.updateReportInReportByCall.bind(
                     newLocality, newThoroughfare, newPremise, newSubPremise,
                     newDepartureTime, newArrivalTime, newCompletionTime, newReturnTime,
                     newDiagnosis, newDiagnosisCode, newResult, newHospitalization,
-                    newApplied, newTrauma, newOnset, newFruitless,
+                    newApplied, newTrauma, newOnset, newFruitless, newUnitId,
                     callId, reportId
             );
-            System.out.println(boundStatement);
 
             DBConnector.getSession().execute(boundStatement);
-            System.out.println("[Report updated]");
 //        оновити дані пацієнта
             UpdatePatient(oldPatient);
+
+            Alerts.SucceedOperation();
         } catch (NullPointerException e){
-            System.out.println(e);
+            System.out.println(e.getMessage());
+            Alerts.FailedOperation();
         }
 
     }
@@ -172,10 +161,7 @@ public class UpdateReportController extends ReportController{
         GetOldData();
 
         try {
-            PreparedStatement deleteReport = DBConnector.getSession().prepare(
-                    "DELETE FROM " + StringResources.REPORT_BY_CALL + " WHERE call_id = ? and id = ?;"
-            );
-            BoundStatement boundStatement = deleteReport.bind(callId, reportId);
+            BoundStatement boundStatement = PreparedStatements.deleteReportFromReportByCall.bind(callId, reportId);
             DBConnector.getSession().execute(boundStatement);
             System.out.println("[Report deleted]");
 
@@ -196,44 +182,27 @@ public class UpdateReportController extends ReportController{
         if (newPatientFn.equals(oldPatient.getFirstName()) && newPatientMn.equals(oldPatient.getMiddleName()) && newPatientLn.equals(oldPatient.getLastName()) && newPatientDob == oldPatient.getDob()){
             System.out.println("[Patient is not changed]");
         } else if(newPatientDob != oldPatient.getDob() && oldPatient.getDob() != null){
-            //TODO перемістити у PreparedStatement
 
             // dob - clustering key у таблиці patients, отже його значення неможливо змінити.
             // Можливий варіант - створення нового запису, та видалення попереднього
             UUID patientId = UUID.randomUUID();
-            PreparedStatement addPatient = DBConnector.getSession().prepare(
-                    "INSERT INTO " + StringResources.PATIENTS + " (dob, id, first_name, middle_name, last_name) " +
-                            "VALUES(?, ?, ?, ?, ?);"
-            );
-            boundStatement = addPatient.bind(newPatientDob, patientId, newPatientFn, newPatientMn, newPatientLn);
+
+            boundStatement = PreparedStatements.addPatientToPatients.bind(newPatientDob, patientId, newPatientFn, newPatientMn, newPatientLn);
             DBConnector.getSession().execute(boundStatement);
             System.out.println("[Patient added]");
 
-            PreparedStatement updateReport = DBConnector.getSession().prepare(
-                    "UPDATE " + StringResources.REPORT_BY_CALL +
-                            " SET patient_id = ? " +
-                            "WHERE call_id = ? AND id = ?;"
-            );
-            boundStatement = updateReport.bind(patientId, callId, reportId);
+            boundStatement = PreparedStatements.updatePatientInReportByCall.bind(patientId, callId, reportId);
             DBConnector.getSession().execute(boundStatement);
             System.out.println("[Report changed]");
 
-            PreparedStatement deletePatient = DBConnector.getSession().prepare(
-                    "DELETE FROM " + StringResources.PATIENTS + " WHERE id = ? AND dob = ?;"
-            );
-            boundStatement = deletePatient.bind(oldPatient.getId(), oldPatient.getDob());
+            boundStatement = PreparedStatements.deletePatientFromPatient.bind(oldPatient.getId(), oldPatient.getDob());
             DBConnector.getSession().execute(boundStatement);
             System.out.println("[Patient deleted]");
 
 
         } else {
 
-            PreparedStatement updatePatient = DBConnector.getSession().prepare(
-                    "UPDATE " + StringResources.PATIENTS +
-                            " SET first_name = ? , middle_name = ? , last_name = ?" +
-                            " WHERE id = ? AND dob = ? ;"
-            );
-            boundStatement = updatePatient.bind(newPatientFn, newPatientMn, newPatientLn, oldPatient.getId(), oldPatient.getDob());
+            boundStatement = PreparedStatements.updatePatientNameInPatients.bind(newPatientFn, newPatientMn, newPatientLn, oldPatient.getId(), oldPatient.getDob());
 
             DBConnector.getSession().execute(boundStatement);
             System.out.println("[Patient changed]");
@@ -255,13 +224,6 @@ public class UpdateReportController extends ReportController{
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
-        System.out.println("Date: " + dateToSearch);
-        System.out.println("Time: " + timeToSearch);
-        System.out.println("Locality: " + localityToSearch);
-        System.out.println("Thoroughfare: " + thoroughfareToSearch);
-
     }
 
     protected void GetOldData(){
@@ -390,8 +352,8 @@ public class UpdateReportController extends ReportController{
 
     public void InitMenuButtons(){
 
-        MenuItem hospItemY = new MenuItem("Hospitalized");
-        MenuItem hospItemN = new MenuItem("Not hospitalized");
+        MenuItem hospItemY = new MenuItem(StringResources.HOSP_TRUE);
+        MenuItem hospItemN = new MenuItem(StringResources.HOSP_FALSE);
         hospitalizationMenuButton.getItems().addAll(hospItemY, hospItemN);
         hospItemN.setOnAction(event -> hospitalizationMenuButton.setText(hospItemN.getText()));
         hospItemY.setOnAction(event -> hospitalizationMenuButton.setText(hospItemY.getText()));

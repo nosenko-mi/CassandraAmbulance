@@ -39,6 +39,12 @@ public class Alerts {
         alert.showAndWait();
     }
 
+    public static void FailedOperation(){
+        alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(ERROR_TITLE);
+        alert.setHeaderText("Could not perform operation");
+        alert.showAndWait();
+    }
 
 
 }
