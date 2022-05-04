@@ -108,9 +108,9 @@
             </Label>
          </children>
       </VBox>
-      <CheckBox fx:id="doctorCheckBox" layoutX="226.0" layoutY="79.0" mnemonicParsing="false" onAction="#DoctorChecked" text="Лікар" />
-      <CheckBox fx:id="orderlyCheckBox" layoutX="301.0" layoutY="79.0" mnemonicParsing="false" onAction="#OrderlyChecked" text="Санітар" />
-      <CheckBox fx:id="driverCheckBox" layoutX="384.0" layoutY="79.0" mnemonicParsing="false" onAction="#DriverChecked" text="Водій" />
+      <CheckBox fx:id="doctorCheckBox" layoutX="226.0" layoutY="79.0" mnemonicParsing="false" text="Лікар" />
+      <CheckBox fx:id="orderlyCheckBox" layoutX="301.0" layoutY="79.0" mnemonicParsing="false" text="Санітар" />
+      <CheckBox fx:id="driverCheckBox" layoutX="384.0" layoutY="79.0" mnemonicParsing="false" text="Водій" />
       <TableView fx:id="employeeUnitTable" layoutX="226.0" layoutY="439.0" prefHeight="257.0" prefWidth="1010.0" />
       <Button fx:id="getUnitButton" layoutX="1177.0" layoutY="404.0" mnemonicParsing="false" onAction="#GetUnitsByEmployee" text="Get unit" AnchorPane.rightAnchor="44.0" />
       <Label layoutX="226.0" layoutY="408.0" text="Employee id" />

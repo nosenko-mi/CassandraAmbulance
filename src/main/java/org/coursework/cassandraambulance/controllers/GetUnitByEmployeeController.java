@@ -4,6 +4,7 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import org.coursework.cassandraambulance.Alerts;
 import org.coursework.cassandraambulance.models.EmployeeUnit;
 import org.coursework.cassandraambulance.models.Person;
 import org.coursework.cassandraambulance.tables.EmployeeUnitTable;
@@ -32,23 +33,13 @@ public class GetUnitByEmployeeController extends Controller  {
     public void GetUnitsByEmployee(ActionEvent event) {
         try {
             employeeId = UUID.fromString(employeeIdTextField.getText());
+            EmployeeUnitTable.GetByEmp(employeeUnitTable, employeeId);
         } catch (IllegalArgumentException e){
             employeeId = null;
+            Alerts.ParseError("Employee id can't be parsed");
             System.out.println(e);
         }
-        EmployeeUnitTable.GetByEmp(employeeUnitTable, employeeId);
 
     }
-
-
-    public void DoctorChecked(ActionEvent event) {
-    }
-
-    public void OrderlyChecked(ActionEvent event) {
-    }
-
-    public void DriverChecked(ActionEvent event) {
-    }
-
 
 }
