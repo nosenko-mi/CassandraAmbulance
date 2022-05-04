@@ -3,6 +3,7 @@ package org.coursework.cassandraambulance.controllers;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import org.coursework.cassandraambulance.Alerts;
 import org.coursework.cassandraambulance.models.Person;
 import org.coursework.cassandraambulance.tables.PersonTable;
 
@@ -24,20 +25,15 @@ public class GetPersonController extends Controller {
     public void GetPerson(ActionEvent event) {
         GetSearchValues();
 
-        // так як пошук можливий лише у порядку type -> id, робиться наступна перевірка:
-        // коли вказани type та id немає значення, чи вказано ім'я
+        // пошук можливий лише у порядку type -> id, робиться наступна перевірка:
+        // коли вказані type та id немає значення, чи вказано ім'я
         if (personType != null && personId != null){
             PersonTable.GetByTypeId(personTable, personType, personId);
         } else if(personType != null) {
             PersonTable.GetByTypeName(personTable, personType, personFn, personMn, personLn);
         } else {
             PersonTable.GetAll(personTable);
-
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Select information");
-            alert.setHeaderText("Selection parameters is incorrect");
-            alert.setContentText("Available parameters type -> id or type -> name\nCurrently selected all rows");
-            alert.showAndWait();
+            Alerts.WrongSearchParameters("Available parameters type -> id or type -> name\nCurrently selected all rows");
         }
 
     }
@@ -50,10 +46,9 @@ public class GetPersonController extends Controller {
             personType = typeMenuButton.getText();
 
             personId = UUID.fromString(personIdTextField.getText());
-        } catch (DateTimeParseException e) {
-            System.out.println("[Error] " + e);
         } catch (IllegalArgumentException e) {
             System.out.println("[Error] " + e);
+            Alerts.ParseError("Person id can't be parsed");
             personId = null;
         } catch (Exception e) {
             e.printStackTrace();
