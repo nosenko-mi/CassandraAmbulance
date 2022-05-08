@@ -2,6 +2,7 @@ package org.coursework.cassandraambulance.controllers;
 
 import javafx.scene.control.Alert;
 import javafx.scene.input.MouseEvent;
+import org.coursework.cassandraambulance.StringResources;
 import org.coursework.cassandraambulance.ViewSwitcher;
 
 public class Controller {
@@ -76,7 +77,5 @@ public class Controller {
         ViewSwitcher.Switch(mouseEvent, "add_unit_view.fxml", "/style.css");
 
     }
-
-
 
 }

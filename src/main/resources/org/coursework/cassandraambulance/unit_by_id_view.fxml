@@ -1,17 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Separator?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.coursework.cassandraambulance.controllers.GetUnitByIdController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.coursework.cassandraambulance.controllers.GetUnitByIdController">
    <children>
-      <TableView fx:id="unitTable" layoutX="226.0" layoutY="134.0" prefHeight="537.0" prefWidth="1010.0" AnchorPane.bottomAnchor="49.0" AnchorPane.leftAnchor="226.0" AnchorPane.rightAnchor="44.0" AnchorPane.topAnchor="134.0" />
+      <TableView fx:id="unitTable" layoutX="226.0" layoutY="134.0" prefHeight="463.0" prefWidth="1010.0" AnchorPane.bottomAnchor="123.0" AnchorPane.leftAnchor="226.0" AnchorPane.rightAnchor="44.0" AnchorPane.topAnchor="134.0" />
       <Button fx:id="getDataButton" layoutX="1174.0" layoutY="99.0" mnemonicParsing="false" onAction="#GetUnitById" text="Get data" AnchorPane.rightAnchor="44.0" />
       <Label layoutX="226.0" layoutY="24.0" text="Get unit by id">
          <font>
@@ -84,7 +79,7 @@
                   <Font size="18.0" />
                </font>
             </Label>
-            <Label fx:id="addUnit" onMouseClicked="#SwitchToAddUnit" layoutX="10.0" layoutY="293.0" prefHeight="40.0" prefWidth="150.0" text="Add unit" textFill="#00000099">
+            <Label fx:id="addUnit" layoutX="10.0" layoutY="293.0" onMouseClicked="#SwitchToAddUnit" prefHeight="40.0" prefWidth="150.0" text="Add unit" textFill="#00000099">
                <font>
                   <Font size="18.0" />
                </font>
@@ -107,5 +102,6 @@
 
          </children>
       </VBox>
+      <Button fx:id="deleteUnitButton" layoutX="1161.0" layoutY="607.0" mnemonicParsing="false" onAction="#DeleteUnit" text="Delete unit" />
    </children>
 </AnchorPane>

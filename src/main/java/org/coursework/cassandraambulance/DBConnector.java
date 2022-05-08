@@ -9,20 +9,33 @@ import java.net.InetSocketAddress;
 // клас, необхідний для з'єднання з базою даних
 public class DBConnector {
 
-    static CqlSession session;
+    private static CqlSession session;
+    private static final String KEYSPACE = "ambulance_ver3";
 
     public static void connectDB(String seeds, int port){
+        try{
+            session = CqlSession
+                    .builder()
+                    .addContactPoint(new InetSocketAddress(seeds, port))
+                    .withKeyspace(KEYSPACE)
+                    .build();
 
-        session = CqlSession.builder()
-                .addContactPoint(new InetSocketAddress(seeds, port))
-                .build();
+            System.out.println("[Connected] " + session.getContext().getSessionName());
+        } catch (AllNodesFailedException e){
+            System.out.println(e.getMessage());
+
+        }
+//        session = CqlSession.builder()
+//                .addContactPoint(new InetSocketAddress(seeds, port))
+//                .build();
     }
 
     public static void connectDB(){
-        // за замовчуванням використовуєтсья сокет: localhost порт: 9042
+        // за замовчуванням використовується сокет: localhost порт: 9042
         try{
-            session = CqlSession.builder()
-                    .withKeyspace("ambulance_ver3")
+            session = CqlSession
+                    .builder()
+                    .withKeyspace(KEYSPACE)
                     .build();
 
             System.out.println("[Connected] " + session.getContext().getSessionName());

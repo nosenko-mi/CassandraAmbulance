@@ -10,6 +10,11 @@ public class PreparedStatements {
                     " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);"
     );
 
+    public static PreparedStatement deleteUnit = DBConnector.getSession().prepare(
+            "DELETE FROM " + StringResources.UNIT_BY_ID +
+                    " WHERE id = ?"
+    );
+
     public static PreparedStatement addToUnitByEmp = DBConnector.getSession().prepare(
             "INSERT INTO " + StringResources.UNIT_BY_EMP +
                     " (emp_id, unit_id)" +
@@ -95,7 +100,7 @@ public class PreparedStatements {
 
     public static PreparedStatement deletePersonFromPersons = DBConnector.getSession().prepare(
             "DELETE FROM " + StringResources.PERSONS +
-                    "WHERE type = ? AND id = ?"
+                    " WHERE type = ? AND id = ?"
     );
 
     public static PreparedStatement updateReportInReportByCall = DBConnector.getSession().prepare(
