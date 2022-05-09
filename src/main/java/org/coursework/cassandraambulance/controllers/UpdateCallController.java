@@ -150,22 +150,9 @@ public class UpdateCallController extends Controller {
 
     public void RemoveCall(ActionEvent event) {
         GetOldData();
-        PreparedStatement deleteCall = DBConnector.getSession().prepare(
-                "DELETE FROM " + StringResources.CALL_BY_DATE + " WHERE date = ? AND time = ? AND id = ?;"
-        );
-        BoundStatement boundStatement = deleteCall.bind(oldDate, oldTime, oldCallId);
+
+        BoundStatement boundStatement = PreparedStatements.deleteCall.bind(oldDate, oldTime, oldCallId);
         DBConnector.getSession().execute(boundStatement);
-
-
-        // переделать
-//        Delete delete = deleteFrom(TableName.CALL_BY_DATE)
-//                .where(Relation.column("date").isEqualTo(bindMarker()))
-//                .where(Relation.column("time").isEqualTo(bindMarker()))
-//                .where(Relation.column("id").isEqualTo(bindMarker()));
-////        delete.build(oldDate, oldTime, oldCallId);
-//        DBConnector.getSession().execute(delete.build(oldDate, oldTime, oldCallId));
-
-//        BoundStatement boundStatement = delete.bind(oldDate, oldTime, oldCallId);
 
     }
 

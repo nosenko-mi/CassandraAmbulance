@@ -79,7 +79,9 @@ public class PreparedStatements {
                     " WHERE date = ? AND time = ? AND id = ?;"
     );
 
-
+    public static PreparedStatement deleteCall = DBConnector.getSession().prepare(
+            "DELETE FROM " + StringResources.CALL_BY_DATE + " WHERE date = ? AND time = ? AND id = ?;"
+    );
 
     public static PreparedStatement deleteCallFromCallByAddress = DBConnector.getSession().prepare(
             "DELETE FROM " + StringResources.CALL_BY_ADDRESS +

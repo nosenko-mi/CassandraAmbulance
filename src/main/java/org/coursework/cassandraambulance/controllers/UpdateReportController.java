@@ -20,7 +20,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
 import java.util.UUID;
 
-public class UpdateReportController extends ReportController{
+public class UpdateReportController extends Controller {
 
     public MenuButton resultMenuButton;
     public MenuButton hospitalizationMenuButton;

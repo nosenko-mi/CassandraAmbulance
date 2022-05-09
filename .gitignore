@@ -2,3 +2,6 @@
 /out/
 /target/
 
+/models_dark.uml
+/models_light.uml
+/controllers.uml
