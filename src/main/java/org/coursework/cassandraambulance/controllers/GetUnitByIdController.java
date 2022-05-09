@@ -41,33 +41,37 @@ public class GetUnitByIdController extends Controller {
             unitId = UUID.fromString(unitIdTextField.getText());
 
             ResultSet rs = Query.GetUnitById(unitId);
-
             Row row = rs.one();
 
-            Unit unit = new Unit(
-                    row.getUuid("id"), row.getUuid("doctor_id"), row.getUuid("orderly_id"), row.getUuid("driver_id"), row.getUuid("car_id"),
-                    row.getString("doctor_first_name"), row.getString("doctor_middle_name"), row.getString("doctor_last_name"),
-                    row.getString("orderly_first_name"), row.getString("orderly_middle_name"), row.getString("orderly_last_name"),
-                    row.getString("driver_first_name"), row.getString("driver_middle_name"), row.getString("driver_last_name"),
-                    row.getString("car_serial_number")
-            );
+            if (rs != null){
+
+                Unit unit = new Unit(
+                        row.getUuid("id"), row.getUuid("doctor_id"), row.getUuid("orderly_id"), row.getUuid("driver_id"), row.getUuid("car_id"),
+                        row.getString("doctor_first_name"), row.getString("doctor_middle_name"), row.getString("doctor_last_name"),
+                        row.getString("orderly_first_name"), row.getString("orderly_middle_name"), row.getString("orderly_last_name"),
+                        row.getString("driver_first_name"), row.getString("driver_middle_name"), row.getString("driver_last_name"),
+                        row.getString("car_serial_number")
+                );
 
 
-            BoundStatement boundStatement = PreparedStatements.deleteUnit.bind(unitId);
+                BoundStatement boundStatement = PreparedStatements.deleteUnit.bind(unitId);
 
-            DBConnector.getSession().execute(boundStatement);
+                DBConnector.getSession().execute(boundStatement);
 
-            boundStatement = PreparedStatements.deleteFromUnitByEmp.bind(unit.getDoctorId(),unit.getId());
-            DBConnector.getSession().execute(boundStatement);
-            boundStatement = PreparedStatements.deleteFromUnitByEmp.bind(unit.getDriverId(),unit.getId());
-            DBConnector.getSession().execute(boundStatement);
-            boundStatement = PreparedStatements.deleteFromUnitByEmp.bind(unit.getOrderlyId(),unit.getId());
-            DBConnector.getSession().execute(boundStatement);
-            boundStatement = PreparedStatements.deleteFromUnitByEmp.bind(unit.getCarId(),unit.getId());
-            DBConnector.getSession().execute(boundStatement);
+                boundStatement = PreparedStatements.deleteFromUnitByEmp.bind(unit.getDoctorId(),unit.getId());
+                DBConnector.getSession().execute(boundStatement);
+                boundStatement = PreparedStatements.deleteFromUnitByEmp.bind(unit.getDriverId(),unit.getId());
+                DBConnector.getSession().execute(boundStatement);
+                boundStatement = PreparedStatements.deleteFromUnitByEmp.bind(unit.getOrderlyId(),unit.getId());
+                DBConnector.getSession().execute(boundStatement);
+                boundStatement = PreparedStatements.deleteFromUnitByEmp.bind(unit.getCarId(),unit.getId());
+                DBConnector.getSession().execute(boundStatement);
+                Alerts.SucceedOperation();
 
+            } else {
+                Alerts.FailedOperation();
+            }
 
-            Alerts.SucceedOperation();
 
         } catch (IllegalArgumentException e){
             unitId = null;
