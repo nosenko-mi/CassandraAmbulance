@@ -12,6 +12,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import org.coursework.cassandraambulance.DBConnector;
+import org.coursework.cassandraambulance.Query;
 import org.coursework.cassandraambulance.StringResources;
 import org.coursework.cassandraambulance.TableUtils;
 import org.coursework.cassandraambulance.models.Unit;
@@ -81,14 +82,9 @@ public class UnitTable {
         ResultSet rs;
         // обрати записи з таблиці unit_by_emp
         if (id != null){
-            PreparedStatement getUnitByEmp = DBConnector.getSession().prepare(
-                    "SELECT * FROM " + StringResources.UNIT_BY_ID + " WHERE id = ?;"
-            );
-            BoundStatement boundStatement = getUnitByEmp.bind(id);
-            rs = DBConnector.getSession().execute(boundStatement);
+            rs = Query.GetUnitById(id);
         } else {
-            String getAllUnits = "SELECT * FROM " + StringResources.UNIT_BY_ID + ";";
-            rs = DBConnector.getSession().execute(getAllUnits);
+            rs = Query.GetAllUnits();
         }
 
         personObservableList.clear();
@@ -108,8 +104,7 @@ public class UnitTable {
 
         ResultSet rs;
         // обрати записи з таблиці unit_by_emp
-        String getAllUnits = "SELECT * FROM " + StringResources.UNIT_BY_ID + ";";
-        rs = DBConnector.getSession().execute(getAllUnits);
+        rs = Query.GetAllUnits();
 
         personObservableList.clear();
 

@@ -161,8 +161,20 @@ public class Query {
         return rs;
     }
 
-    public static ResultSet GetUnitById(){
+    public static ResultSet GetUnitById(UUID id){
         ResultSet rs = null;
+        PreparedStatement getUnitByEmp = DBConnector.getSession().prepare(
+                "SELECT * FROM " + StringResources.UNIT_BY_ID + " WHERE id = ?;"
+        );
+        BoundStatement boundStatement = getUnitByEmp.bind(id);
+        rs = DBConnector.getSession().execute(boundStatement);
+        return rs;
+    }
+
+    public static ResultSet GetAllUnits(){
+        ResultSet rs = null;
+        String getAllUnits = "SELECT * FROM " + StringResources.UNIT_BY_ID + ";";
+        rs = DBConnector.getSession().execute(getAllUnits);
         return rs;
     }
 
