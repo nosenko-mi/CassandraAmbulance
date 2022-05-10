@@ -1,13 +1,15 @@
 package org.coursework.cassandraambulance.controllers;
 
 import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.MenuButton;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import org.coursework.cassandraambulance.Alerts;
+import org.coursework.cassandraambulance.StringResources;
 import org.coursework.cassandraambulance.models.Person;
 import org.coursework.cassandraambulance.tables.PersonTable;
 
-import java.time.format.DateTimeParseException;
 import java.util.UUID;
 
 public class GetPersonController extends Controller {
@@ -17,7 +19,6 @@ public class GetPersonController extends Controller {
     public TextField personLnTextField;
     public MenuButton typeMenuButton;
     public TextField personIdTextField;
-    public TextField patientIdTextField;
 
     private UUID personId;
     private String personFn, personMn, personLn, personType;
@@ -59,18 +60,15 @@ public class GetPersonController extends Controller {
             System.out.println("[Type is not chosen]");
         }
 
-        System.out.println("[First name]" + personFn);
-        System.out.println("[Middle name]" + personMn);
-        System.out.println("[Last name]" + personLn);
-
     }
 
     public void InitMenuButtons() {
 
-        MenuItem typeItemDoctor = new MenuItem("Лікар");
-        MenuItem typeItemOrderly = new MenuItem("Санітар");
-        MenuItem typeItemDriver = new MenuItem("Водій");
-        MenuItem typeItemCaller = new MenuItem("Викликач");
+        // створення опцій для випадаючого меню
+        MenuItem typeItemDoctor = new MenuItem(StringResources.DOCTOR_TYPE);
+        MenuItem typeItemOrderly = new MenuItem(StringResources.ORDERLY_TYPE);
+        MenuItem typeItemDriver = new MenuItem(StringResources.DRIVER_TYPE);
+        MenuItem typeItemCaller = new MenuItem(StringResources.CALLER_TYPE);
         MenuItem typeItemNone = new MenuItem("-");
         typeMenuButton.getItems().addAll(typeItemDoctor, typeItemOrderly, typeItemDriver, typeItemCaller, typeItemNone);
         typeItemDoctor.setOnAction(event -> typeMenuButton.setText(typeItemDoctor.getText()));
@@ -84,6 +82,5 @@ public class GetPersonController extends Controller {
     public void initialize(){
         InitMenuButtons();
     }
-
 
 }

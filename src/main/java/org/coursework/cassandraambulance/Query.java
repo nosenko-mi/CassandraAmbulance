@@ -347,11 +347,6 @@ public class Query {
         return rs;
     }
 
-    public  static ResultSet GetOneCall(){
-        ResultSet rs = null;
-        return rs;
-    }
-
     public  static ResultSet GetOneReport(UUID callId, UUID reportId){
         ResultSet rs;
 
@@ -373,6 +368,4 @@ public class Query {
         rs = DBConnector.getSession().execute(boundStatement);
         return rs;
     }
-
-
 }

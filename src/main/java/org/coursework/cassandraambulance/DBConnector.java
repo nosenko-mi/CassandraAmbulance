@@ -2,7 +2,6 @@ package org.coursework.cassandraambulance;
 
 import com.datastax.oss.driver.api.core.AllNodesFailedException;
 import com.datastax.oss.driver.api.core.CqlSession;
-
 import java.net.InetSocketAddress;
 
 
@@ -10,6 +9,7 @@ import java.net.InetSocketAddress;
 public class DBConnector {
 
     private static CqlSession session;
+    // назва бази даних
     private static final String KEYSPACE = "ambulance_ver3";
 
     public static void connectDB(String seeds, int port){
@@ -25,13 +25,10 @@ public class DBConnector {
             System.out.println(e.getMessage());
 
         }
-//        session = CqlSession.builder()
-//                .addContactPoint(new InetSocketAddress(seeds, port))
-//                .build();
     }
 
     public static void connectDB(){
-        // за замовчуванням використовується сокет: localhost порт: 9042
+        // за замовчуванням seeds: localhost port: 9042
         try{
             session = CqlSession
                     .builder()

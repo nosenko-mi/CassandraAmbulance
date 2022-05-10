@@ -43,15 +43,9 @@ public class PersonTable {
 
     public static void GetByEmp(TableView<Person> personTable, CheckBox doctorCheckBox, CheckBox orderlyCheckBox, CheckBox driverCheckBox){
         ResultSet rs = Query.GetEmployees(doctorCheckBox, orderlyCheckBox, driverCheckBox);
-        personObservableList.clear();
-        for (Row row : rs){
-            personObservableList
-                    .add(new Person(
-                            row.getString("type"), row.getUuid("id"),
-                            row.getString("first_name"), row.getString("middle_name"), row.getString("last_name")
-                    ));
 
-        }
+        personObservableList.clear();
+        HandleRows(rs);
 
         personTable.getColumns().clear();
 

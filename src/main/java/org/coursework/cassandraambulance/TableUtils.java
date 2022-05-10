@@ -103,30 +103,8 @@ TableUtils {
             // create string from cell
             String text = "";
 
-//            Object observableValue = table.getColumns().get(col).getCellObservableValue(row);
             ObservableValue observableValue = table.getColumns().get(col).getCellObservableValue(row);
 
-            // null-check: provide empty string for nulls
-
-//            if (observableValue == null) {
-//                text = "";
-//            }
-//            else if( observableValue instanceof DoubleProperty) { // TODO: handle boolean etc
-//                text = numberFormatter.format( ((DoubleProperty) observableValue).get());
-//            }
-//            else if( observableValue instanceof IntegerProperty) {
-//                text = numberFormatter.format( ((IntegerProperty) observableValue).get());
-//            }
-//            else if( observableValue instanceof StringProperty) {
-//                text = ((StringProperty) observableValue).get();
-//            }
-//            else if( observableValue instanceof BooleanProperty) {
-//                text = String.valueOf(((BooleanProperty) observableValue).get());
-//            }
-//            else {
-//                System.out.println("Unsupported observable value: " + observableValue);
-//            }
-//
 
             if (observableValue == null) {
                 text = "";
@@ -208,7 +186,6 @@ TableUtils {
 
                 System.out.println( rowTable + "/" + colTable + ": " +observableValue);
 
-                // TODO: handle boolean, etc
                 if( observableValue instanceof DoubleProperty) {
 
                     try {
